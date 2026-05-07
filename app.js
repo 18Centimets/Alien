@@ -38,15 +38,22 @@ async function fetchOnlineMaterials() {
         
         // Transform API data to match dashboard format
         const transformedData = {
-            allocations: (apiData.allocations || []).map(item => ({
-                date: item.date === '01/01/1970' ? 'N/A' : item.date,
-                postOffice: item.bc || 'N/A',
-                item: item.item || 'N/A',
-                quantity: item.sl || 0,
-                unit: item.unit || 'N/A',
-                location: item.dest || 'N/A',
-                issuer: item.issuer || 'N/A'
-            })),
+            allocations: (apiData.allocations || []).map(item => {
+                let displayDate = item.date;
+                if (!displayDate || displayDate === '01/01/1970' || displayDate === 'N/A') {
+                    // Fallback to updated date if possible
+                    displayDate = apiData.updated ? new Date(apiData.updated).toLocaleDateString('vi-VN') : 'Mới nhất';
+                }
+                return {
+                    date: displayDate,
+                    postOffice: item.bc || 'N/A',
+                    item: item.item || 'N/A',
+                    quantity: item.sl || 0,
+                    unit: item.unit || 'N/A',
+                    location: item.dest || 'N/A',
+                    issuer: item.issuer || 'N/A'
+                };
+            }),
             forklifts: (apiData.forkliftLogs || []).map(item => ({
                 supplier: item.provider || 'N/A',
                 code: item.id || 'N/A',
@@ -323,7 +330,7 @@ function renderMaterialsTable(searchTerm = '') {
     
     allocations.forEach(item => {
         // Simple search filter
-        const searchableText = `${item.date} ${item.postOffice} ${item.item} ${item.location}`.toLowerCase();
+        const searchableText = `${item.date} ${item.postOffice} ${item.item} ${item.location} ${item.issuer}`.toLowerCase();
         if (searchTerm && !searchableText.includes(searchTerm.toLowerCase())) return;
 
         let statusClass = 'neutral';
