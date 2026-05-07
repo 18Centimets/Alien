@@ -255,6 +255,7 @@ function renderHeatmapTable() {
                 <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">${po.province}</div>
             </td>
             <td>${po.am}</td>
+            <td class="text-center"><span style="font-size: 11px; padding: 2px 6px; background: rgba(255,255,255,0.05); border-radius: 4px;">${po.type}</span></td>
             <td class="text-right" style="font-weight: 600;">${formatNumber(po.volMet)}</td>
             <td class="text-right">${formatNumber(po.capacity)}</td>
             <td class="text-center">

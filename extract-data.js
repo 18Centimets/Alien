@@ -26,7 +26,7 @@ const data = XLSX.utils.sheet_to_json(laySheet, { header: 1, defval: 0 });
 // 2: C (bc), 3: D (SL1), 4: E (KL1) ... up to 15: P (SL7), 16: Q (KL7)
 // 17: R (Thành phố), 18: S (Quận/Huyện), 19: T (AM)
 // 17: R (Thành phố), 18: S (Quận/Huyện), 19: T (AM)
-// 20: U (Capacity), 21: V (Đáp ứng Vol)
+// 20: U (Capacity), 21: V (Đáp ứng Vol), 22: W (Loại)
 
 // Pre-scan all sheets to find capacities
 const capacityMap = {};
@@ -74,6 +74,7 @@ for (let r = 4; r < data.length; r++) { // Data starts at row 5 (index 4)
   const district = String(row[18]);
   const am = String(row[19]) || 'Unassigned';
   let capacity = parseFloat(row[20]) || 0;
+  const type = String(row[22] || 'N/A');
   
   // Try to get capacity from other sheets if missing
   if (capacity === 0 && capacityMap[name]) {
@@ -114,6 +115,7 @@ for (let r = 4; r < data.length; r++) { // Data starts at row 5 (index 4)
     province,
     district,
     am,
+    type,
     capacity,
     volMet,
     utilizationRate: capacity > 0 ? (volMet / capacity) * 100 : 0,
