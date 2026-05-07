@@ -44,7 +44,8 @@ async function fetchOnlineMaterials() {
                 item: item.item || 'N/A',
                 quantity: item.sl || 0,
                 unit: item.unit || 'N/A',
-                location: item.dest || 'N/A'
+                location: item.dest || 'N/A',
+                issuer: item.issuer || 'N/A'
             })),
             forklifts: (apiData.forkliftLogs || []).map(item => ({
                 supplier: item.provider || 'N/A',
@@ -341,6 +342,7 @@ function renderMaterialsTable(searchTerm = '') {
                     ${item.location || 'N/A'}
                 </span>
             </td>
+            <td class="text-center" style="font-weight: 500; color: var(--accent-primary);">${item.issuer || 'N/A'}</td>
         `;
         tbody.appendChild(tr);
     });
