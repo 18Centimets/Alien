@@ -1,0 +1,7937 @@
+{
+  "metadata": {
+    "dates": [
+      "22/04/2026",
+      "23/04/2026",
+      "24/04/2026",
+      "25/04/2026",
+      "26/04/2026",
+      "27/04/2026",
+      "28/04/2026"
+    ]
+  },
+  "postOffices": [
+    {
+      "id": "PO-4",
+      "name": "81",
+      "province": "Bình Dương",
+      "district": "Huyện Bắc Tân Uyên",
+      "am": "Khiếu Trung Kiên",
+      "capacity": 539,
+      "volMet": 475,
+      "utilizationRate": 88.12615955473099,
+      "totalOrders": 1059,
+      "totalWeight": 389,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 175,
+          "weight": 64
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 222,
+          "weight": 97
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 222,
+          "weight": 86
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 187,
+          "weight": 34
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 74,
+          "weight": 44
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 86,
+          "weight": 64
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 93,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-5",
+      "name": "341",
+      "province": "Bình Dương",
+      "district": "Huyện Bàu Bàng",
+      "am": "Lê Thị Cẩm Tiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 3000,
+      "totalWeight": 1739,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 646,
+          "weight": 363
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 492,
+          "weight": 276
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 277,
+          "weight": 291
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 374,
+          "weight": 122
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 207,
+          "weight": 432
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 612,
+          "weight": 255
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 392,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-6",
+      "name": "754",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Bình Chánh",
+      "am": "Tôn Ngọc Lực",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 10646,
+      "totalWeight": 4145,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1594,
+          "weight": 672
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1416,
+          "weight": 662
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1199,
+          "weight": 830
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2104,
+          "weight": 307
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 531,
+          "weight": 915
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1957,
+          "weight": 759
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1845,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-7",
+      "name": "867",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Bình Chánh",
+      "am": "Nguyễn Thị Huyền Trinh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 29910,
+      "totalWeight": 5089,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4389,
+          "weight": 755
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3743,
+          "weight": 901
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4068,
+          "weight": 960
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5794,
+          "weight": 373
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2018,
+          "weight": 1000
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5086,
+          "weight": 1100
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4812,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-8",
+      "name": "620",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Bình Chánh",
+      "am": "Tôn Ngọc Lực",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 12389,
+      "totalWeight": 2648,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1782,
+          "weight": 389
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1536,
+          "weight": 421
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1477,
+          "weight": 487
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2453,
+          "weight": 110
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 584,
+          "weight": 758
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2782,
+          "weight": 483
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1775,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-9",
+      "name": "1005",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Bình Chánh",
+      "am": "Nguyễn Quang Thắng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 11535,
+      "totalWeight": 5013,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1612,
+          "weight": 751
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1462,
+          "weight": 863
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1936,
+          "weight": 1019
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2478,
+          "weight": 477
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 638,
+          "weight": 979
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1614,
+          "weight": 924
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1795,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-10",
+      "name": "2581",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Bình Chánh",
+      "am": "Nguyễn Hữu Lộc",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 69936,
+      "totalWeight": 12253,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 11840,
+          "weight": 2007
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 9412,
+          "weight": 2042
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 9360,
+          "weight": 2257
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 10726,
+          "weight": 1180
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 3723,
+          "weight": 2738
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 13574,
+          "weight": 2029
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 11301,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-11",
+      "name": "1694",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Bình Chánh",
+      "am": "Nguyễn Thị Huyền Trinh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 28278,
+      "totalWeight": 9646,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4446,
+          "weight": 1529
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3973,
+          "weight": 1422
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3672,
+          "weight": 1918
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5512,
+          "weight": 200
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 371,
+          "weight": 3002
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 6379,
+          "weight": 1575
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3925,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-12",
+      "name": "934",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Bình Chánh",
+      "am": "Nguyễn Thị Huyền Trinh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 26136,
+      "totalWeight": 4642,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4632,
+          "weight": 830
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4047,
+          "weight": 796
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3961,
+          "weight": 854
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4372,
+          "weight": 154
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 543,
+          "weight": 1190
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5485,
+          "weight": 818
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3096,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-13",
+      "name": "1283",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Bình Chánh",
+      "am": "Huỳnh Tấn Dũng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 17937,
+      "totalWeight": 6107,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2928,
+          "weight": 911
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2172,
+          "weight": 1010
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2337,
+          "weight": 1132
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2963,
+          "weight": 566
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1058,
+          "weight": 1275
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3074,
+          "weight": 1213
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3405,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-14",
+      "name": "113",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Cần Giờ",
+      "am": "Nguyễn Văn Tài",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 332,
+      "totalWeight": 431,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 40,
+          "weight": 86
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 85,
+          "weight": 56
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 41,
+          "weight": 76
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 48,
+          "weight": 34
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 17,
+          "weight": 93
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 80,
+          "weight": 86
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 21,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-15",
+      "name": "318",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Huyện Châu Đức",
+      "am": "Nguyễn Thanh Bình",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 3936,
+      "totalWeight": 1872,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 706,
+          "weight": 313
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 593,
+          "weight": 273
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 614,
+          "weight": 347
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 621,
+          "weight": 285
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 507,
+          "weight": 317
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 569,
+          "weight": 337
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 326,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-16",
+      "name": "128",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Huyện Châu Đức",
+      "am": "Lê Trọng Hậu",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 2853,
+      "totalWeight": 658,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 528,
+          "weight": 134
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 631,
+          "weight": 114
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 304,
+          "weight": 110
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 329,
+          "weight": 70
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 220,
+          "weight": 116
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 400,
+          "weight": 114
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 441,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-17",
+      "name": "1167",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Củ Chi",
+      "am": "Nguyễn Văn Tuyên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 26255,
+      "totalWeight": 6309,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4618,
+          "weight": 1302
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3320,
+          "weight": 1123
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3703,
+          "weight": 1335
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5592,
+          "weight": 500
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1459,
+          "weight": 1131
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3530,
+          "weight": 918
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4033,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-18",
+      "name": "412",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Củ Chi",
+      "am": "Nguyễn Văn Tuyên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 16565,
+      "totalWeight": 2193,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2761,
+          "weight": 404
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2607,
+          "weight": 366
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2572,
+          "weight": 381
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2634,
+          "weight": 150
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 506,
+          "weight": 488
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3118,
+          "weight": 404
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2367,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-19",
+      "name": "1085",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Củ Chi",
+      "am": "Nguyễn Văn Tuyên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 48820,
+      "totalWeight": 7157,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 6849,
+          "weight": 836
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 6287,
+          "weight": 1045
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 5658,
+          "weight": 1295
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 10058,
+          "weight": 430
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1130,
+          "weight": 2269
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 12328,
+          "weight": 1282
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 6510,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-20",
+      "name": "549",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Củ Chi",
+      "am": "Nguyễn Văn Tuyên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 25092,
+      "totalWeight": 2318,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3813,
+          "weight": 421
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3971,
+          "weight": 356
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3893,
+          "weight": 403
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3733,
+          "weight": 382
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2868,
+          "weight": 360
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3340,
+          "weight": 396
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3474,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-21",
+      "name": "20",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Huyện đảo Côn Đảo",
+      "am": "Phạm Văn Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 427,
+      "totalWeight": 95,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 19,
+          "weight": 20
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 149,
+          "weight": 18
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 73,
+          "weight": 14
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 33,
+          "weight": 15
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 24,
+          "weight": 13
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 24,
+          "weight": 15
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 105,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-22",
+      "name": "319",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Huyện Đất Đỏ",
+      "am": "Nguyễn Văn Tân",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 3220,
+      "totalWeight": 3083,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 426,
+          "weight": 505
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 451,
+          "weight": 483
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 440,
+          "weight": 650
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 780,
+          "weight": 486
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 515,
+          "weight": 433
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 233,
+          "weight": 526
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 375,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-23",
+      "name": "54",
+      "province": "Bình Dương",
+      "district": "Huyện Dầu Tiếng",
+      "am": "Lê Thị Cẩm Tiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 1771,
+      "totalWeight": 345,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 162,
+          "weight": 63
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 151,
+          "weight": 83
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 570,
+          "weight": 49
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 141,
+          "weight": 28
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 257,
+          "weight": 60
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 251,
+          "weight": 62
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 239,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-24",
+      "name": "18",
+      "province": "Bình Dương",
+      "district": "Huyện Dầu Tiếng",
+      "am": "Lê Thị Cẩm Tiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 245,
+      "totalWeight": 102,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 28,
+          "weight": 13
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 45,
+          "weight": 14
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3,
+          "weight": 21
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 118,
+          "weight": 18
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 19,
+          "weight": 18
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 21,
+          "weight": 18
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 11,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-25",
+      "name": "2422",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Hóc Môn",
+      "am": "Huỳnh Tấn Dũng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 39088,
+      "totalWeight": 14327,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5904,
+          "weight": 2165
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 5660,
+          "weight": 2088
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 5126,
+          "weight": 2426
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 6800,
+          "weight": 1692
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 3345,
+          "weight": 2932
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5648,
+          "weight": 3024
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 6605,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-26",
+      "name": "1369",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Hóc Môn",
+      "am": "Huỳnh Tấn Dũng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 16192,
+      "totalWeight": 6144,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3010,
+          "weight": 779
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2422,
+          "weight": 1240
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2516,
+          "weight": 1006
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2273,
+          "weight": 674
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1221,
+          "weight": 1254
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2371,
+          "weight": 1191
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2379,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-27",
+      "name": "5355",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Hóc Môn",
+      "am": "Huỳnh Tấn Dũng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 61491,
+      "totalWeight": 30368,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 9620,
+          "weight": 5468
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 9014,
+          "weight": 5234
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 8389,
+          "weight": 5449
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 10297,
+          "weight": 1832
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 4059,
+          "weight": 7577
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 10298,
+          "weight": 4808
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 9814,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-28",
+      "name": "2314",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Hóc Môn",
+      "am": "Huỳnh Tấn Dũng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 62792,
+      "totalWeight": 11216,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 9887,
+          "weight": 1837
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 8334,
+          "weight": 1862
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 8675,
+          "weight": 2242
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 11080,
+          "weight": 786
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 3406,
+          "weight": 2545
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 11750,
+          "weight": 1944
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 9660,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-29",
+      "name": "404",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Huyện Long Điền",
+      "am": "Phạm Văn Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 5470,
+      "totalWeight": 2505,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 713,
+          "weight": 578
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 793,
+          "weight": 344
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 837,
+          "weight": 461
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 924,
+          "weight": 274
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 509,
+          "weight": 406
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 704,
+          "weight": 442
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 990,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-30",
+      "name": "112",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Huyện Long Điền",
+      "am": "Nguyễn Văn Tân",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 1965,
+      "totalWeight": 961,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 131,
+          "weight": 230
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 389,
+          "weight": 137
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 230,
+          "weight": 196
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 440,
+          "weight": 41
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 168,
+          "weight": 211
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 317,
+          "weight": 146
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 290,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-31",
+      "name": "418",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Nhà Bè",
+      "am": "Nguyễn Văn Tài",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 3589,
+      "totalWeight": 2253,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 411,
+          "weight": 419
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 692,
+          "weight": 414
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 489,
+          "weight": 449
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 625,
+          "weight": 182
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 297,
+          "weight": 423
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 679,
+          "weight": 366
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 396,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-32",
+      "name": "1353",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Nhà Bè",
+      "am": "Nguyễn Quang Thắng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 1446,
+      "totalWeight": 103,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1299,
+          "weight": 92
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 72,
+          "weight": 4
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 51,
+          "weight": 2
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1,
+          "weight": 3
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 22,
+          "weight": 0
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 0,
+          "weight": 2
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-33",
+      "name": "576",
+      "province": "Hồ Chí Minh",
+      "district": "Huyện Nhà Bè",
+      "am": "Nguyễn Quang Thắng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 7751,
+      "totalWeight": 3015,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1189,
+          "weight": 453
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1053,
+          "weight": 503
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1453,
+          "weight": 510
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1160,
+          "weight": 492
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 776,
+          "weight": 617
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1009,
+          "weight": 440
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1111,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-34",
+      "name": "40",
+      "province": "Bình Dương",
+      "district": "Huyện Phú Giáo",
+      "am": "Lê Thị Cẩm Tiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 1726,
+      "totalWeight": 334,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 115,
+          "weight": 59
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 266,
+          "weight": 78
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 364,
+          "weight": 60
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 453,
+          "weight": 41
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 242,
+          "weight": 49
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 157,
+          "weight": 47
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 129,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-35",
+      "name": "41",
+      "province": "Bình Dương",
+      "district": "Huyện Phú Giáo",
+      "am": "Lê Thị Cẩm Tiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 565,
+      "totalWeight": 207,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 141,
+          "weight": 33
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 83,
+          "weight": 53
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 104,
+          "weight": 22
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 46,
+          "weight": 28
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 32,
+          "weight": 38
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 114,
+          "weight": 33
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 45,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-36",
+      "name": "295",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Huyện Xuyên Mộc",
+      "am": "Lê Trọng Hậu",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 2092,
+      "totalWeight": 1784,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 158,
+          "weight": 359
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 305,
+          "weight": 307
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 361,
+          "weight": 248
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 279,
+          "weight": 366
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 286,
+          "weight": 307
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 402,
+          "weight": 197
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 301,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-37",
+      "name": "528",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Huyện Xuyên Mộc",
+      "am": "Lê Trọng Hậu",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 6084,
+      "totalWeight": 3044,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 940,
+          "weight": 562
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1007,
+          "weight": 527
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 731,
+          "weight": 463
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 965,
+          "weight": 299
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 462,
+          "weight": 543
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 937,
+          "weight": 650
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1042,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-38",
+      "name": "497",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 1",
+      "am": "Trần Đại Hưng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 4221,
+      "totalWeight": 2431,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 804,
+          "weight": 519
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 688,
+          "weight": 409
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 547,
+          "weight": 414
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 807,
+          "weight": 213
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 189,
+          "weight": 430
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 562,
+          "weight": 446
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 624,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-39",
+      "name": "218",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 1",
+      "am": "Trần Đại Hưng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 1987,
+      "totalWeight": 1097,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 335,
+          "weight": 181
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 243,
+          "weight": 224
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 343,
+          "weight": 209
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 339,
+          "weight": 69
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 153,
+          "weight": 201
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 255,
+          "weight": 213
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 319,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-40",
+      "name": "451",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 1",
+      "am": "Nguyễn Thị Hoàng Yến",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 6462,
+      "totalWeight": 2221,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 915,
+          "weight": 399
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1040,
+          "weight": 463
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 932,
+          "weight": 403
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1047,
+          "weight": 231
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 460,
+          "weight": 392
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1203,
+          "weight": 333
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 865,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-41",
+      "name": "518",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 1",
+      "am": "Nguyễn Thị Hoàng Yến",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 4939,
+      "totalWeight": 2721,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 699,
+          "weight": 437
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 599,
+          "weight": 473
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 800,
+          "weight": 467
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 979,
+          "weight": 286
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 363,
+          "weight": 551
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 791,
+          "weight": 507
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 708,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-42",
+      "name": "1675",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 10",
+      "am": "Hoàng Đình Vũ",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 23038,
+      "totalWeight": 9188,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3804,
+          "weight": 1596
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3274,
+          "weight": 1588
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3435,
+          "weight": 1563
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4018,
+          "weight": 383
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1100,
+          "weight": 2205
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3649,
+          "weight": 1853
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3758,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-43",
+      "name": "1720",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 10",
+      "am": "Hoàng Đình Vũ",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 29290,
+      "totalWeight": 11092,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3978,
+          "weight": 1965
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3689,
+          "weight": 1837
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4460,
+          "weight": 1854
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5812,
+          "weight": 572
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1088,
+          "weight": 2631
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5698,
+          "weight": 2233
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4565,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-44",
+      "name": "1359",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 11",
+      "am": "Lê Trọng Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 25130,
+      "totalWeight": 7044,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3076,
+          "weight": 1138
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3402,
+          "weight": 1103
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3664,
+          "weight": 1397
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4942,
+          "weight": 398
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1286,
+          "weight": 1860
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 4886,
+          "weight": 1148
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3874,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-45",
+      "name": "1693",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 11",
+      "am": "Lê Trọng Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 26186,
+      "totalWeight": 7671,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4726,
+          "weight": 1284
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3939,
+          "weight": 1318
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3692,
+          "weight": 1436
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4391,
+          "weight": 505
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1438,
+          "weight": 1650
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 4293,
+          "weight": 1478
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3707,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-46",
+      "name": "739",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 11",
+      "am": "Lê Trọng Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 19948,
+      "totalWeight": 3507,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2712,
+          "weight": 653
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3263,
+          "weight": 638
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3675,
+          "weight": 648
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3384,
+          "weight": 143
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 678,
+          "weight": 809
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3461,
+          "weight": 616
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2775,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-47",
+      "name": "1979",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 12",
+      "am": "Phan Nguyễn An",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 37793,
+      "totalWeight": 9739,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5815,
+          "weight": 1687
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 5528,
+          "weight": 1679
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 5082,
+          "weight": 1757
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 7876,
+          "weight": 764
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2884,
+          "weight": 1954
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5210,
+          "weight": 1898
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 5398,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-48",
+      "name": "1749",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 12",
+      "am": "Phan Nguyễn An",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 33770,
+      "totalWeight": 9069,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5443,
+          "weight": 1618
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4292,
+          "weight": 1546
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4447,
+          "weight": 1755
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5660,
+          "weight": 721
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2448,
+          "weight": 1601
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 6117,
+          "weight": 1828
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 5363,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-49",
+      "name": "1500",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 12",
+      "am": "Phan Nguyễn An",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 33388,
+      "totalWeight": 7169,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4373,
+          "weight": 1262
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3984,
+          "weight": 1311
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3868,
+          "weight": 1348
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5874,
+          "weight": 271
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1255,
+          "weight": 1516
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5800,
+          "weight": 1461
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 8234,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-50",
+      "name": "2227",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 12",
+      "am": "Lê Hải Duy",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 44564,
+      "totalWeight": 13444,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 7046,
+          "weight": 2108
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 6528,
+          "weight": 2590
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 6616,
+          "weight": 2520
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 7635,
+          "weight": 1079
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1508,
+          "weight": 2702
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 8537,
+          "weight": 2445
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 6694,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-51",
+      "name": "1986",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 12",
+      "am": "Huỳnh Thị Mai Trinh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 29334,
+      "totalWeight": 8080,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5162,
+          "weight": 1580
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 5065,
+          "weight": 1426
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4092,
+          "weight": 1603
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5038,
+          "weight": 739
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1928,
+          "weight": 1482
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 4612,
+          "weight": 1250
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3437,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-52",
+      "name": "1363",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 12",
+      "am": "Lê Hải Duy",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 22298,
+      "totalWeight": 6648,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3437,
+          "weight": 1057
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3378,
+          "weight": 1075
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3497,
+          "weight": 1528
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4160,
+          "weight": 545
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1188,
+          "weight": 1248
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3444,
+          "weight": 1195
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3194,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-53",
+      "name": "1344",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 12",
+      "am": "Huỳnh Thị Mai Trinh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 21337,
+      "totalWeight": 7483,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3324,
+          "weight": 1126
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2994,
+          "weight": 1317
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2664,
+          "weight": 1505
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4036,
+          "weight": 540
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 733,
+          "weight": 1641
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3947,
+          "weight": 1354
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3639,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-54",
+      "name": "3619",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 12",
+      "am": "Huỳnh Tấn Dũng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 58647,
+      "totalWeight": 18914,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 9903,
+          "weight": 2953
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 7791,
+          "weight": 3076
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 7775,
+          "weight": 3517
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 10354,
+          "weight": 1875
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 4503,
+          "weight": 4081
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 9261,
+          "weight": 3412
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 9060,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-56",
+      "name": "87",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 12",
+      "am": "Phan Nguyễn An",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 7038,
+      "totalWeight": 387,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1319,
+          "weight": 92
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1081,
+          "weight": 64
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 945,
+          "weight": 72
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 848,
+          "weight": 17
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 486,
+          "weight": 62
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1049,
+          "weight": 80
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1310,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-57",
+      "name": "1",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 12",
+      "am": "Huỳnh Thị Mai Trinh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 28,
+      "totalWeight": 1,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 16,
+          "weight": 1
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 12,
+          "weight": 0
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 0,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-58",
+      "name": "1453",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 2",
+      "am": "Nguyễn Đình Toàn",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 20191,
+      "totalWeight": 7590,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3046,
+          "weight": 1203
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2970,
+          "weight": 1235
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2567,
+          "weight": 1473
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3970,
+          "weight": 369
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1234,
+          "weight": 1726
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3364,
+          "weight": 1584
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3040,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-59",
+      "name": "672",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 2",
+      "am": "Nguyễn Thị Mỹ Tiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 6306,
+      "totalWeight": 3091,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1154,
+          "weight": 593
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 736,
+          "weight": 487
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 635,
+          "weight": 604
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1055,
+          "weight": 78
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 308,
+          "weight": 515
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1007,
+          "weight": 814
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1411,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-61",
+      "name": "1",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 2",
+      "am": "Nguyễn Đình Toàn",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 23,
+      "totalWeight": 0,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 23,
+          "weight": 0
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 0,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-62",
+      "name": "564",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 2",
+      "am": "Đoàn Ngọc Trung",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 10027,
+      "totalWeight": 2781,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1522,
+          "weight": 450
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1519,
+          "weight": 451
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1536,
+          "weight": 592
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1599,
+          "weight": 148
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 348,
+          "weight": 500
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1649,
+          "weight": 640
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1854,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-63",
+      "name": "789",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 3",
+      "am": "Hoàng Đình Vũ",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 8007,
+      "totalWeight": 4067,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1156,
+          "weight": 748
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1310,
+          "weight": 761
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1060,
+          "weight": 745
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1730,
+          "weight": 277
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 342,
+          "weight": 726
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 789,
+          "weight": 810
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1620,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-64",
+      "name": "1071",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 3",
+      "am": "Trần Đại Hưng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 10237,
+      "totalWeight": 5380,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1461,
+          "weight": 839
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1434,
+          "weight": 1069
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1839,
+          "weight": 992
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1555,
+          "weight": 409
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 502,
+          "weight": 1147
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1958,
+          "weight": 924
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1488,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-66",
+      "name": "542",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 4",
+      "am": "Nguyễn Thị Hoàng Yến",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 6284,
+      "totalWeight": 2582,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 888,
+          "weight": 424
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 730,
+          "weight": 421
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 853,
+          "weight": 447
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 913,
+          "weight": 291
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 774,
+          "weight": 508
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1074,
+          "weight": 491
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1052,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-67",
+      "name": "322",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 4",
+      "am": "Nguyễn Thị Hoàng Yến",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 2387,
+      "totalWeight": 1428,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 343,
+          "weight": 226
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 367,
+          "weight": 209
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 330,
+          "weight": 227
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 307,
+          "weight": 272
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 279,
+          "weight": 239
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 332,
+          "weight": 255
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 429,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-68",
+      "name": "803",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 5",
+      "am": "Hoàng Đình Vũ",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 6756,
+      "totalWeight": 2863,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1319,
+          "weight": 527
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 867,
+          "weight": 516
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1251,
+          "weight": 526
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1209,
+          "weight": 305
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 314,
+          "weight": 498
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1013,
+          "weight": 491
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 783,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-69",
+      "name": "1481",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 5",
+      "am": "Hoàng Đình Vũ",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 32763,
+      "totalWeight": 7493,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4757,
+          "weight": 1243
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 5480,
+          "weight": 1315
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4345,
+          "weight": 1474
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5711,
+          "weight": 611
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1365,
+          "weight": 1567
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 6511,
+          "weight": 1283
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4594,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-70",
+      "name": "1465",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 6",
+      "am": "Tôn Ngọc Lực",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 18084,
+      "totalWeight": 7599,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2777,
+          "weight": 1605
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3148,
+          "weight": 1342
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2935,
+          "weight": 1209
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3376,
+          "weight": 613
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 737,
+          "weight": 1387
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2443,
+          "weight": 1443
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2668,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-71",
+      "name": "1566",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 6",
+      "am": "Tôn Ngọc Lực",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 58468,
+      "totalWeight": 7880,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 10061,
+          "weight": 1305
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 8589,
+          "weight": 1310
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 8129,
+          "weight": 1479
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 10013,
+          "weight": 588
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 3699,
+          "weight": 1659
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 9153,
+          "weight": 1539
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 8824,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-72",
+      "name": "414",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 7",
+      "am": "Nguyễn Quang Thắng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 18728,
+      "totalWeight": 2083,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2099,
+          "weight": 394
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2764,
+          "weight": 405
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2402,
+          "weight": 434
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5258,
+          "weight": 125
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 355,
+          "weight": 283
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3046,
+          "weight": 442
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2804,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-73",
+      "name": "2107",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 7",
+      "am": "Nguyễn Văn Tài",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 30148,
+      "totalWeight": 3914,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 8499,
+          "weight": 773
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2711,
+          "weight": 553
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2103,
+          "weight": 859
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 7737,
+          "weight": 260
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1466,
+          "weight": 952
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5907,
+          "weight": 517
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1725,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-74",
+      "name": "958",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 7",
+      "am": "Nguyễn Văn Tài",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 18228,
+      "totalWeight": 4554,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3076,
+          "weight": 906
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2418,
+          "weight": 837
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2788,
+          "weight": 877
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3876,
+          "weight": 258
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 636,
+          "weight": 837
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2997,
+          "weight": 839
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2437,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-75",
+      "name": "288",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 7",
+      "am": "Nguyễn Văn Tài",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 5815,
+      "totalWeight": 1063,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1414,
+          "weight": 185
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 804,
+          "weight": 162
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 518,
+          "weight": 205
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1211,
+          "weight": 49
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 209,
+          "weight": 137
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 444,
+          "weight": 325
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1215,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-76",
+      "name": "853",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 7",
+      "am": "Nguyễn Văn Tài",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 48317,
+      "totalWeight": 4401,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5175,
+          "weight": 603
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4235,
+          "weight": 729
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 5780,
+          "weight": 1023
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 17696,
+          "weight": 419
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1748,
+          "weight": 907
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 9876,
+          "weight": 720
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3807,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-78",
+      "name": "701",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 8",
+      "am": "Tôn Ngọc Lực",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 12444,
+      "totalWeight": 3116,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2110,
+          "weight": 619
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1751,
+          "weight": 544
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1726,
+          "weight": 571
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1966,
+          "weight": 229
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 770,
+          "weight": 637
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2480,
+          "weight": 516
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1641,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-79",
+      "name": "1710",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 8",
+      "am": "Nguyễn Quang Thắng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 19125,
+      "totalWeight": 10765,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3078,
+          "weight": 1786
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3055,
+          "weight": 1727
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2790,
+          "weight": 2320
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3208,
+          "weight": 1069
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1232,
+          "weight": 1932
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3039,
+          "weight": 1931
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2723,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-80",
+      "name": "2517",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 8",
+      "am": "Nguyễn Quang Thắng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 36618,
+      "totalWeight": 11068,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5703,
+          "weight": 1907
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 5678,
+          "weight": 1775
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 5749,
+          "weight": 2332
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 7982,
+          "weight": 478
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1386,
+          "weight": 2690
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5254,
+          "weight": 1886
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4866,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-81",
+      "name": "25",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 9",
+      "am": "Võ Thị Bích Ngọc",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 185,
+      "totalWeight": 53,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 34,
+          "weight": 8
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 26,
+          "weight": 9
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 16,
+          "weight": 14
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 10,
+          "weight": 8
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 76,
+          "weight": 9
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 10,
+          "weight": 5
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 13,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-82",
+      "name": "732",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 9",
+      "am": "Võ Thị Bích Ngọc",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 11747,
+      "totalWeight": 3998,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1968,
+          "weight": 758
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1858,
+          "weight": 670
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1836,
+          "weight": 668
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1992,
+          "weight": 446
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 694,
+          "weight": 689
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1437,
+          "weight": 767
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1962,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-83",
+      "name": "1858",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 9",
+      "am": "Võ Thị Bích Ngọc",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 11360,
+      "totalWeight": 13197,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1469,
+          "weight": 1823
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1621,
+          "weight": 2066
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1735,
+          "weight": 2440
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2166,
+          "weight": 1967
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1136,
+          "weight": 2561
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1558,
+          "weight": 2340
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1675,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-84",
+      "name": "1731",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 9",
+      "am": "Võ Thị Bích Ngọc",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 24844,
+      "totalWeight": 9520,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3602,
+          "weight": 1361
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2926,
+          "weight": 1353
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3715,
+          "weight": 2771
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5469,
+          "weight": 775
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2281,
+          "weight": 1910
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3722,
+          "weight": 1350
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3129,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-87",
+      "name": "1058",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 9",
+      "am": "Võ Thị Bích Ngọc",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 13259,
+      "totalWeight": 5142,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2470,
+          "weight": 924
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1950,
+          "weight": 909
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1874,
+          "weight": 841
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1958,
+          "weight": 446
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 783,
+          "weight": 1099
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2328,
+          "weight": 923
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1896,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-88",
+      "name": "1550",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 9",
+      "am": "Võ Thị Bích Ngọc",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 24471,
+      "totalWeight": 7534,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4204,
+          "weight": 1425
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4931,
+          "weight": 1577
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3948,
+          "weight": 1520
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3549,
+          "weight": 350
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1367,
+          "weight": 1486
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3353,
+          "weight": 1176
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3119,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-89",
+      "name": "1751",
+      "province": "Hồ Chí Minh",
+      "district": "Quận 9",
+      "am": "Võ Thị Bích Ngọc",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 27963,
+      "totalWeight": 8642,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4669,
+          "weight": 1380
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3615,
+          "weight": 1575
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3995,
+          "weight": 1512
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4219,
+          "weight": 612
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1448,
+          "weight": 1897
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 4981,
+          "weight": 1666
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 5036,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-90",
+      "name": "2060",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Tân",
+      "am": "Võ Minh Tông",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 38148,
+      "totalWeight": 14564,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5021,
+          "weight": 2209
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 6052,
+          "weight": 2268
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 5672,
+          "weight": 2786
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 6738,
+          "weight": 1784
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2507,
+          "weight": 3080
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 6558,
+          "weight": 2437
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 5600,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-91",
+      "name": "1352",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Tân",
+      "am": "Tạ Đăng Hiếu",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 16154,
+      "totalWeight": 8054,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1847,
+          "weight": 1151
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1932,
+          "weight": 1197
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1697,
+          "weight": 1318
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2815,
+          "weight": 420
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 655,
+          "weight": 1959
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3388,
+          "weight": 2009
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3820,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-92",
+      "name": "252",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Tân",
+      "am": "Tạ Đăng Hiếu",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 13766,
+      "totalWeight": 1627,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2063,
+          "weight": 261
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1834,
+          "weight": 235
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1832,
+          "weight": 280
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2417,
+          "weight": 109
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 468,
+          "weight": 236
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1777,
+          "weight": 506
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3375,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-93",
+      "name": "2519",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Tân",
+      "am": "Võ Minh Tông",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 33069,
+      "totalWeight": 11973,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5518,
+          "weight": 1887
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4649,
+          "weight": 1844
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4103,
+          "weight": 2546
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5870,
+          "weight": 945
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1803,
+          "weight": 2760
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 6649,
+          "weight": 1991
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4477,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-94",
+      "name": "3011",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Tân",
+      "am": "Tạ Đăng Hiếu",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 29163,
+      "totalWeight": 16559,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4515,
+          "weight": 2873
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3829,
+          "weight": 2934
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4100,
+          "weight": 2788
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5825,
+          "weight": 1801
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1437,
+          "weight": 3151
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5411,
+          "weight": 3012
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4046,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-95",
+      "name": "4600",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Tân",
+      "am": "Võ Minh Tông",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 52759,
+      "totalWeight": 29193,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 7704,
+          "weight": 4325
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 7805,
+          "weight": 4740
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 7371,
+          "weight": 5608
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 9336,
+          "weight": 3233
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 4652,
+          "weight": 6027
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 8854,
+          "weight": 5260
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 7037,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-96",
+      "name": "1211",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Tân",
+      "am": "Phạm Huy Thiện",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 18233,
+      "totalWeight": 11364,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1943,
+          "weight": 1582
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2240,
+          "weight": 2008
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2425,
+          "weight": 1985
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3418,
+          "weight": 1588
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1501,
+          "weight": 2022
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3469,
+          "weight": 2179
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3237,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-97",
+      "name": "1",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Tân",
+      "am": "Phạm Huy Thiện",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 211,
+      "totalWeight": 11,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 12,
+          "weight": 1
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 0,
+          "weight": 6
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 37,
+          "weight": 3
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 162,
+          "weight": 1
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 0,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-99",
+      "name": "2215",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Tân",
+      "am": "Võ Minh Tông",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 40897,
+      "totalWeight": 12793,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 6563,
+          "weight": 2207
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 5741,
+          "weight": 1825
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 5220,
+          "weight": 2271
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 7287,
+          "weight": 878
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2290,
+          "weight": 3278
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 8354,
+          "weight": 2334
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 5442,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-100",
+      "name": "1650",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Tân",
+      "am": "Nguyễn Thị Huyền Trinh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 30630,
+      "totalWeight": 9548,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4428,
+          "weight": 1485
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4405,
+          "weight": 1564
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4066,
+          "weight": 1826
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 6476,
+          "weight": 1141
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1687,
+          "weight": 2001
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 4879,
+          "weight": 1531
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4689,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-101",
+      "name": "1503",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Thạnh",
+      "am": "Trần Lệ Huyền Trân",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 19084,
+      "totalWeight": 7355,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2872,
+          "weight": 1044
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2734,
+          "weight": 1143
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2730,
+          "weight": 1325
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3468,
+          "weight": 398
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 837,
+          "weight": 1849
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3697,
+          "weight": 1596
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2746,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-102",
+      "name": "1480",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Thạnh",
+      "am": "Trần Lệ Huyền Trân",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 24049,
+      "totalWeight": 7461,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4707,
+          "weight": 1228
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3550,
+          "weight": 1233
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3304,
+          "weight": 1359
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3899,
+          "weight": 762
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2026,
+          "weight": 1465
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3099,
+          "weight": 1414
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3464,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-103",
+      "name": "798",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Thạnh",
+      "am": "Trần Lệ Huyền Trân",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 6390,
+      "totalWeight": 4487,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1181,
+          "weight": 687
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 940,
+          "weight": 838
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 884,
+          "weight": 897
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1007,
+          "weight": 210
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 484,
+          "weight": 959
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 813,
+          "weight": 896
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1081,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-104",
+      "name": "542",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Thạnh",
+      "am": "Trần Lệ Huyền Trân",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 5837,
+      "totalWeight": 2528,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 878,
+          "weight": 427
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 719,
+          "weight": 378
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 746,
+          "weight": 521
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1025,
+          "weight": 157
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 393,
+          "weight": 549
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 957,
+          "weight": 496
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1119,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-105",
+      "name": "781",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Thạnh",
+      "am": "Trần Lệ Huyền Trân",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 13637,
+      "totalWeight": 3965,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2590,
+          "weight": 624
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1756,
+          "weight": 614
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1574,
+          "weight": 769
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2589,
+          "weight": 169
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 560,
+          "weight": 1019
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2513,
+          "weight": 770
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2055,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-106",
+      "name": "49",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Bình Thạnh",
+      "am": "Nguyễn Hoàng Khánh Linh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 321,
+      "totalWeight": 172,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 42,
+          "weight": 41
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 28,
+          "weight": 30
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 48,
+          "weight": 28
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 30,
+          "weight": 52
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 166,
+          "weight": 8
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 0,
+          "weight": 13
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 7,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-107",
+      "name": "24783",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Đặc Biệt",
+      "am": "0",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 1231749,
+      "totalWeight": 158600,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 160114,
+          "weight": 24570
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 157996,
+          "weight": 28684
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 173083,
+          "weight": 32210
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 303342,
+          "weight": 13801
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 115203,
+          "weight": 29635
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 164749,
+          "weight": 29700
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 157262,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-108",
+      "name": "993",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Gò Vấp",
+      "am": "Nguyễn Chơn Như",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 10342,
+      "totalWeight": 5218,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1812,
+          "weight": 791
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1433,
+          "weight": 812
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1596,
+          "weight": 858
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1710,
+          "weight": 562
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 762,
+          "weight": 1065
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1347,
+          "weight": 1130
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1682,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-109",
+      "name": "1651",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Gò Vấp",
+      "am": "Nguyễn Chơn Như",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 37484,
+      "totalWeight": 8044,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 6395,
+          "weight": 1357
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3493,
+          "weight": 1560
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 7122,
+          "weight": 1647
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 6680,
+          "weight": 491
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 3973,
+          "weight": 1621
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 4811,
+          "weight": 1368
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 5010,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-110",
+      "name": "1380",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Gò Vấp",
+      "am": "Nguyễn Chơn Như",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 18753,
+      "totalWeight": 6946,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2928,
+          "weight": 1259
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2943,
+          "weight": 1140
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2762,
+          "weight": 1202
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3480,
+          "weight": 518
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1208,
+          "weight": 1507
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2855,
+          "weight": 1320
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2577,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-111",
+      "name": "769",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Gò Vấp",
+      "am": "Nguyễn Chơn Như",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 12859,
+      "totalWeight": 4228,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1946,
+          "weight": 744
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2081,
+          "weight": 627
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1737,
+          "weight": 796
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2378,
+          "weight": 474
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 981,
+          "weight": 919
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1996,
+          "weight": 668
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1740,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-112",
+      "name": "1167",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Gò Vấp",
+      "am": "Nguyễn Chơn Như",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 17000,
+      "totalWeight": 6635,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2472,
+          "weight": 871
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2213,
+          "weight": 983
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2080,
+          "weight": 1234
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3289,
+          "weight": 382
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1991,
+          "weight": 1772
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2748,
+          "weight": 1393
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2207,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-113",
+      "name": "3717",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Gò Vấp",
+      "am": "Huỳnh Thị Mai Trinh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 32895,
+      "totalWeight": 19339,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5172,
+          "weight": 3154
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4376,
+          "weight": 3275
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 5071,
+          "weight": 3630
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5083,
+          "weight": 891
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1645,
+          "weight": 4993
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5566,
+          "weight": 3396
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 5982,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-114",
+      "name": "1",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Gò Vấp",
+      "am": "Nguyễn Hoàng Khánh Linh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 44,
+      "totalWeight": 6,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 0,
+          "weight": 1
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 5,
+          "weight": 1
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 18,
+          "weight": 3
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 11,
+          "weight": 0
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 0,
+          "weight": 1
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 10,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-115",
+      "name": "2355",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Gò Vấp",
+      "am": "Huỳnh Thị Mai Trinh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 16873,
+      "totalWeight": 12741,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2781,
+          "weight": 2064
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2172,
+          "weight": 2522
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2611,
+          "weight": 2208
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2489,
+          "weight": 584
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1036,
+          "weight": 3343
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3147,
+          "weight": 2020
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2637,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-116",
+      "name": "1408",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Phú Nhuận",
+      "am": "Nguyễn Hoàng Khánh Linh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 15345,
+      "totalWeight": 7776,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2172,
+          "weight": 1235
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2758,
+          "weight": 1349
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2310,
+          "weight": 1176
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2584,
+          "weight": 506
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 805,
+          "weight": 1790
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2427,
+          "weight": 1720
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2289,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-117",
+      "name": "1218",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Phú Nhuận",
+      "am": "Nguyễn Hoàng Khánh Linh",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 9131,
+      "totalWeight": 5822,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1425,
+          "weight": 1019
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1549,
+          "weight": 1089
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1199,
+          "weight": 993
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1499,
+          "weight": 612
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 812,
+          "weight": 1072
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1030,
+          "weight": 1037
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1617,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-118",
+      "name": "1261",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Tân Bình",
+      "am": "Đặng Hoài Phong",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 21506,
+      "totalWeight": 6108,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3093,
+          "weight": 1058
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3211,
+          "weight": 1163
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3335,
+          "weight": 1142
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3956,
+          "weight": 390
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1121,
+          "weight": 1148
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2774,
+          "weight": 1207
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4016,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-119",
+      "name": "855",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Tân Bình",
+      "am": "Hoàng Đình Vũ",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 9142,
+      "totalWeight": 3967,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1660,
+          "weight": 734
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1380,
+          "weight": 699
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1148,
+          "weight": 757
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1886,
+          "weight": 314
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 454,
+          "weight": 807
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1340,
+          "weight": 656
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1274,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-120",
+      "name": "2136",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Tân Bình",
+      "am": "Lê Hải Duy",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 24074,
+      "totalWeight": 9815,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3557,
+          "weight": 1544
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3316,
+          "weight": 1715
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3124,
+          "weight": 1899
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4963,
+          "weight": 931
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2649,
+          "weight": 1695
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2927,
+          "weight": 2031
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3538,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-121",
+      "name": "1685",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Tân Bình",
+      "am": "Đặng Hoài Phong",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 36038,
+      "totalWeight": 8313,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5872,
+          "weight": 1532
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 5792,
+          "weight": 1523
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 5100,
+          "weight": 1588
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 6377,
+          "weight": 571
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2163,
+          "weight": 1681
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 6090,
+          "weight": 1418
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4644,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-122",
+      "name": "3282",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Tân Bình",
+      "am": "Nguyễn Chơn Như",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 32567,
+      "totalWeight": 14307,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 5521,
+          "weight": 2313
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4699,
+          "weight": 2369
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4925,
+          "weight": 2464
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5634,
+          "weight": 1449
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2452,
+          "weight": 3113
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5036,
+          "weight": 2599
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4300,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-124",
+      "name": "2674",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Tân Phú",
+      "am": "Lê Trọng Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 43118,
+      "totalWeight": 13573,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 6525,
+          "weight": 2234
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 6295,
+          "weight": 2217
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 6671,
+          "weight": 2486
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 8078,
+          "weight": 815
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2005,
+          "weight": 3052
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 6852,
+          "weight": 2769
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 6692,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-125",
+      "name": "1776",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Tân Phú",
+      "am": "Đặng Hoài Phong",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 31143,
+      "totalWeight": 9074,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4853,
+          "weight": 1342
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4749,
+          "weight": 1403
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4158,
+          "weight": 1709
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5439,
+          "weight": 589
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2175,
+          "weight": 2364
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5049,
+          "weight": 1667
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4720,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-126",
+      "name": "1101",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Tân Phú",
+      "am": "Đặng Hoài Phong",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 19333,
+      "totalWeight": 7955,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2774,
+          "weight": 910
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2662,
+          "weight": 1116
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2641,
+          "weight": 1604
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3351,
+          "weight": 1104
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1754,
+          "weight": 1390
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3075,
+          "weight": 1831
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3076,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-127",
+      "name": "3831",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Tân Phú",
+      "am": "Lê Trọng Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 55223,
+      "totalWeight": 21622,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 8260,
+          "weight": 3430
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 7405,
+          "weight": 3464
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 7747,
+          "weight": 3994
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 9207,
+          "weight": 1761
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 4096,
+          "weight": 5138
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 10429,
+          "weight": 3835
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 8079,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-129",
+      "name": "1532",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Tân Phú",
+      "am": "Đặng Hoài Phong",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 19167,
+      "totalWeight": 7894,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2927,
+          "weight": 1360
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3172,
+          "weight": 1274
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2874,
+          "weight": 1411
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 3373,
+          "weight": 538
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1005,
+          "weight": 1782
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2687,
+          "weight": 1529
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3129,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-130",
+      "name": "2441",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Thủ Đức",
+      "am": "Trần Nguyễn Long Huy",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 40433,
+      "totalWeight": 18596,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 6089,
+          "weight": 2063
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4158,
+          "weight": 2469
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4973,
+          "weight": 3263
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 5971,
+          "weight": 950
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 3162,
+          "weight": 4939
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 7529,
+          "weight": 4912
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 8551,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-131",
+      "name": "1764",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Thủ Đức",
+      "am": "Nguyễn Đoàn Anh Thư",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 24024,
+      "totalWeight": 9299,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4065,
+          "weight": 1437
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3384,
+          "weight": 1314
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2709,
+          "weight": 1925
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4255,
+          "weight": 647
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1548,
+          "weight": 2007
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 4069,
+          "weight": 1969
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3994,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-132",
+      "name": "3109",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Thủ Đức",
+      "am": "Đoàn Ngọc Trung",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 54607,
+      "totalWeight": 15320,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 8184,
+          "weight": 2631
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 7324,
+          "weight": 2604
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 8332,
+          "weight": 2761
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 9614,
+          "weight": 1377
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 4498,
+          "weight": 3072
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 7973,
+          "weight": 2875
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 8682,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-133",
+      "name": "892",
+      "province": "Hồ Chí Minh",
+      "district": "Quận Thủ Đức",
+      "am": "Nguyễn Đoàn Anh Thư",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 10987,
+      "totalWeight": 4199,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1912,
+          "weight": 756
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1452,
+          "weight": 728
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1467,
+          "weight": 723
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2077,
+          "weight": 451
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1214,
+          "weight": 799
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1584,
+          "weight": 742
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1281,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-134",
+      "name": "155",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Thành phố Bà Rịa",
+      "am": "Nguyễn Văn Tân",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 2374,
+      "totalWeight": 1407,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 320,
+          "weight": 154
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 332,
+          "weight": 131
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 265,
+          "weight": 248
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 316,
+          "weight": 214
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 242,
+          "weight": 327
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 361,
+          "weight": 333
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 538,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-135",
+      "name": "125",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Thành phố Bà Rịa",
+      "am": "Nguyễn Văn Tân",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 2099,
+      "totalWeight": 741,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 379,
+          "weight": 117
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 385,
+          "weight": 146
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 268,
+          "weight": 142
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 315,
+          "weight": 93
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 203,
+          "weight": 106
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 340,
+          "weight": 137
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 209,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-136",
+      "name": "320",
+      "province": "Bình Dương",
+      "district": "Thành phố Dĩ An",
+      "am": "Đoàn Ngọc Trung",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 4544,
+      "totalWeight": 2362,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 519,
+          "weight": 295
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 478,
+          "weight": 365
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 690,
+          "weight": 423
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 856,
+          "weight": 358
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 551,
+          "weight": 494
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 573,
+          "weight": 427
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 877,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-137",
+      "name": "466",
+      "province": "Bình Dương",
+      "district": "Thành phố Dĩ An",
+      "am": "Đoàn Ngọc Trung",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 10784,
+      "totalWeight": 3239,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1235,
+          "weight": 480
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1468,
+          "weight": 551
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1552,
+          "weight": 667
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2412,
+          "weight": 345
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 896,
+          "weight": 613
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1957,
+          "weight": 583
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1264,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-138",
+      "name": "683",
+      "province": "Bình Dương",
+      "district": "Thành phố Dĩ An",
+      "am": "Trần Nguyễn Long Huy",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 15263,
+      "totalWeight": 3345,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2495,
+          "weight": 634
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2041,
+          "weight": 612
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3396,
+          "weight": 582
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2163,
+          "weight": 211
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 926,
+          "weight": 615
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1363,
+          "weight": 691
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2879,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-139",
+      "name": "1209",
+      "province": "Bình Dương",
+      "district": "Thành phố Dĩ An",
+      "am": "Trần Nguyễn Long Huy",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 19768,
+      "totalWeight": 6373,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4204,
+          "weight": 1041
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 3812,
+          "weight": 1209
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2130,
+          "weight": 1227
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2853,
+          "weight": 645
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 886,
+          "weight": 1139
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2880,
+          "weight": 1112
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3003,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-140",
+      "name": "163",
+      "province": "Bình Dương",
+      "district": "Thành phố Tân Uyên",
+      "am": "Vi Mạnh Dũng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 3212,
+      "totalWeight": 1072,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 313,
+          "weight": 116
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 701,
+          "weight": 148
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 374,
+          "weight": 181
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 549,
+          "weight": 143
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 107,
+          "weight": 238
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 689,
+          "weight": 246
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 479,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-141",
+      "name": "80",
+      "province": "Bình Dương",
+      "district": "Thành phố Tân Uyên",
+      "am": "Khiếu Trung Kiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 1414,
+      "totalWeight": 577,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 293,
+          "weight": 80
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 179,
+          "weight": 91
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 139,
+          "weight": 80
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 155,
+          "weight": 94
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 171,
+          "weight": 132
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 264,
+          "weight": 100
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 213,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-142",
+      "name": "180",
+      "province": "Bình Dương",
+      "district": "Thành phố Tân Uyên",
+      "am": "Khiếu Trung Kiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 1451,
+      "totalWeight": 722,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 259,
+          "weight": 149
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 198,
+          "weight": 115
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 193,
+          "weight": 133
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 230,
+          "weight": 36
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 42,
+          "weight": 163
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 280,
+          "weight": 126
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 249,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-143",
+      "name": "136",
+      "province": "Bình Dương",
+      "district": "Thành phố Tân Uyên",
+      "am": "Khiếu Trung Kiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 4828,
+      "totalWeight": 955,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 242,
+          "weight": 142
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 195,
+          "weight": 120
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 762,
+          "weight": 147
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 835,
+          "weight": 263
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 508,
+          "weight": 171
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1110,
+          "weight": 112
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1176,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-144",
+      "name": "379",
+      "province": "Bình Dương",
+      "district": "Thành phố Tân Uyên",
+      "am": "Vi Mạnh Dũng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 9691,
+      "totalWeight": 2463,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1392,
+          "weight": 365
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2013,
+          "weight": 386
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1224,
+          "weight": 468
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1351,
+          "weight": 288
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1007,
+          "weight": 518
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1534,
+          "weight": 438
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1170,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-145",
+      "name": "269",
+      "province": "Bình Dương",
+      "district": "Thành phố Tân Uyên",
+      "am": "Khiếu Trung Kiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 4915,
+      "totalWeight": 1157,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 776,
+          "weight": 219
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 651,
+          "weight": 211
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1065,
+          "weight": 200
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 631,
+          "weight": 102
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 395,
+          "weight": 199
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 730,
+          "weight": 226
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 667,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-146",
+      "name": "428",
+      "province": "Bình Dương",
+      "district": "Thành phố Thủ Dầu Một",
+      "am": "Vũ Bạch Khiêm",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 11192,
+      "totalWeight": 2150,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2843,
+          "weight": 430
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1921,
+          "weight": 402
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1654,
+          "weight": 452
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1810,
+          "weight": 195
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 428,
+          "weight": 323
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1134,
+          "weight": 348
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1402,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-147",
+      "name": "978",
+      "province": "Bình Dương",
+      "district": "Thành phố Thủ Dầu Một",
+      "am": "Vũ Bạch Khiêm",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 10279,
+      "totalWeight": 8562,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1808,
+          "weight": 1283
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1874,
+          "weight": 1735
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1671,
+          "weight": 1968
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2404,
+          "weight": 2101
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1065,
+          "weight": 1470
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1454,
+          "weight": 5
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-148",
+      "name": "573",
+      "province": "Bình Dương",
+      "district": "Thành phố Thủ Dầu Một",
+      "am": "Vũ Bạch Khiêm",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 31139,
+      "totalWeight": 3824,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3999,
+          "weight": 515
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4253,
+          "weight": 509
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4845,
+          "weight": 645
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 6043,
+          "weight": 593
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 3855,
+          "weight": 923
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3713,
+          "weight": 639
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 4431,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-149",
+      "name": "2403",
+      "province": "Bình Dương",
+      "district": "Thành phố Thủ Dầu Một",
+      "am": "Vũ Bạch Khiêm",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 21633,
+      "totalWeight": 13851,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 3407,
+          "weight": 2210
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2889,
+          "weight": 2241
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 3478,
+          "weight": 2464
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4243,
+          "weight": 1621
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2333,
+          "weight": 1804
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1672,
+          "weight": 3511
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3611,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-150",
+      "name": "742",
+      "province": "Bình Dương",
+      "district": "Thành phố Thủ Dầu Một",
+      "am": "Vũ Bạch Khiêm",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 10728,
+      "totalWeight": 4242,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1804,
+          "weight": 667
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1312,
+          "weight": 757
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1280,
+          "weight": 682
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1534,
+          "weight": 656
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1534,
+          "weight": 831
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1760,
+          "weight": 649
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1504,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-151",
+      "name": "673",
+      "province": "Bình Dương",
+      "district": "Thành phố Thủ Dầu Một",
+      "am": "Vũ Bạch Khiêm",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 14073,
+      "totalWeight": 3433,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2568,
+          "weight": 524
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1962,
+          "weight": 476
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1630,
+          "weight": 639
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2717,
+          "weight": 301
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1353,
+          "weight": 792
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2060,
+          "weight": 701
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1783,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-152",
+      "name": "9",
+      "province": "Hồ Chí Minh",
+      "district": "Thành phố Thủ Đức",
+      "am": "Nguyễn Đoàn Anh Thư",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 46,
+      "totalWeight": 3,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 30,
+          "weight": 0
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 0,
+          "weight": 0
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 0,
+          "weight": 1
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4,
+          "weight": 1
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 10,
+          "weight": 0
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 0,
+          "weight": 1
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-153",
+      "name": "842",
+      "province": "Bình Dương",
+      "district": "Thành phố Thuận An",
+      "am": "Vi Mạnh Dũng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 13952,
+      "totalWeight": 4239,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2075,
+          "weight": 741
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1971,
+          "weight": 725
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2182,
+          "weight": 761
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2435,
+          "weight": 371
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 641,
+          "weight": 960
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2878,
+          "weight": 681
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1770,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-154",
+      "name": "495",
+      "province": "Bình Dương",
+      "district": "Thành phố Thuận An",
+      "am": "Vũ Bạch Khiêm",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 18206,
+      "totalWeight": 2460,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 2934,
+          "weight": 394
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2447,
+          "weight": 448
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2022,
+          "weight": 515
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4278,
+          "weight": 263
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2152,
+          "weight": 500
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2742,
+          "weight": 340
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1631,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-155",
+      "name": "1163",
+      "province": "Bình Dương",
+      "district": "Thành phố Thuận An",
+      "am": "Vũ Bạch Khiêm",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 14432,
+      "totalWeight": 6488,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 1745,
+          "weight": 1029
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 2076,
+          "weight": 1103
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 2326,
+          "weight": 1216
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 2139,
+          "weight": 599
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 1351,
+          "weight": 1311
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 2209,
+          "weight": 1230
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 2586,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-156",
+      "name": "368",
+      "province": "Bình Dương",
+      "district": "Thành phố Thuận An",
+      "am": "Vi Mạnh Dũng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 5154,
+      "totalWeight": 1788,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 820,
+          "weight": 301
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 635,
+          "weight": 308
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 767,
+          "weight": 330
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 970,
+          "weight": 188
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 388,
+          "weight": 300
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 666,
+          "weight": 361
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 908,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-157",
+      "name": "571",
+      "province": "Bình Dương",
+      "district": "Thành phố Thuận An",
+      "am": "Vũ Bạch Khiêm",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 5673,
+      "totalWeight": 3625,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 947,
+          "weight": 629
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 905,
+          "weight": 588
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 805,
+          "weight": 687
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 934,
+          "weight": 283
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 268,
+          "weight": 536
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 729,
+          "weight": 902
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1085,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-158",
+      "name": "1659",
+      "province": "Bình Dương",
+      "district": "Thành phố Thuận An",
+      "am": "Vũ Bạch Khiêm",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 27014,
+      "totalWeight": 7856,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4434,
+          "weight": 1330
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4669,
+          "weight": 1364
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 4488,
+          "weight": 1491
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4168,
+          "weight": 801
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 2428,
+          "weight": 1650
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 3660,
+          "weight": 1220
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3167,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-159",
+      "name": "163",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Thành phố Vũng Tàu",
+      "am": "Phạm Văn Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 2876,
+      "totalWeight": 941,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 475,
+          "weight": 205
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 539,
+          "weight": 155
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 458,
+          "weight": 151
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 494,
+          "weight": 132
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 272,
+          "weight": 138
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 346,
+          "weight": 160
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 292,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-160",
+      "name": "137",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Thành phố Vũng Tàu",
+      "am": "Phạm Văn Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 1372,
+      "totalWeight": 919,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 255,
+          "weight": 156
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 249,
+          "weight": 136
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 219,
+          "weight": 235
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 176,
+          "weight": 107
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 122,
+          "weight": 153
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 169,
+          "weight": 132
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 182,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-161",
+      "name": "376",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Thành phố Vũng Tàu",
+      "am": "Phạm Văn Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 3330,
+      "totalWeight": 1995,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 495,
+          "weight": 292
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 535,
+          "weight": 486
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 555,
+          "weight": 369
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 487,
+          "weight": 220
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 292,
+          "weight": 324
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 394,
+          "weight": 304
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 572,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-162",
+      "name": "186",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Thành phố Vũng Tàu",
+      "am": "Nguyễn Thanh Bình",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 6103,
+      "totalWeight": 1269,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 743,
+          "weight": 160
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 949,
+          "weight": 140
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 658,
+          "weight": 183
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1024,
+          "weight": 120
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 525,
+          "weight": 357
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1036,
+          "weight": 309
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1168,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-163",
+      "name": "80",
+      "province": "Bình Dương",
+      "district": "Thị xã Bến Cát",
+      "am": "Lê Thị Cẩm Tiên",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 1988,
+      "totalWeight": 417,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 210,
+          "weight": 61
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 347,
+          "weight": 96
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 317,
+          "weight": 107
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 323,
+          "weight": 42
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 231,
+          "weight": 54
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 276,
+          "weight": 57
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 284,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-164",
+      "name": "318",
+      "province": "Bình Dương",
+      "district": "Thị xã Bến Cát",
+      "am": "Nguyễn Hữu Tiến",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 8923,
+      "totalWeight": 2102,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 405,
+          "weight": 391
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 1471,
+          "weight": 355
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 1323,
+          "weight": 395
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 1881,
+          "weight": 155
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 635,
+          "weight": 470
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 1622,
+          "weight": 336
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 1586,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-165",
+      "name": "150",
+      "province": "Bình Dương",
+      "district": "Thị xã Bến Cát",
+      "am": "Nguyễn Hữu Tiến",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 2740,
+      "totalWeight": 845,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 296,
+          "weight": 147
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 360,
+          "weight": 143
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 564,
+          "weight": 193
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 489,
+          "weight": 93
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 132,
+          "weight": 150
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 650,
+          "weight": 119
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 249,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-166",
+      "name": "916",
+      "province": "Bình Dương",
+      "district": "Thị xã Bến Cát",
+      "am": "Nguyễn Hữu Tiến",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 32924,
+      "totalWeight": 5087,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 4729,
+          "weight": 817
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 4766,
+          "weight": 1011
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 5207,
+          "weight": 974
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 4673,
+          "weight": 849
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 4381,
+          "weight": 950
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 5742,
+          "weight": 486
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 3426,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-167",
+      "name": "311",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Thị Xã Phú Mỹ",
+      "am": "Phạm Văn Tùng",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 2125,
+      "totalWeight": 1582,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 370,
+          "weight": 188
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 209,
+          "weight": 245
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 232,
+          "weight": 201
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 355,
+          "weight": 326
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 151,
+          "weight": 293
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 430,
+          "weight": 329
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 378,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-168",
+      "name": "178",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Thị Xã Phú Mỹ",
+      "am": "Nguyễn Thanh Bình",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 2475,
+      "totalWeight": 1146,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 589,
+          "weight": 183
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 268,
+          "weight": 178
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 434,
+          "weight": 239
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 538,
+          "weight": 214
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 209,
+          "weight": 180
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 244,
+          "weight": 152
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 193,
+          "weight": 0
+        }
+      ]
+    },
+    {
+      "id": "PO-169",
+      "name": "296",
+      "province": "Bà Rịa - Vũng Tàu",
+      "district": "Thị Xã Phú Mỹ",
+      "am": "Nguyễn Thanh Bình",
+      "capacity": 0,
+      "volMet": 0,
+      "utilizationRate": 0,
+      "totalOrders": 3649,
+      "totalWeight": 1414,
+      "history": [
+        {
+          "day": "22/04/2026",
+          "orders": 639,
+          "weight": 227
+        },
+        {
+          "day": "23/04/2026",
+          "orders": 616,
+          "weight": 237
+        },
+        {
+          "day": "24/04/2026",
+          "orders": 517,
+          "weight": 248
+        },
+        {
+          "day": "25/04/2026",
+          "orders": 479,
+          "weight": 79
+        },
+        {
+          "day": "26/04/2026",
+          "orders": 192,
+          "weight": 374
+        },
+        {
+          "day": "27/04/2026",
+          "orders": 571,
+          "weight": 249
+        },
+        {
+          "day": "28/04/2026",
+          "orders": 635,
+          "weight": 0
+        }
+      ]
+    }
+  ],
+  "ams": [
+    {
+      "name": "0",
+      "postOffices": 1,
+      "totalOrders": 1231749,
+      "totalWeight": 158600
+    },
+    {
+      "name": "Khiếu Trung Kiên",
+      "postOffices": 5,
+      "totalOrders": 13667,
+      "totalWeight": 3800
+    },
+    {
+      "name": "Lê Thị Cẩm Tiên",
+      "postOffices": 6,
+      "totalOrders": 9295,
+      "totalWeight": 3144
+    },
+    {
+      "name": "Tôn Ngọc Lực",
+      "postOffices": 5,
+      "totalOrders": 112031,
+      "totalWeight": 25388
+    },
+    {
+      "name": "Nguyễn Thị Huyền Trinh",
+      "postOffices": 4,
+      "totalOrders": 114954,
+      "totalWeight": 28925
+    },
+    {
+      "name": "Nguyễn Quang Thắng",
+      "postOffices": 6,
+      "totalOrders": 95203,
+      "totalWeight": 32047
+    },
+    {
+      "name": "Nguyễn Hữu Lộc",
+      "postOffices": 1,
+      "totalOrders": 69936,
+      "totalWeight": 12253
+    },
+    {
+      "name": "Huỳnh Tấn Dũng",
+      "postOffices": 6,
+      "totalOrders": 256147,
+      "totalWeight": 87076
+    },
+    {
+      "name": "Nguyễn Văn Tài",
+      "postOffices": 6,
+      "totalOrders": 106429,
+      "totalWeight": 16616
+    },
+    {
+      "name": "Nguyễn Thanh Bình",
+      "postOffices": 4,
+      "totalOrders": 16163,
+      "totalWeight": 5701
+    },
+    {
+      "name": "Lê Trọng Hậu",
+      "postOffices": 3,
+      "totalOrders": 11029,
+      "totalWeight": 5486
+    },
+    {
+      "name": "Nguyễn Văn Tuyên",
+      "postOffices": 4,
+      "totalOrders": 116732,
+      "totalWeight": 17977
+    },
+    {
+      "name": "Phạm Văn Tùng",
+      "postOffices": 6,
+      "totalOrders": 15600,
+      "totalWeight": 8037
+    },
+    {
+      "name": "Nguyễn Văn Tân",
+      "postOffices": 4,
+      "totalOrders": 9658,
+      "totalWeight": 6192
+    },
+    {
+      "name": "Trần Đại Hưng",
+      "postOffices": 3,
+      "totalOrders": 16445,
+      "totalWeight": 8908
+    },
+    {
+      "name": "Nguyễn Thị Hoàng Yến",
+      "postOffices": 4,
+      "totalOrders": 20072,
+      "totalWeight": 8952
+    },
+    {
+      "name": "Hoàng Đình Vũ",
+      "postOffices": 6,
+      "totalOrders": 108996,
+      "totalWeight": 38670
+    },
+    {
+      "name": "Lê Trọng Tùng",
+      "postOffices": 5,
+      "totalOrders": 169605,
+      "totalWeight": 53417
+    },
+    {
+      "name": "Phan Nguyễn An",
+      "postOffices": 4,
+      "totalOrders": 111989,
+      "totalWeight": 26364
+    },
+    {
+      "name": "Lê Hải Duy",
+      "postOffices": 3,
+      "totalOrders": 90936,
+      "totalWeight": 29907
+    },
+    {
+      "name": "Huỳnh Thị Mai Trinh",
+      "postOffices": 5,
+      "totalOrders": 100467,
+      "totalWeight": 47644
+    },
+    {
+      "name": "Nguyễn Đình Toàn",
+      "postOffices": 2,
+      "totalOrders": 20214,
+      "totalWeight": 7590
+    },
+    {
+      "name": "Nguyễn Thị Mỹ Tiên",
+      "postOffices": 1,
+      "totalOrders": 6306,
+      "totalWeight": 3091
+    },
+    {
+      "name": "Đoàn Ngọc Trung",
+      "postOffices": 4,
+      "totalOrders": 79962,
+      "totalWeight": 23702
+    },
+    {
+      "name": "Võ Thị Bích Ngọc",
+      "postOffices": 7,
+      "totalOrders": 113829,
+      "totalWeight": 48086
+    },
+    {
+      "name": "Võ Minh Tông",
+      "postOffices": 4,
+      "totalOrders": 164873,
+      "totalWeight": 68523
+    },
+    {
+      "name": "Tạ Đăng Hiếu",
+      "postOffices": 3,
+      "totalOrders": 59083,
+      "totalWeight": 26240
+    },
+    {
+      "name": "Phạm Huy Thiện",
+      "postOffices": 2,
+      "totalOrders": 18444,
+      "totalWeight": 11375
+    },
+    {
+      "name": "Trần Lệ Huyền Trân",
+      "postOffices": 5,
+      "totalOrders": 68997,
+      "totalWeight": 25796
+    },
+    {
+      "name": "Nguyễn Hoàng Khánh Linh",
+      "postOffices": 4,
+      "totalOrders": 24841,
+      "totalWeight": 13776
+    },
+    {
+      "name": "Nguyễn Chơn Như",
+      "postOffices": 6,
+      "totalOrders": 129005,
+      "totalWeight": 45378
+    },
+    {
+      "name": "Đặng Hoài Phong",
+      "postOffices": 5,
+      "totalOrders": 127187,
+      "totalWeight": 39344
+    },
+    {
+      "name": "Trần Nguyễn Long Huy",
+      "postOffices": 3,
+      "totalOrders": 75464,
+      "totalWeight": 28314
+    },
+    {
+      "name": "Nguyễn Đoàn Anh Thư",
+      "postOffices": 3,
+      "totalOrders": 35057,
+      "totalWeight": 13501
+    },
+    {
+      "name": "Vi Mạnh Dũng",
+      "postOffices": 4,
+      "totalOrders": 32009,
+      "totalWeight": 9562
+    },
+    {
+      "name": "Vũ Bạch Khiêm",
+      "postOffices": 10,
+      "totalOrders": 164369,
+      "totalWeight": 56491
+    },
+    {
+      "name": "Nguyễn Hữu Tiến",
+      "postOffices": 3,
+      "totalOrders": 44587,
+      "totalWeight": 8034
+    }
+  ],
+  "summary": {
+    "totalOrders": 3961330,
+    "totalWeight": 1053907,
+    "activePostOffices": 157
+  }
+}

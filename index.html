@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHN Command Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar glass-panel">
+            <div class="brand">
+                <div class="logo">GHN</div>
+                <div class="brand-text">Command Center</div>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#overview" class="nav-item active" data-target="overview">
+                    <i data-lucide="layout-dashboard"></i> Tổng Quan
+                </a>
+                <a href="#post-offices" class="nav-item" data-target="post-offices">
+                    <i data-lucide="building-2"></i> Bưu Cục & Hạ Tầng
+                </a>
+                <a href="#ams" class="nav-item" data-target="ams">
+                    <i data-lucide="users"></i> Hiệu Suất AM
+                </a>
+                <a href="#trends" class="nav-item" data-target="trends">
+                    <i data-lucide="trending-up"></i> Xu Hướng
+                </a>
+                <a href="#materials" class="nav-item" data-target="materials">
+                    <i data-lucide="package-open"></i> Vật Tư Cấp Phát
+                </a>
+                <a href="#forklifts" class="nav-item" data-target="forklifts">
+                    <i data-lucide="truck"></i> Nhật Ký Xe Nâng
+                </a>
+                <a href="#purchases" class="nav-item" data-target="purchases">
+                    <i data-lucide="shopping-cart"></i> Tình Trạng Đặt Mua
+                </a>
+            </nav>
+            
+            <div class="user-profile">
+                <img src="https://ui-avatars.com/api/?name=Admin+GHN&background=f26522&color=fff" alt="User">
+                <div class="user-info">
+                    <span class="user-name">Quản lý Vận hành</span>
+                    <span class="user-role">SCOMMERCE</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="search-bar glass-panel">
+                    <i data-lucide="search"></i>
+                    <input type="text" placeholder="Tìm kiếm bưu cục, AM..." id="searchInput">
+                </div>
+                <div class="topbar-actions">
+                    <div class="date-picker glass-panel">
+                        <i data-lucide="calendar"></i>
+                        <span>22/04/2026 - 28/04/2026</span>
+                    </div>
+                    <button class="icon-btn glass-panel notification-btn">
+                        <i data-lucide="bell"></i>
+                        <span class="badge">3</span>
+                    </button>
+                </div>
+            </header>
+
+            <div id="loading" class="loading-state">
+                <i data-lucide="loader" class="spin"></i> Đang tải dữ liệu vận hành...
+            </div>
+
+            <!-- Dashboard Content -->
+            <div id="dashboard-content" class="dashboard-content hidden">
+                
+                <!-- Module 1: Overview -->
+                <section id="overview" class="module-section active">
+                    <div class="section-header">
+                        <h2>Tổng Quan Vận Hành Toàn Quốc</h2>
+                        <p class="subtitle">Trạng thái Giao / Lấy của 157 Bưu cục trọng điểm</p>
+                    </div>
+
+                    <!-- KPIs -->
+                    <div class="kpi-grid">
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-icon orange"><i data-lucide="package"></i></div>
+                            <div class="kpi-details">
+                                <h3>Tổng Sản Lượng</h3>
+                                <div class="kpi-value" id="kpi-total-orders">0</div>
+                                <div class="kpi-trend up"><i data-lucide="arrow-up-right"></i> +12%</div>
+                            </div>
+                        </div>
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-icon red"><i data-lucide="weight"></i></div>
+                            <div class="kpi-details">
+                                <h3>Tổng Khối Lượng (Kg)</h3>
+                                <div class="kpi-value" id="kpi-total-weight">0</div>
+                                <div class="kpi-trend up"><i data-lucide="arrow-up-right"></i> +8%</div>
+                            </div>
+                        </div>
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-icon green"><i data-lucide="building"></i></div>
+                            <div class="kpi-details">
+                                <h3>Bưu Cục Hoạt Động</h3>
+                                <div class="kpi-value" id="kpi-total-pos">0</div>
+                                <div class="kpi-trend neutral"><i data-lucide="minus"></i> Ổn định</div>
+                            </div>
+                        </div>
+                        <div class="kpi-card glass-panel">
+                            <div class="kpi-icon purple"><i data-lucide="users-2"></i></div>
+                            <div class="kpi-details">
+                                <h3>Area Managers (AM)</h3>
+                                <div class="kpi-value" id="kpi-total-ams">0</div>
+                                <div class="kpi-trend neutral"><i data-lucide="minus"></i> Ổn định</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts Row -->
+                    <div class="charts-row">
+                        <div class="chart-container glass-panel span-2">
+                            <div class="chart-header">
+                                <h3>Xu Hướng Sản Lượng (7 Ngày)</h3>
+                            </div>
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                        <div class="chart-container glass-panel">
+                            <div class="chart-header">
+                                <h3>Top 5 Tỉnh/Thành</h3>
+                            </div>
+                            <canvas id="provinceChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Module 2: Post Offices Heatmap -->
+                <section id="post-offices" class="module-section">
+                    <div class="section-header">
+                        <h2>Sức Khỏe Hạ Tầng Bưu Cục</h2>
+                        <p class="subtitle">Theo dõi tỷ lệ đáp ứng Volume / Capacity tối đa (Heatmap)</p>
+                    </div>
+
+                    <div class="table-container glass-panel">
+                        <div class="table-actions">
+                            <h3>Bản Đồ Nhiệt (Heatmap)</h3>
+                            <div class="legend">
+                                <span class="legend-item"><span class="dot red"></span> Quá tải (>90%)</span>
+                                <span class="legend-item"><span class="dot yellow"></span> Cảnh báo (70-90%)</span>
+                                <span class="legend-item"><span class="dot green"></span> An toàn (<70%)</span>
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table id="poTable">
+                                <thead>
+                                    <tr>
+                                        <th>Bưu Cục</th>
+                                        <th>Khu Vực</th>
+                                        <th>Quản Lý (AM)</th>
+                                        <th class="text-right">Sản Lượng</th>
+                                        <th class="text-right">Capacity Max</th>
+                                        <th class="text-center">Trạng Thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Module 3: AM Performance -->
+                <section id="ams" class="module-section">
+                    <div class="section-header">
+                        <h2>Hiệu Suất Area Managers (AM)</h2>
+                        <p class="subtitle">Bảng xếp hạng năng lực xử lý theo người quản lý vùng</p>
+                    </div>
+                    
+                    <div class="charts-row">
+                        <div class="chart-container glass-panel span-3">
+                            <div class="chart-header">
+                                <h3>Top 10 AM theo Sản Lượng Xử Lý</h3>
+                            </div>
+                            <canvas id="amChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Module 4: Trends -->
+                <section id="trends" class="module-section">
+                    <div class="section-header">
+                        <h2>Phân Tích Xu Hướng Chuyên Sâu</h2>
+                        <p class="subtitle">So sánh tăng trưởng và biến động theo từng khu vực</p>
+                    </div>
+                    <div class="glass-panel" style="padding: 2rem; text-align: center; color: var(--text-secondary);">
+                        <i data-lucide="bar-chart-2" style="width: 48px; height: 48px; opacity: 0.5; margin-bottom: 1rem;"></i>
+                        <p>Module đang phân tích dữ liệu AI dự báo. Vui lòng quay lại sau!</p>
+                    </div>
+                </section>
+
+                <!-- Module 5: Materials -->
+                <section id="materials" class="module-section">
+                    <div class="section-header">
+                        <h2>Tình Trạng Cấp Phát Vật Tư</h2>
+                        <p class="subtitle">Theo dõi lịch sử và trạng thái cấp phát vật tư cho các bưu cục</p>
+                    </div>
+
+                    <div class="table-container glass-panel">
+                        <div class="table-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3>Lịch sử cấp phát mới nhất</h3>
+                            <div class="search-bar" style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                                <input type="text" id="searchMaterials" placeholder="Tìm bưu cục, vật tư..." style="background: transparent; border: none; color: var(--text-primary); outline: none; font-family: inherit;">
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table id="materialsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Ngày Cấp Phát</th>
+                                        <th>Bưu Cục</th>
+                                        <th>Hàng Hóa</th>
+                                        <th class="text-right">Số Lượng</th>
+                                        <th class="text-center">ĐVT</th>
+                                        <th class="text-center">Hàng Về Tại</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Module 6: Forklifts -->
+                <section id="forklifts" class="module-section">
+                    <div class="section-header">
+                        <h2>Nhật Ký Sự Cố Xe Nâng</h2>
+                        <p class="subtitle">Theo dõi tình trạng hoạt động và bảo trì các thiết bị xe nâng</p>
+                    </div>
+
+                    <div class="table-container glass-panel">
+                        <div class="table-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3>Lịch sử sự cố</h3>
+                            <div class="search-bar" style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                                <input type="text" id="searchForklifts" placeholder="Tìm mã xe, loại sự cố..." style="background: transparent; border: none; color: var(--text-primary); outline: none; font-family: inherit;">
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table id="forkliftsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Mã Xe (Tên Xe)</th>
+                                        <th>Nhà Cung Cấp</th>
+                                        <th>Loại Sự Cố</th>
+                                        <th class="text-center">Thời Gian Sự Cố</th>
+                                        <th class="text-center">Thời Gian Khắc Phục</th>
+                                        <th class="text-center">Trạng Thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Module 7: Purchases -->
+                <section id="purchases" class="module-section">
+                    <div class="section-header">
+                        <h2>Tình Trạng Đặt Mua Vật Tư</h2>
+                        <p class="subtitle">Theo dõi tiến độ đơn hàng và thời gian nhận hàng dự kiến</p>
+                    </div>
+
+                    <div class="table-container glass-panel">
+                        <div class="table-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <h3>Danh sách đơn hàng</h3>
+                            <div class="search-bar" style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                                <input type="text" id="searchPurchases" placeholder="Tìm tên hàng, mã hàng..." style="background: transparent; border: none; color: var(--text-primary); outline: none; font-family: inherit;">
+                            </div>
+                        </div>
+                        <div class="table-wrapper">
+                            <table id="purchasesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Tên Hàng Hóa</th>
+                                        <th>Mã Hàng</th>
+                                        <th class="text-right">Số Lượng</th>
+                                        <th class="text-center">Ngày Đặt</th>
+                                        <th class="text-center">Ngày Nhận</th>
+                                        <th class="text-center">Trạng Thái</th>
+                                        <th class="text-center">Thao Tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="data/operations.js"></script>
+    <script src="data/materials.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
