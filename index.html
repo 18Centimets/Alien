@@ -40,6 +40,9 @@
                 <a href="#purchases" class="nav-item" data-target="purchases">
                     <i data-lucide="shopping-cart"></i> Tình Trạng Đặt Mua
                 </a>
+                <a href="#transport-map" class="nav-item" data-target="transport-map">
+                    <i data-lucide="map"></i> Bản Đồ Vận Tải
+                </a>
             </nav>
             
             <div class="user-profile">
@@ -307,6 +310,20 @@
                                     <!-- Populated by JS -->
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Module 8: Transport Map -->
+                <section id="transport-map" class="module-section">
+                    <div class="section-header">
+                        <h2>Bản Đồ Mạng Lưới Vận Tải</h2>
+                        <p class="subtitle">Trực quan hóa luồng vận hành và vị trí các bưu cục trọng điểm</p>
+                    </div>
+                    
+                    <div class="glass-panel" style="padding: 10px; height: calc(100vh - 250px); min-height: 500px;">
+                        <div class="map-container" style="height: 100%; border-radius: 12px; overflow: hidden; position: relative;">
+                            <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1rIvXNdrMwLoLnAUq0i7FsHQxEaINlGM&ehbc=2E312F" width="100%" height="100%" style="border:0; filter: invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.2);"></iframe>
                         </div>
                     </div>
                 </section>
