@@ -320,10 +320,47 @@
                         <h2>Bản Đồ Mạng Lưới Vận Tải</h2>
                         <p class="subtitle">Trực quan hóa luồng vận hành và vị trí các bưu cục trọng điểm</p>
                     </div>
+
+                    <div class="map-controls">
+                        <div class="search-group glass-panel">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="mapSearchPO" placeholder="Tìm tên bưu cục..." list="poList">
+                            <datalist id="poList"></datalist>
+                        </div>
+                        <div class="search-group glass-panel">
+                            <i data-lucide="map-pin"></i>
+                            <input type="text" id="mapSearchProv" placeholder="Tìm theo tỉnh..." list="provList">
+                            <datalist id="provList"></datalist>
+                        </div>
+                    </div>
                     
-                    <div class="glass-panel" style="padding: 10px; height: calc(100vh - 250px); min-height: 500px;">
+                    <div class="glass-panel" style="padding: 10px; height: calc(100vh - 350px); min-height: 500px; position: relative;">
+                        <div id="mapDetailsOverlay" class="map-details-overlay glass-panel hidden">
+                            <button class="close-overlay" id="closeMapOverlay"><i data-lucide="x"></i></button>
+                            <div class="overlay-content">
+                                <h4 id="overlayName">Tên Bưu Cục</h4>
+                                <div class="overlay-grid">
+                                    <div class="overlay-item">
+                                        <span class="label">Sản lượng:</span>
+                                        <span id="overlayOrders" class="value">0</span>
+                                    </div>
+                                    <div class="overlay-item">
+                                        <span class="label">Khu vực:</span>
+                                        <span id="overlayDistrict" class="value">--</span>
+                                    </div>
+                                    <div class="overlay-item">
+                                        <span class="label">Tỉnh:</span>
+                                        <span id="overlayProvince" class="value">--</span>
+                                    </div>
+                                    <div class="overlay-item">
+                                        <span class="label">AM Quản lý:</span>
+                                        <span id="overlayAM" class="value">--</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="map-container" style="height: 100%; border-radius: 12px; overflow: hidden; position: relative;">
-                            <iframe src="https://www.google.com/maps/d/u/0/embed?mid=1rIvXNdrMwLoLnAUq0i7FsHQxEaINlGM&ehbc=2E312F" width="100%" height="100%" style="border:0; filter: invert(90%) hue-rotate(180deg) brightness(0.9) contrast(1.2);"></iframe>
+                            <iframe id="mapIframe" src="https://www.google.com/maps/d/u/0/embed?mid=1rIvXNdrMwLoLnAUq0i7FsHQxEaINlGM&ehbc=2E312F" width="100%" height="100%" style="border:0;"></iframe>
                         </div>
                     </div>
                 </section>

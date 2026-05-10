@@ -105,6 +105,7 @@ function initDashboard() {
     renderProvinceChart();
     renderHeatmapTable();
     renderAMChart();
+    initMapSearch(); // New function
     if (ghnMaterialsData) {
         if (ghnMaterialsData.allocations && ghnMaterialsData.allocations.length > 0) {
             renderMaterialsTable();
@@ -466,6 +467,80 @@ function initPurchasesSearch() {
             renderPurchasesTable(e.target.value);
         });
     }
+}
+
+// Map Search Logic
+function initMapSearch() {
+    const poList = document.getElementById('poList');
+    const provList = document.getElementById('provList');
+    const mapSearchPO = document.getElementById('mapSearchPO');
+    const mapSearchProv = document.getElementById('mapSearchProv');
+    const overlay = document.getElementById('mapDetailsOverlay');
+    const closeBtn = document.getElementById('closeMapOverlay');
+
+    if (!poList || !ghnData) return;
+
+    // Populate datalists
+    const pos = ghnData.postOffices;
+    pos.forEach(po => {
+        const opt = document.createElement('option');
+        opt.value = po.name;
+        poList.appendChild(opt);
+    });
+
+    const provinces = [...new Set(pos.map(po => po.province))].sort();
+    provinces.forEach(prov => {
+        const opt = document.createElement('option');
+        opt.value = prov;
+        provList.appendChild(opt);
+    });
+
+    // PO Search Event
+    mapSearchPO.addEventListener('change', (e) => {
+        const found = pos.find(p => p.name === e.target.value);
+        if (found) {
+            showMapOverlay(found);
+        }
+    });
+
+    // Province Search Event
+    mapSearchProv.addEventListener('change', (e) => {
+        const provPOs = pos.filter(p => p.province === e.target.value);
+        if (provPOs.length > 0) {
+            showProvinceOverlay(e.target.value, provPOs);
+        }
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => overlay.classList.add('hidden'));
+    }
+}
+
+function showMapOverlay(po) {
+    const overlay = document.getElementById('mapDetailsOverlay');
+    if (!overlay) return;
+    
+    document.getElementById('overlayName').textContent = po.name;
+    document.getElementById('overlayOrders').textContent = formatNumber(po.volMet);
+    document.getElementById('overlayDistrict').textContent = po.district;
+    document.getElementById('overlayProvince').textContent = po.province;
+    document.getElementById('overlayAM').textContent = po.am;
+    
+    overlay.classList.remove('hidden');
+}
+
+function showProvinceOverlay(province, provPOs) {
+    const overlay = document.getElementById('mapDetailsOverlay');
+    if (!overlay) return;
+
+    const totalOrders = provPOs.reduce((sum, p) => sum + p.volMet, 0);
+    document.getElementById('overlayName').textContent = `Khu vực: ${province}`;
+    document.getElementById('overlayOrders').textContent = formatNumber(totalOrders);
+    document.getElementById('overlayDistrict').textContent = `${provPOs.length} Bưu cục`;
+    document.getElementById('overlayProvince').textContent = province;
+    document.getElementById('overlayAM').textContent = "Danh sách đa dạng";
+    
+    overlay.classList.remove('hidden');
 }
 
 // Start app
