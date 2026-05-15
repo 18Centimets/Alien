@@ -62,7 +62,16 @@ async function fetchOnlineMaterials() {
                 fixTime: item.fixDate === '01/01/1970' ? '' : item.fixDate,
                 note: item.note || ''
             })),
-            purchases: window.ghnMaterialsConfig ? window.ghnMaterialsConfig.purchases : [] // Keep offline purchases
+            purchases: window.ghnMaterialsConfig ? window.ghnMaterialsConfig.purchases : [], // Keep offline purchases
+            infraHealth: (apiData.infraHealth || []).map(item => ({
+                date: item.date || 'N/A',
+                group: item.group || 'N/A',
+                item: item.item || 'N/A',
+                status: item.status || 'N/A',
+                desc: item.desc || '',
+                action: item.action || '-',
+                inspector: item.inspector || 'N/A'
+            }))
         };
         
         console.log('Online data fetched and transformed successfully');
@@ -474,21 +483,26 @@ function initPurchasesSearch() {
 
 // --- INFRA HEALTH MODULE (Module 8) ---
 function renderInfraHealthModule() {
-    // 1. Mock data if API doesn't have it yet
-    const infraData = (ghnMaterialsData && ghnMaterialsData.infraHealth) ? ghnMaterialsData.infraHealth : [
-        { group: 'Kết cấu xây dựng', item: 'Mái tôn khu A', status: 'Khá', action: 'Theo dõi dột' },
-        { group: 'Hệ thống điện', item: 'Đèn LED highbay', status: 'Tốt', action: '-' },
-        { group: 'Hệ thống điện', item: 'Tủ điện tổng MSB', status: 'Trung bình', action: 'Bảo trì định kỳ' },
-        { group: 'PCCC', item: 'Sprinkler khu B', status: 'Kém', action: 'Thay thế 3 đầu phun bị rỉ sét' },
-        { group: 'PCCC', item: 'Đèn khẩn cấp khu C', status: 'Kém', action: 'Thay pin backup' },
-        { group: 'PCCC', item: 'Bình chữa cháy', status: 'Khá', action: 'Kiểm tra áp suất' },
-        { group: 'Thiết bị vận hành', item: 'Băng chuyền chính', status: 'Tốt', action: '-' },
-        { group: 'Thiết bị vận hành', item: 'Xe nâng điện', status: 'Trung bình', action: 'Kiểm tra bình ắc quy' },
-        { group: 'CNTT & An ninh', item: 'Camera ngoài trời', status: 'Khá', action: 'Vệ sinh ống kính' },
-        { group: 'CNTT & An ninh', item: 'Mạng LAN', status: 'Trung bình', action: 'Thay switch phụ' },
-        { group: 'HVAC', item: 'Quạt đối lưu', status: 'Tốt', action: '-' },
-        { group: 'HVAC', item: 'Điều hòa tủ đứng', status: 'Khá', action: 'Bơm ga' }
-    ];
+    // 1. Use real data if available and not empty, otherwise fallback to mock data
+    let infraData = [];
+    if (ghnMaterialsData && ghnMaterialsData.infraHealth && ghnMaterialsData.infraHealth.length > 0) {
+        infraData = ghnMaterialsData.infraHealth;
+    } else {
+        infraData = [
+            { group: 'Kết cấu xây dựng', item: 'Mái tôn khu A', status: 'Khá', action: 'Theo dõi dột' },
+            { group: 'Hệ thống điện', item: 'Đèn LED highbay', status: 'Tốt', action: '-' },
+            { group: 'Hệ thống điện', item: 'Tủ điện tổng MSB', status: 'Trung bình', action: 'Bảo trì định kỳ' },
+            { group: 'PCCC', item: 'Sprinkler khu B', status: 'Kém', action: 'Thay thế 3 đầu phun bị rỉ sét' },
+            { group: 'PCCC', item: 'Đèn khẩn cấp khu C', status: 'Kém', action: 'Thay pin backup' },
+            { group: 'PCCC', item: 'Bình chữa cháy', status: 'Khá', action: 'Kiểm tra áp suất' },
+            { group: 'Thiết bị vận hành', item: 'Băng chuyền chính', status: 'Tốt', action: '-' },
+            { group: 'Thiết bị vận hành', item: 'Xe nâng điện', status: 'Trung bình', action: 'Kiểm tra bình ắc quy' },
+            { group: 'CNTT & An ninh', item: 'Camera ngoài trời', status: 'Khá', action: 'Vệ sinh ống kính' },
+            { group: 'CNTT & An ninh', item: 'Mạng LAN', status: 'Trung bình', action: 'Thay switch phụ' },
+            { group: 'HVAC', item: 'Quạt đối lưu', status: 'Tốt', action: '-' },
+            { group: 'HVAC', item: 'Điều hòa tủ đứng', status: 'Khá', action: 'Bơm ga' }
+        ];
+    }
 
     // Groups definition
     const groupsInfo = {
