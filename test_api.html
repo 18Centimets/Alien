@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head><title>API Test</title></head>
+<body>
+<h1>GHN API Test</h1>
+<pre id="result">Đang gọi API...</pre>
+<script>
+const url = 'https://script.google.com/macros/s/AKfycbwQWBAoL1zyBZ3v33EtXTChgLK1STa1rzcGdMcwbhExeBNH6As9BjphfX0SRbk67Twf/exec';
+
+async function testAPI() {
+    const el = document.getElementById('result');
+    try {
+        el.textContent = 'Bắt đầu fetch...';
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000);
+        
+        const response = await fetch(url, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        
+        el.textContent = 'Fetch OK, status: ' + response.status + ', parsing JSON...';
+        const data = await response.json();
+        
+        el.textContent = 'THÀNH CÔNG!\n\n' +
+            'Allocations: ' + (data.allocations || []).length + ' dòng\n' +
+            'Forklift Logs: ' + (data.forkliftLogs || []).length + ' dòng\n' +
+            'Infra Health: ' + (data.infraHealth || []).length + ' dòng\n' +
+            'Updated: ' + data.updated + '\n\n' +
+            'Sample: ' + JSON.stringify(data.allocations?.[0], null, 2);
+    } catch (err) {
+        el.textContent = 'LỖI: ' + err.name + ' - ' + err.message;
+    }
+}
+testAPI();
+</script>
+</body>
+</html>
