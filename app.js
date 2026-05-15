@@ -32,7 +32,16 @@ document.querySelectorAll('.nav-item').forEach(item => {
 // Load Data (From global variable)
 async function fetchOnlineMaterials() {
     try {
-        const response = await fetch(APPS_SCRIPT_URL);
+        // Timeout sau 10 giây để tránh treo vô thời hạn
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000);
+        
+        const response = await fetch(APPS_SCRIPT_URL, { 
+            signal: controller.signal,
+            redirect: 'follow'
+        });
+        clearTimeout(timeoutId);
+        
         if (!response.ok) throw new Error('Network response was not ok');
         const apiData = await response.json();
         
