@@ -118,6 +118,9 @@ function initDashboard() {
             renderPurchasesTable();
             initPurchasesSearch();
         }
+        
+        // Render Infra Health even with mock data for now
+        renderInfraHealthModule();
     }
 }
 
@@ -468,5 +471,185 @@ function initPurchasesSearch() {
     }
 }
 
+// --- INFRA HEALTH MODULE (Module 8) ---
+function renderInfraHealthModule() {
+    // 1. Mock data if API doesn't have it yet
+    const infraData = (ghnMaterialsData && ghnMaterialsData.infraHealth) ? ghnMaterialsData.infraHealth : [
+        { group: 'Kết cấu xây dựng', item: 'Mái tôn khu A', status: 'Khá', action: 'Theo dõi dột' },
+        { group: 'Hệ thống điện', item: 'Đèn LED highbay', status: 'Tốt', action: '-' },
+        { group: 'Hệ thống điện', item: 'Tủ điện tổng MSB', status: 'Trung bình', action: 'Bảo trì định kỳ' },
+        { group: 'PCCC', item: 'Sprinkler khu B', status: 'Kém', action: 'Thay thế 3 đầu phun bị rỉ sét' },
+        { group: 'PCCC', item: 'Đèn khẩn cấp khu C', status: 'Kém', action: 'Thay pin backup' },
+        { group: 'PCCC', item: 'Bình chữa cháy', status: 'Khá', action: 'Kiểm tra áp suất' },
+        { group: 'Thiết bị vận hành', item: 'Băng chuyền chính', status: 'Tốt', action: '-' },
+        { group: 'Thiết bị vận hành', item: 'Xe nâng điện', status: 'Trung bình', action: 'Kiểm tra bình ắc quy' },
+        { group: 'CNTT & An ninh', item: 'Camera ngoài trời', status: 'Khá', action: 'Vệ sinh ống kính' },
+        { group: 'CNTT & An ninh', item: 'Mạng LAN', status: 'Trung bình', action: 'Thay switch phụ' },
+        { group: 'HVAC', item: 'Quạt đối lưu', status: 'Tốt', action: '-' },
+        { group: 'HVAC', item: 'Điều hòa tủ đứng', status: 'Khá', action: 'Bơm ga' }
+    ];
+
+    // Groups definition
+    const groupsInfo = {
+        'Kết cấu xây dựng': { icon: 'building', id: 'Xây dựng' },
+        'Hệ thống điện': { icon: 'zap', id: 'Điện' },
+        'PCCC': { icon: 'flame', id: 'PCCC' },
+        'Thiết bị vận hành': { icon: 'settings', id: 'Vận hành' },
+        'CNTT & An ninh': { icon: 'shield-check', id: 'CNTT' },
+        'HVAC': { icon: 'wind', id: 'HVAC' }
+    };
+
+    // Calculate stats
+    let totalItems = infraData.length;
+    let redItems = [];
+    
+    let groupStats = {};
+    Object.keys(groupsInfo).forEach(g => {
+        groupStats[g] = { total: 0, good: 0, fair: 0, bad: 0, critical: 0 };
+    });
+
+    let overall = { good: 0, fair: 0, bad: 0, critical: 0 };
+
+    infraData.forEach(item => {
+        let gName = item.group;
+        if (!groupStats[gName]) return;
+        
+        groupStats[gName].total++;
+        let st = item.status.toLowerCase();
+        
+        if (st === 'tốt') { groupStats[gName].good++; overall.good++; }
+        else if (st === 'khá') { groupStats[gName].fair++; overall.fair++; }
+        else if (st === 'trung bình' || st === 'tb') { groupStats[gName].bad++; overall.bad++; }
+        else if (st === 'kém') { 
+            groupStats[gName].critical++; 
+            overall.critical++; 
+            redItems.push(item);
+        }
+    });
+
+    // 2. Render Alert Banner
+    const alertBanner = document.getElementById('infra-alert-banner');
+    if (redItems.length > 0) {
+        alertBanner.classList.remove('hidden');
+        alertBanner.querySelector('span').textContent = \`CẢNH BÁO: Phát hiện \${redItems.length} hạng mục ĐỎ cần xử lý khẩn cấp trong 48h!\`;
+    } else {
+        alertBanner.classList.add('hidden');
+    }
+
+    // 3. Render KPI Cards
+    const kpiContainer = document.getElementById('infra-kpi-container');
+    kpiContainer.innerHTML = '';
+
+    Object.keys(groupsInfo).forEach(gName => {
+        const stats = groupStats[gName];
+        let healthScore = 100;
+        if (stats.total > 0) {
+            healthScore = Math.round(((stats.good + stats.fair) / stats.total) * 100);
+        }
+
+        let scoreClass = 'score-green';
+        let bgClass = 'bg-green';
+        let trendHtml = '<i data-lucide="trending-up" class="score-green"></i> <span>Tốt lên</span>';
+
+        if (healthScore < 40 || stats.critical > 0) {
+            scoreClass = 'score-red'; bgClass = 'bg-red';
+            trendHtml = '<i data-lucide="alert-triangle" class="score-red"></i> <span class="score-red">⚠ KHẨN</span>';
+        } else if (healthScore < 60) {
+            scoreClass = 'score-orange'; bgClass = 'bg-orange';
+            trendHtml = '<i data-lucide="trending-down" class="score-orange"></i> <span>Giảm</span>';
+        } else if (healthScore < 80) {
+            scoreClass = 'score-yellow'; bgClass = 'bg-yellow';
+            trendHtml = '<i data-lucide="minus" class="score-yellow"></i> <span>Ổn định</span>';
+        } else {
+            trendHtml = '<i data-lucide="check-circle" class="score-green"></i> <span>Ổn định</span>';
+        }
+
+        const card = document.createElement('div');
+        card.className = 'infra-card glass-panel';
+        card.innerHTML = \`
+            <div class="infra-card-header">
+                <h3>\${groupsInfo[gName].id}</h3>
+                <div class="\${bgClass}" style="padding: 6px; border-radius: 8px; display: flex;">
+                    <i data-lucide="\${groupsInfo[gName].icon}"></i>
+                </div>
+            </div>
+            <div class="infra-card-body">
+                <span class="infra-score \${scoreClass}">\${healthScore}%</span>
+            </div>
+            <div class="infra-trend">
+                \${trendHtml}
+            </div>
+        \`;
+        kpiContainer.appendChild(card);
+    });
+
+    // 4. Render Chart
+    const ctx = document.getElementById('infraHealthChart');
+    if (ctx && charts.infraHealth) {
+        charts.infraHealth.destroy();
+    }
+    
+    if (ctx) {
+        charts.infraHealth = new Chart(ctx.getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Tốt (Xanh)', 'Khá (Vàng)', 'Trung bình (Cam)', 'Kém (Đỏ)'],
+                datasets: [{
+                    data: [overall.good, overall.fair, overall.bad, overall.critical],
+                    backgroundColor: ['#10b981', '#f59e0b', '#f26522', '#ef4444'],
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '75%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: { color: '#9ba1b0', font: { family: "'Inter', sans-serif" } }
+                    }
+                }
+            }
+        });
+    }
+
+    // 5. Render Urgent Table
+    const tbody = document.querySelector('#infraUrgentTable tbody');
+    if (tbody) {
+        tbody.innerHTML = '';
+        
+        // Sort items: Red -> Orange -> Yellow -> Green
+        const statusWeight = { 'kém': 4, 'trung bình': 3, 'tb': 3, 'khá': 2, 'tốt': 1 };
+        const sortedItems = [...infraData].sort((a, b) => {
+            return (statusWeight[b.status.toLowerCase()] || 0) - (statusWeight[a.status.toLowerCase()] || 0);
+        }).slice(0, 10); // Top 10
+
+        sortedItems.forEach(item => {
+            let st = item.status.toLowerCase();
+            let badgeClass = 'neutral';
+            
+            if (st === 'kém') badgeClass = 'critical';
+            else if (st === 'trung bình' || st === 'tb') badgeClass = 'warning';
+            else if (st === 'khá') badgeClass = 'warning'; // Can use a yellow class if defined, but warning is orange
+            else if (st === 'tốt') badgeClass = 'safe';
+
+            const tr = document.createElement('tr');
+            tr.innerHTML = \`
+                <td><strong>\${groupsInfo[item.group] ? groupsInfo[item.group].id : item.group}</strong></td>
+                <td>\${item.item}</td>
+                <td class="text-center">
+                    <span class="status-badge \${badgeClass}">\${item.status}</span>
+                </td>
+                <td>\${item.action || '-'}</td>
+            \`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Refresh icons for new elements
+    lucide.createIcons();
+}
 // Start app
 loadData();

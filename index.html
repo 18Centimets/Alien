@@ -37,6 +37,9 @@
                 <a href="#forklifts" class="nav-item" data-target="forklifts">
                     <i data-lucide="truck"></i> Nhật Ký Xe Nâng
                 </a>
+                <a href="#infra-health" class="nav-item" data-target="infra-health">
+                    <i data-lucide="activity"></i> Sức Khỏe Kho
+                </a>
                 <a href="#purchases" class="nav-item" data-target="purchases">
                     <i data-lucide="shopping-cart"></i> Tình Trạng Đặt Mua
                 </a>
@@ -271,6 +274,53 @@
                                     <!-- Populated by JS -->
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Module 8: Infra Health -->
+                <section id="infra-health" class="module-section">
+                    <div class="section-header">
+                        <h2>Sức Khỏe Hạ Tầng Kho Hưng Yên</h2>
+                        <p class="subtitle">Đánh giá 6 nhóm hạ tầng theo hệ thống mã màu 4 cấp độ</p>
+                    </div>
+
+                    <div id="infra-alert-banner" class="alert-banner hidden">
+                        <i data-lucide="alert-triangle"></i>
+                        <span>CẢNH BÁO: Phát hiện hạng mục ĐỎ cần xử lý khẩn cấp trong 48h!</span>
+                    </div>
+
+                    <div class="infra-grid" id="infra-kpi-container">
+                        <!-- KPI Cards will be generated here -->
+                    </div>
+
+                    <div class="dashboard-grid" style="margin-top: 1.5rem;">
+                        <div class="chart-container glass-panel">
+                            <h3>Tỷ Lệ Sức Khỏe Tổng Thể</h3>
+                            <div style="height: 300px;">
+                                <canvas id="infraHealthChart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="table-container glass-panel">
+                            <div class="table-actions" style="margin-bottom: 1rem;">
+                                <h3>Hạng Mục Cần Xử Lý</h3>
+                            </div>
+                            <div class="table-wrapper">
+                                <table id="infraUrgentTable">
+                                    <thead>
+                                        <tr>
+                                            <th>Nhóm</th>
+                                            <th>Hạng Mục</th>
+                                            <th class="text-center">Tình Trạng</th>
+                                            <th>Hành Động Đề Xuất</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Populated by JS -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </section>

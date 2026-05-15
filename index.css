@@ -472,3 +472,104 @@ tr:hover td {
 .hidden {
     display: none !important;
 }
+
+/* Infra Health Module Styles */
+.infra-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.infra-card {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.infra-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.infra-card-header h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.infra-card-header i {
+    width: 24px;
+    height: 24px;
+    color: var(--text-secondary);
+}
+
+.infra-card-body {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.infra-score {
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.infra-status {
+    font-size: 14px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.infra-trend {
+    font-size: 13px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.infra-trend i {
+    width: 14px;
+    height: 14px;
+}
+
+/* Colors for Infra Status */
+.score-green { color: var(--status-green); }
+.score-yellow { color: var(--status-yellow); }
+.score-orange { color: var(--ghn-orange); }
+.score-red { color: var(--status-red); }
+
+.bg-green { background: rgba(16, 185, 129, 0.15); color: var(--status-green); border: 1px solid rgba(16, 185, 129, 0.3); }
+.bg-yellow { background: rgba(245, 158, 11, 0.15); color: var(--status-yellow); border: 1px solid rgba(245, 158, 11, 0.3); }
+.bg-orange { background: rgba(242, 101, 34, 0.15); color: var(--ghn-orange); border: 1px solid rgba(242, 101, 34, 0.3); }
+.bg-red { background: rgba(239, 68, 68, 0.15); color: var(--status-red); border: 1px solid rgba(239, 68, 68, 0.3); }
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+}
+
+.alert-banner {
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.5);
+    color: var(--status-red);
+    padding: 16px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    font-weight: 600;
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0% { border-color: rgba(239, 68, 68, 0.3); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.2); }
+    50% { border-color: rgba(239, 68, 68, 0.8); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+    100% { border-color: rgba(239, 68, 68, 0.3); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
