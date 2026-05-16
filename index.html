@@ -119,6 +119,13 @@
                 </a>
             </nav>
             
+            <div style="padding: 0 15px 15px;">
+                <button id="btn-create-ticket" class="btn-primary btn-block" style="background: var(--ghn-red); box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);">
+                    <i data-lucide="alert-triangle"></i>
+                    <span>Báo Cáo Sự Cố</span>
+                </button>
+            </div>
+            
             <div class="db-upload-zone" id="db-upload-zone" style="margin: 0 15px 15px; padding: 15px; border: 2px dashed rgba(255,255,255,0.2); border-radius: 8px; text-align: center; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.borderColor='var(--ghn-orange)'; this.style.background='rgba(242,101,34,0.05)';" onmouseout="this.style.borderColor='rgba(255,255,255,0.2)'; this.style.background='transparent';">
                 <i data-lucide="upload-cloud" style="width: 24px; height: 24px; color: var(--ghn-orange); margin-bottom: 8px;"></i>
                 <div style="font-size: 12px; color: var(--text-secondary); line-height: 1.4; font-weight: 500;">Cập nhật Database<br><span style="font-size: 10px; color: var(--text-muted);">(Kéo thả file Excel)</span></div>
@@ -598,6 +605,54 @@
                 <input type="text" id="ai-chat-input" placeholder="Hỏi về diện tích, số lượng cột, PCCC...">
                 <button id="ai-chat-send"><i data-lucide="send"></i></button>
             </div>
+        </div>
+    </div>
+
+    <!-- TICKET MODAL -->
+    <div id="ticket-modal" class="auth-overlay" style="display: none; align-items: flex-start; padding-top: 50px; z-index: 10000;">
+        <div class="auth-box glass-panel" style="width: 500px; max-width: 90%;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 20px;">
+                <h3 style="margin: 0; color: var(--text-primary); display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="alert-octagon" style="color: var(--ghn-red);"></i> Tạo Ticket Sự Cố
+                </h3>
+                <button id="close-ticket-modal" style="background: none; border: none; color: var(--text-secondary); cursor: pointer;"><i data-lucide="x"></i></button>
+            </div>
+            
+            <form id="ticket-form" class="auth-form active">
+                <div class="form-group">
+                    <label>Khu vực phát sinh sự cố</label>
+                    <div class="input-with-icon">
+                        <i data-lucide="map-pin"></i>
+                        <input type="text" id="ticket-location" required placeholder="VD: Cửa Outbound số 5">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Mức độ khẩn cấp</label>
+                    <div class="input-with-icon" style="padding-left: 0;">
+                        <select id="ticket-priority" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); padding: 12px 15px; border-radius: 8px; font-family: inherit;">
+                            <option value="CRITICAL" style="color: black;">Nghiêm trọng (ĐỎ) - Ngừng trệ sản xuất</option>
+                            <option value="WARNING" style="color: black;">Cảnh báo (VÀNG) - Vẫn hoạt động được</option>
+                            <option value="INFO" style="color: black;">Thông thường (XANH) - Ghi nhận bảo trì</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Mô tả chi tiết lỗi</label>
+                    <textarea id="ticket-desc" required placeholder="Mô tả hiện tượng (VD: Có tiếng kêu lạ, kẹt bánh răng...)" style="width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); color: var(--text-primary); padding: 12px 15px; border-radius: 8px; font-family: inherit; resize: vertical; min-height: 80px;"></textarea>
+                </div>
+                
+                <div id="ticket-ai-advice" style="display: none; background: rgba(16, 185, 129, 0.1); border: 1px dashed var(--ghn-green); padding: 15px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; color: var(--text-primary); overflow-y: auto; max-height: 150px;">
+                    <div style="color: var(--ghn-green); font-weight: bold; margin-bottom: 5px; display: flex; align-items: center; gap: 5px;"><i data-lucide="bot" style="width: 16px; height: 16px;"></i> Kỹ Sư Trưởng tư vấn sơ cứu:</div>
+                    <div id="ticket-ai-content" style="white-space: pre-line;"></div>
+                </div>
+
+                <button type="submit" class="btn-primary btn-block" id="btn-submit-ticket">
+                    <span id="ticket-btn-text">Gửi Báo Cáo & Nhận Tư Vấn AI</span>
+                    <i data-lucide="send" id="ticket-btn-icon"></i>
+                </button>
+            </form>
         </div>
     </div>
 

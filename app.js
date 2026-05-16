@@ -1460,3 +1460,100 @@ function parseExcelToDashboard(workbook) {
     // Gọi lại hàm render
     initDashboard();
 }
+
+// ==========================================
+// TICKET MODAL LOGIC
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    const btnCreateTicket = document.getElementById('btn-create-ticket');
+    const ticketModal = document.getElementById('ticket-modal');
+    const closeTicketModal = document.getElementById('close-ticket-modal');
+    const ticketForm = document.getElementById('ticket-form');
+    const aiAdviceBox = document.getElementById('ticket-ai-advice');
+    const aiContent = document.getElementById('ticket-ai-content');
+    const btnSubmitTicket = document.getElementById('btn-submit-ticket');
+    const btnText = document.getElementById('ticket-btn-text');
+    const btnIcon = document.getElementById('ticket-btn-icon');
+
+    if(btnCreateTicket) {
+        btnCreateTicket.addEventListener('click', () => {
+            ticketModal.style.display = 'flex';
+            aiAdviceBox.style.display = 'none';
+            ticketForm.reset();
+            
+            // Khôi phục nút
+            btnText.textContent = 'Gửi Báo Cáo & Nhận Tư Vấn AI';
+            btnIcon.setAttribute('data-lucide', 'send');
+            btnIcon.style.animation = 'none';
+            btnSubmitTicket.disabled = false;
+            btnSubmitTicket.onclick = null;
+            lucide.createIcons();
+        });
+    }
+
+    if(closeTicketModal) {
+        closeTicketModal.addEventListener('click', () => {
+            ticketModal.style.display = 'none';
+        });
+    }
+
+    if(ticketForm) {
+        ticketForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (btnSubmitTicket.onclick) return; // Đang ở chế độ Đóng
+            
+            const location = document.getElementById('ticket-location').value;
+            const priority = document.getElementById('ticket-priority').value;
+            const desc = document.getElementById('ticket-desc').value;
+            
+            // Show loading
+            btnText.textContent = 'AI Đang Phân Tích...';
+            btnIcon.setAttribute('data-lucide', 'loader');
+            btnIcon.style.animation = 'spin 2s linear infinite';
+            lucide.createIcons();
+            btnSubmitTicket.disabled = true;
+            
+            // Construct message for AI
+            const priorityText = priority === 'CRITICAL' ? 'Nghiêm trọng (ĐỎ)' : (priority === 'WARNING' ? 'Cảnh báo (VÀNG)' : 'Thông thường (XANH)');
+            const message = `SỰ CỐ KHẨN CẤP: Tôi vừa phát hiện sự cố tại khu vực: ${location}. Mức độ: ${priorityText}. Mô tả hiện tượng: ${desc}. Là Kỹ Sư Trưởng, hãy đánh giá mức độ rủi ro và đưa ra 3 bước sơ cứu/xử lý tạm thời ngay lập tức trước khi đội bảo trì đến. Trình bày dưới dạng gạch đầu dòng ngắn gọn.`;
+            
+            try {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=chat&message=${encodeURIComponent(message)}`, {
+                    method: 'GET'
+                });
+                
+                const data = await response.json();
+                
+                // Show AI Advice
+                aiContent.innerHTML = data.reply ? data.reply.replace(/\n/g, '<br>') : 'Không nhận được phản hồi từ AI.';
+                aiAdviceBox.style.display = 'block';
+                
+                // Change button to "Đóng" since we don't save to DB yet
+                btnText.textContent = 'Hoàn tất & Đóng';
+                btnIcon.setAttribute('data-lucide', 'check');
+                btnIcon.style.animation = 'none';
+                lucide.createIcons();
+                
+                btnSubmitTicket.onclick = (ev) => {
+                    ev.preventDefault();
+                    ticketModal.style.display = 'none';
+                    // Sẽ thêm logic đẩy lên Data Excel/Google Sheet vào tương lai
+                };
+                
+                btnSubmitTicket.disabled = false;
+                
+            } catch (error) {
+                console.error('Lỗi khi gọi AI:', error);
+                aiContent.innerHTML = '<span style="color:var(--ghn-red)">Lỗi kết nối đến Kỹ Sư Trưởng AI. Vui lòng thử lại sau.</span>';
+                aiAdviceBox.style.display = 'block';
+                
+                btnText.textContent = 'Thử Lại';
+                btnIcon.setAttribute('data-lucide', 'rotate-cw');
+                btnIcon.style.animation = 'none';
+                lucide.createIcons();
+                btnSubmitTicket.disabled = false;
+            }
+        });
+    }
+});
