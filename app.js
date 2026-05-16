@@ -6,7 +6,7 @@ let ghnData = null;
 let ghnMaterialsData = null;
 let charts = {};
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby0ONvNLl_dgSi3Cp8cDMnlqByz2hdGvFckMzttxJdMpekxoVjnDxXAeCo4yqeg2WA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwWEsj_d2YS_SVGz2YKQf2dqE5oWzIKQsBE5NU7Pv3_dcnBiEMfAp_CgIbP9OmC3tK5/exec';
 
 // Chart.js Global Defaults for Dark Theme
 Chart.defaults.color = '#9ba1b0';
