@@ -1091,8 +1091,8 @@ tr:hover td {
 }
 
 .ai-chat-panel {
-    width: 350px;
-    height: 500px;
+    width: 450px;
+    height: 600px;
     margin-bottom: 20px;
     border-radius: 20px;
     display: flex;
