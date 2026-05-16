@@ -1,11 +1,24 @@
 var GEMINI_API_KEY = "AIzaSyBu0Ul0MgW6V32cZof9dJMnWsuyjw-03V0";
 
 function doGet(e) {
-  var action = e.parameter.action;
+  var action = e ? e.parameter.action : null;
   if (action === 'chat') return handleAIChat(e.parameter.message);
   if (action === 'login') return handleLogin(e.parameter.username, e.parameter.password);
   if (action === 'register') return handleRegister(e.parameter.fullname, e.parameter.username, e.parameter.password);
-  return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "Invalid action" })).setMimeType(ContentService.MimeType.JSON);
+  
+  // Trả về dữ liệu cho Dashboard
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var result = {
+      allocations: getAllocationsData(ss),
+      forkliftLogs: getForkliftLogsData(ss),
+      infraHealth: getInfraHealthData(ss),
+      updated: new Date().toISOString()
+    };
+    return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+  } catch (error) {
+    return ContentService.createTextOutput(JSON.stringify({ error: error.message })).setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
 function handleAIChat(userMessage) {
@@ -103,4 +116,90 @@ function handleRegister(fullname, username, password) {
   }
   sheet.appendRow([username, password, fullname, "Chờ duyệt", "user"]);
   return ContentService.createTextOutput(JSON.stringify({ status: 'success', message: 'Đăng ký OK.' })).setMimeType(ContentService.MimeType.JSON);
+}
+
+// ===== CÁC HÀM ĐỌC DỮ LIỆU TỪ EXCEL =====
+function getAllocationsData(ss) {
+  var sheet = ss.getSheetByName('Cấp phát các BC');
+  if (!sheet) return [];
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return [];
+  var data = sheet.getRange(2, 1, lastRow - 1, 7).getValues();
+  var result = [];
+  for (var i = 0; i < data.length; i++) {
+    var row = data[i];
+    if (row[0] !== '' && row[0] !== null) {
+      result.push({
+        date: formatDate(row[0]),
+        bc: String(row[1] || '').trim(),
+        item: String(row[2] || '').trim(),
+        sl: Number(row[3]) || 0,
+        unit: String(row[4] || '').trim(),
+        dest: String(row[5] || '').trim(),
+        issuer: String(row[6] || '').trim()
+      });
+    }
+  }
+  return result;
+}
+
+function getForkliftLogsData(ss) {
+  var sheet = ss.getSheetByName('Nhật ký xe nâng');
+  if (!sheet) return [];
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return [];
+  var data = sheet.getRange(2, 1, lastRow - 1, 6).getValues();
+  var result = [];
+  for (var i = 0; i < data.length; i++) {
+    var row = data[i];
+    if (row[0] !== '' && row[0] !== null) {
+      result.push({
+        provider: String(row[0] || '').trim(),
+        id: String(row[1] || '').trim(),
+        issueDate: formatDate(row[2]),
+        issueType: String(row[3] || '').trim(),
+        fixDate: formatDate(row[4]),
+        note: String(row[5] || '').trim()
+      });
+    }
+  }
+  return result;
+}
+
+function getInfraHealthData(ss) {
+  var sheet = ss.getSheetByName('KiemTraHaTang');
+  if (!sheet) return [];
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 2) return [];
+  var data = sheet.getRange(2, 1, lastRow - 1, 7).getValues();
+  var result = [];
+  for (var i = 0; i < data.length; i++) {
+    var row = data[i];
+    if (row[0] !== '' && row[0] !== null) {
+      result.push({
+        date: formatDate(row[0]),
+        group: String(row[1] || '').trim(),
+        item: String(row[2] || '').trim(),
+        status: String(row[3] || '').trim(),
+        desc: String(row[4] || '').trim(),
+        action: String(row[5] || '').trim(),
+        inspector: String(row[6] || '').trim()
+      });
+    }
+  }
+  return result;
+}
+
+function formatDate(value) {
+  if (!value) return '';
+  if (value instanceof Date) {
+    var d = value.getDate().toString();
+    var m = (value.getMonth() + 1).toString();
+    if (d.length < 2) d = '0' + d;
+    if (m.length < 2) m = '0' + m;
+    var y = value.getFullYear();
+    if (y < 2000) return '';
+    return d + '/' + m + '/' + y;
+  }
+  return String(value).trim();
 }
