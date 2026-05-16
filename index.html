@@ -92,6 +92,9 @@
                 <a href="#overview" class="nav-item active" data-target="overview">
                     <i data-lucide="layout-dashboard"></i> Tổng Quan
                 </a>
+                <a href="#layout-map" class="nav-item" data-target="layout-map">
+                    <i data-lucide="map"></i> Sa Bàn Kho 2D
+                </a>
                 <a href="#post-offices" class="nav-item" data-target="post-offices">
                     <i data-lucide="building-2"></i> Bưu Cục & Hạ Tầng
                 </a>
@@ -247,6 +250,26 @@
                                     <div id="summary-fork-pending" style="font-size: 28px; font-weight: 700; color: var(--ghn-red);">0</div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Module: Layout Map 2D -->
+                <section id="layout-map" class="module-section">
+                    <div class="section-header">
+                        <h2>Sa Bàn Kho Trung Chuyển 2D</h2>
+                        <p class="subtitle">Giám sát trạng thái hoạt động thực tế của 45 Dock Leveler và Trạm Biến Áp</p>
+                    </div>
+
+                    <div class="glass-panel" style="padding: 20px;">
+                        <div class="map-legend" style="display: flex; gap: 15px; margin-bottom: 20px; font-size: 13px; justify-content: flex-end;">
+                            <span><span style="display:inline-block; width:12px; height:12px; background:var(--ghn-green); border-radius:3px; margin-right:5px;"></span> Hoạt động tốt</span>
+                            <span><span style="display:inline-block; width:12px; height:12px; background:var(--ghn-red); border-radius:3px; margin-right:5px; animation: blink 1s infinite;"></span> Đang sự cố</span>
+                            <span><span style="display:inline-block; width:12px; height:12px; background:var(--text-muted); border-radius:3px; margin-right:5px;"></span> Đang bảo trì</span>
+                        </div>
+                        
+                        <div class="warehouse-layout" id="warehouse-layout-container">
+                            <!-- Sẽ được render qua JS -->
                         </div>
                     </div>
                 </section>

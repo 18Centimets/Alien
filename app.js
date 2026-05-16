@@ -123,6 +123,7 @@ function initDashboard() {
     renderProvinceChart();
     renderHeatmapTable();
     renderOverviewSummaries();
+    renderLayoutMap();
     initMapSearch(); // New function
     if (ghnMaterialsData) {
         if (ghnMaterialsData.allocations && ghnMaterialsData.allocations.length > 0) {
@@ -331,6 +332,69 @@ function renderOverviewSummaries() {
     
     // Refresh icons inside the newly populated elements just in case
     lucide.createIcons();
+}
+
+// --- SA BÀN KHO 2D LOGIC ---
+function renderLayoutMap() {
+    const container = document.getElementById('warehouse-layout-container');
+    if (!container) return;
+
+    let html = '<div class="layout-grid">';
+    
+    // Render Zones
+    html += '<div class="layout-zone zone-inbound">INBOUND (15 Cửa)</div>';
+    html += '<div class="layout-zone zone-sorting">SORTING (Chuyền phân loại)</div>';
+    html += '<div class="layout-zone zone-outbound">OUTBOUND (30 Cửa)</div>';
+
+    // Render 45 Dock Levelers
+    // Inbound: 15 docks
+    for(let i = 0; i < 15; i++) {
+        let top = 30 + (i * 24);
+        let statusClass = '';
+        let tooltip = `<h4>Cửa Nhập (Inbound) #${i+1}</h4><p>Trạng thái: Hoạt động tốt</p>`;
+        
+        // Giả lập lỗi ở vài cửa
+        if(i === 3 || i === 12) {
+            statusClass = 'error';
+            tooltip = `<h4>Cửa Nhập (Inbound) #${i+1}</h4><p style="color:var(--ghn-red)">Lỗi: Bơm thuỷ lực hỏng</p>`;
+        }
+        if(i === 7) {
+            statusClass = 'maintenance';
+            tooltip = `<h4>Cửa Nhập (Inbound) #${i+1}</h4><p>Đang bảo trì định kỳ</p>`;
+        }
+        
+        html += `<div class="infra-node ${statusClass}" style="top: ${top}px; left: 8px;">
+                    <div class="node-tooltip">${tooltip}</div>
+                 </div>`;
+    }
+
+    // Outbound: 30 docks
+    for(let i = 0; i < 30; i++) {
+        let top = 30 + (i * 12);
+        let statusClass = '';
+        let tooltip = `<h4>Cửa Xuất (Outbound) #${i+1}</h4><p>Trạng thái: Hoạt động tốt</p>`;
+        
+        if(i === 8 || i === 22) {
+            statusClass = 'error';
+            tooltip = `<h4>Cửa Xuất (Outbound) #${i+1}</h4><p style="color:var(--ghn-red)">Lỗi: Kẹt hành trình cửa cuốn</p>`;
+        }
+        
+        html += `<div class="infra-node ${statusClass}" style="top: ${top}px; left: 768px;">
+                    <div class="node-tooltip">${tooltip}</div>
+                 </div>`;
+    }
+
+    // Render Trạm biến áp & Bể nước
+    html += `<div class="infra-node transformer" style="top: 360px; left: 360px;">
+                <div class="node-tooltip"><h4>Trạm Biến Áp (2000kVA)</h4><p>Công suất hiện tại: 65%</p><p>Trạng thái: Ổn định</p></div>
+             </div>`;
+             
+    html += `<div class="infra-node water-tank" style="top: 360px; left: 420px;">
+                <div class="node-tooltip"><h4>Bể Ngầm PCCC</h4><p>Dung tích: 500m3</p><p>Trạng thái: Auto (Chờ)</p></div>
+             </div>`;
+
+    html += '</div>';
+    container.innerHTML = html;
 }
 
 // Search functionality
