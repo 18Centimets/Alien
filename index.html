@@ -524,6 +524,36 @@
         </main>
     </div>
 
+    <!-- AI CHATBOT WIDGET -->
+    <div id="ai-chat-widget" class="ai-chat-widget" style="display: none;">
+        <button id="ai-chat-toggle" class="ai-chat-toggle glass-panel">
+            <i data-lucide="bot"></i>
+        </button>
+        <div id="ai-chat-panel" class="ai-chat-panel hidden glass-panel">
+            <div class="ai-chat-header">
+                <div class="ai-header-info">
+                    <div class="ai-avatar">
+                        <i data-lucide="bot"></i>
+                    </div>
+                    <div>
+                        <h3>Kỹ Sư Trưởng AI</h3>
+                        <p>Đọc bản vẽ & Hạ tầng</p>
+                    </div>
+                </div>
+                <button id="ai-chat-close" class="close-btn"><i data-lucide="x"></i></button>
+            </div>
+            <div id="ai-chat-history" class="ai-chat-history">
+                <div class="chat-message bot">
+                    <div class="message-content">Chào sếp! Tôi đã nạp toàn bộ dữ liệu bản vẽ hoàn công kho Hưng Yên. Sếp cần tra cứu thông số gì ạ?</div>
+                </div>
+            </div>
+            <div class="ai-chat-input-area">
+                <input type="text" id="ai-chat-input" placeholder="Hỏi về diện tích, số lượng cột, PCCC...">
+                <button id="ai-chat-send"><i data-lucide="send"></i></button>
+            </div>
+        </div>
+    </div>
+
     <script src="data/operations.js"></script>
     <script src="data/materials.js"></script>
     <script src="app.js"></script>

@@ -1117,4 +1117,120 @@ function hideAuthMessage() {
 // Start app via Auth Flow
 document.addEventListener('DOMContentLoaded', () => {
     initAuth();
+    initChatbot();
 });
+
+// --- AI CHATBOT LOGIC ---
+function initChatbot() {
+    const toggleBtn = document.getElementById('ai-chat-toggle');
+    const panel = document.getElementById('ai-chat-panel');
+    const closeBtn = document.getElementById('ai-chat-close');
+    const sendBtn = document.getElementById('ai-chat-send');
+    const inputField = document.getElementById('ai-chat-input');
+    const history = document.getElementById('ai-chat-history');
+    
+    // Only show toggle if user is logged in
+    if(localStorage.getItem('ghn_auth_token') === 'verified') {
+        document.getElementById('ai-chat-widget').style.display = 'flex';
+    }
+
+    // Toggle panel
+    toggleBtn.addEventListener('click', () => {
+        panel.classList.toggle('hidden');
+        if (!panel.classList.contains('hidden')) {
+            inputField.focus();
+        }
+    });
+
+    closeBtn.addEventListener('click', () => {
+        panel.classList.add('hidden');
+    });
+
+    // Send Message
+    const sendMessage = async () => {
+        const text = inputField.value.trim();
+        if (!text) return;
+
+        // Add user message to UI
+        appendMessage(text, 'user');
+        inputField.value = '';
+        inputField.disabled = true;
+        sendBtn.disabled = true;
+
+        // Add typing indicator
+        const typingId = appendTypingIndicator();
+        scrollToBottom();
+
+        try {
+            // Call Apps Script Backend
+            const response = await fetch(`${APPS_SCRIPT_URL}?action=chat&message=${encodeURIComponent(text)}`);
+            const data = await response.json();
+            
+            removeElement(typingId);
+            
+            if (data.status === 'success') {
+                appendMessage(data.reply, 'bot');
+            } else {
+                appendMessage("Xin lỗi Sếp, hệ thống nơ-ron của tôi đang bị gián đoạn. Vui lòng kiểm tra lại cấu hình API.", 'bot');
+            }
+        } catch (error) {
+            console.error(error);
+            removeElement(typingId);
+            appendMessage("Lỗi mạng! Không thể kết nối với hệ thống AI. Sếp hãy dán code vào Google Apps Script và Deploy lại nhé.", 'bot');
+        } finally {
+            inputField.disabled = false;
+            sendBtn.disabled = false;
+            inputField.focus();
+            scrollToBottom();
+        }
+    };
+
+    sendBtn.addEventListener('click', sendMessage);
+    inputField.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function appendMessage(text, sender) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-message ${sender}`;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        // Handle basic markdown bold (**text**) -> <strong>text</strong>
+        let formattedText = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        // Handle newlines
+        formattedText = formattedText.replace(/\n/g, '<br>');
+        
+        contentDiv.innerHTML = formattedText;
+        
+        msgDiv.appendChild(contentDiv);
+        history.appendChild(msgDiv);
+        scrollToBottom();
+    }
+
+    function appendTypingIndicator() {
+        const id = 'typing-' + Date.now();
+        const msgDiv = document.createElement('div');
+        msgDiv.className = `chat-message bot`;
+        msgDiv.id = id;
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        contentDiv.innerHTML = '<div class="typing-indicator"><span></span><span></span><span></span></div>';
+        
+        msgDiv.appendChild(contentDiv);
+        history.appendChild(msgDiv);
+        return id;
+    }
+
+    function removeElement(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    }
+
+    function scrollToBottom() {
+        history.scrollTop = history.scrollHeight;
+    }
+}
