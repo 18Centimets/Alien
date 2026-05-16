@@ -122,7 +122,7 @@ function initDashboard() {
     renderTrendChart();
     renderProvinceChart();
     renderHeatmapTable();
-    renderAMChart();
+    renderOverviewSummaries();
     initMapSearch(); // New function
     if (ghnMaterialsData) {
         if (ghnMaterialsData.allocations && ghnMaterialsData.allocations.length > 0) {
@@ -298,36 +298,39 @@ function renderHeatmapTable() {
     });
 }
 
-function renderAMChart() {
-    const ctx = document.getElementById('amChart').getContext('2d');
+function renderOverviewSummaries() {
+    // 1. Tóm tắt Vật tư cấp phát
+    let totalAllocations = 0;
+    let allocationsToPo = 0;
     
-    // Sort AMs by total orders
-    const sortedAMs = [...ghnData.ams]
-        .sort((a, b) => b.totalOrders - a.totalOrders)
-        .slice(0, 10); // Top 10
+    if (ghnMaterialsData && ghnMaterialsData.allocations) {
+        totalAllocations = ghnMaterialsData.allocations.length;
+        allocationsToPo = ghnMaterialsData.allocations.filter(a => a.location && a.location.toLowerCase() === 'bc').length;
+    }
+    
+    const matCardTotal = document.getElementById('summary-mat-total');
+    const matCardPo = document.getElementById('summary-mat-po');
+    if (matCardTotal) matCardTotal.textContent = totalAllocations;
+    if (matCardPo) matCardPo.textContent = allocationsToPo;
 
-    charts.am = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: sortedAMs.map(am => am.name),
-            datasets: [{
-                label: 'Sản Lượng Xử Lý',
-                data: sortedAMs.map(am => am.totalOrders),
-                backgroundColor: '#f26522',
-                borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
+    // 2. Tóm tắt Nhật ký Xe nâng
+    let totalForkliftIssues = 0;
+    let fixedIssues = 0;
+    let pendingIssues = 0;
+    
+    if (ghnMaterialsData && ghnMaterialsData.forklifts) {
+        totalForkliftIssues = ghnMaterialsData.forklifts.length;
+        fixedIssues = ghnMaterialsData.forklifts.filter(f => f.fixTime && f.fixTime !== '' && f.fixTime !== '-').length;
+        pendingIssues = totalForkliftIssues - fixedIssues;
+    }
+    
+    const forkCardTotal = document.getElementById('summary-fork-total');
+    const forkCardPending = document.getElementById('summary-fork-pending');
+    if (forkCardTotal) forkCardTotal.textContent = totalForkliftIssues;
+    if (forkCardPending) forkCardPending.textContent = pendingIssues;
+    
+    // Refresh icons inside the newly populated elements just in case
+    lucide.createIcons();
 }
 
 // Search functionality
