@@ -1,4 +1,4 @@
-var GEMINI_API_KEY = "AIzaSyA9fEyMfq1qRHVtb-TP9iVgVi2U1uAN_kc";
+var GEMINI_API_KEY = "AIzaSyBu0Ul0MgW6V32cZof9dJMnWsuyjw-03V0";
 
 function doGet(e) {
   var action = e.parameter.action;
@@ -79,8 +79,16 @@ function getAuthSheet() {
 function handleLogin(username, password) {
   var data = getAuthSheet().getDataRange().getValues();
   for (var i = 1; i < data.length; i++) {
-    if (data[i][0] === username && data[i][1] === password) {
-      if (data[i][3] === "Đã duyệt") return ContentService.createTextOutput(JSON.stringify({ status: 'success', role: data[i][4] || 'user', message: 'OK' })).setMimeType(ContentService.MimeType.JSON);
+    var sheetUser = data[i][0] ? data[i][0].toString().trim() : "";
+    var sheetPass = data[i][1] ? data[i][1].toString().trim() : "";
+    var inputUser = username ? username.toString().trim() : "";
+    var inputPass = password ? password.toString().trim() : "";
+    
+    if (sheetUser === inputUser && sheetPass === inputPass) {
+      var status = data[i][3] ? data[i][3].toString().trim().toLowerCase() : "";
+      if (status === "đã duyệt") {
+        return ContentService.createTextOutput(JSON.stringify({ status: 'success', role: data[i][4] || 'user', message: 'OK' })).setMimeType(ContentService.MimeType.JSON);
+      }
       return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Tài khoản đang chờ duyệt!' })).setMimeType(ContentService.MimeType.JSON);
     }
   }
