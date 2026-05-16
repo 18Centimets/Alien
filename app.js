@@ -498,18 +498,47 @@ function renderInfraHealthModule() {
         infraData = ghnMaterialsData.infraHealth;
     } else {
         infraData = [
+            // Kết cấu xây dựng
             { group: 'Kết cấu xây dựng', item: 'Mái tôn khu A', status: 'Khá', action: 'Theo dõi dột' },
+            { group: 'Kết cấu xây dựng', item: 'Mái tôn khu B', status: 'Tốt', action: '-' },
+            { group: 'Kết cấu xây dựng', item: 'Sơn vạch kẻ đường', status: 'Khá', action: 'Lên kế hoạch sơn dặm' },
+            { group: 'Kết cấu xây dựng', item: 'Rào chắn bảo vệ', status: 'Trung bình', action: 'Sơn lại các chỗ rỉ sét' },
+            { group: 'Kết cấu xây dựng', item: 'Sàn bê tông khu xuất hàng', status: 'Tốt', action: '-' },
+            { group: 'Kết cấu xây dựng', item: 'Cửa cuốn tự động', status: 'Khá', action: 'Bảo dưỡng motor' },
+            // Hệ thống điện
             { group: 'Hệ thống điện', item: 'Đèn LED highbay', status: 'Tốt', action: '-' },
-            { group: 'Hệ thống điện', item: 'Tủ điện tổng MSB', status: 'Trung bình', action: 'Bảo trì định kỳ' },
+            { group: 'Hệ thống điện', item: 'Tủ điện tổng MSB', status: 'Trung bình', action: 'Bảo trì định kỳ, kiểm tra nhiệt độ' },
+            { group: 'Hệ thống điện', item: 'Hệ thống tiếp địa', status: 'Tốt', action: '-' },
+            { group: 'Hệ thống điện', item: 'Dây cáp điện khu phân loại', status: 'Khá', action: 'Kiểm tra độ võng' },
+            { group: 'Hệ thống điện', item: 'Máy phát điện dự phòng', status: 'Trung bình', action: 'Thay dầu nhớt định kỳ' },
+            { group: 'Hệ thống điện', item: 'Ổ cắm công nghiệp', status: 'Tốt', action: '-' },
+            // PCCC
             { group: 'PCCC', item: 'Sprinkler khu B', status: 'Kém', action: 'Thay thế 3 đầu phun bị rỉ sét' },
-            { group: 'PCCC', item: 'Đèn khẩn cấp khu C', status: 'Kém', action: 'Thay pin backup' },
-            { group: 'PCCC', item: 'Bình chữa cháy', status: 'Khá', action: 'Kiểm tra áp suất' },
+            { group: 'PCCC', item: 'Đèn khẩn cấp khu C', status: 'Kém', action: 'Thay pin backup ngay lập tức' },
+            { group: 'PCCC', item: 'Bình chữa cháy', status: 'Khá', action: 'Kiểm tra áp suất định kỳ' },
+            { group: 'PCCC', item: 'Hệ thống báo cháy tự động', status: 'Tốt', action: '-' },
+            { group: 'PCCC', item: 'Máy bơm chữa cháy', status: 'Trung bình', action: 'Chạy thử nghiệm tuần tới' },
+            { group: 'PCCC', item: 'Họng nước vách tường', status: 'Tốt', action: '-' },
+            // Thiết bị vận hành
             { group: 'Thiết bị vận hành', item: 'Băng chuyền chính', status: 'Tốt', action: '-' },
             { group: 'Thiết bị vận hành', item: 'Xe nâng điện', status: 'Trung bình', action: 'Kiểm tra bình ắc quy' },
+            { group: 'Thiết bị vận hành', item: 'Kệ trung tải', status: 'Tốt', action: '-' },
+            { group: 'Thiết bị vận hành', item: 'Cân điện tử', status: 'Khá', action: 'Hiệu chuẩn lại cảm biến' },
+            { group: 'Thiết bị vận hành', item: 'Băng chuyền nhánh A', status: 'Khá', action: 'Tra dầu mỡ motor' },
+            { group: 'Thiết bị vận hành', item: 'Cửa Dock Leveler số 3', status: 'Kém', action: 'Thay thế ty thủy lực bị xì dầu' },
+            // CNTT & An ninh
             { group: 'CNTT & An ninh', item: 'Camera ngoài trời', status: 'Khá', action: 'Vệ sinh ống kính' },
-            { group: 'CNTT & An ninh', item: 'Mạng LAN', status: 'Trung bình', action: 'Thay switch phụ' },
+            { group: 'CNTT & An ninh', item: 'Mạng LAN nội bộ', status: 'Trung bình', action: 'Thay cáp mốc, tối ưu switch' },
+            { group: 'CNTT & An ninh', item: 'Server lưu trữ', status: 'Tốt', action: '-' },
+            { group: 'CNTT & An ninh', item: 'Thiết bị phát Wifi', status: 'Tốt', action: '-' },
+            { group: 'CNTT & An ninh', item: 'Máy in mã vạch', status: 'Trung bình', action: 'Vệ sinh đầu in' },
+            { group: 'CNTT & An ninh', item: 'Cổng từ an ninh', status: 'Khá', action: 'Căn chỉnh lại độ nhạy' },
+            // HVAC
             { group: 'HVAC', item: 'Quạt đối lưu', status: 'Tốt', action: '-' },
-            { group: 'HVAC', item: 'Điều hòa tủ đứng', status: 'Khá', action: 'Bơm ga' }
+            { group: 'HVAC', item: 'Điều hòa tủ đứng', status: 'Khá', action: 'Bơm ga, làm sạch màng lọc' },
+            { group: 'HVAC', item: 'Quạt hút mái', status: 'Trung bình', action: 'Thay bạc đạn do kêu to' },
+            { group: 'HVAC', item: 'Hệ thống thông gió khu B', status: 'Tốt', action: '-' },
+            { group: 'HVAC', item: 'Máy lạnh văn phòng', status: 'Tốt', action: '-' }
         ];
     }
 
