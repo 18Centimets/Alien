@@ -150,6 +150,29 @@ body {
     color: var(--text-secondary);
 }
 
+.btn-logout {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-logout i {
+    width: 20px;
+    height: 20px;
+}
+
+.btn-logout:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--ghn-red);
+}
+
 /* Main Content */
 .main-content {
     flex-grow: 1;

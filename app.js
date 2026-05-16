@@ -1089,8 +1089,20 @@ function initAuth() {
             lucide.createIcons();
         }
     });
-}
 
+    // Handle Logout
+    const btnLogout = document.getElementById('btn-logout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            if(confirm('Bạn có chắc chắn muốn đăng xuất không?')) {
+                localStorage.removeItem('ghn_auth_token');
+                localStorage.removeItem('ghn_user_role');
+                // Tải lại trang để reset toàn bộ trạng thái
+                window.location.reload();
+            }
+        });
+    }
+}
 function showAuthMessage(msg, type) {
     const el = document.getElementById('auth-message');
     el.textContent = msg;
