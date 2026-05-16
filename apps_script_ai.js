@@ -54,8 +54,8 @@ function handleAIChat(userMessage) {
     if (json.candidates && json.candidates.length > 0) {
       return ContentService.createTextOutput(JSON.stringify({ status: "success", reply: json.candidates[0].content.parts[0].text })).setMimeType(ContentService.MimeType.JSON);
     } else {
-      var errMsg = json.error ? json.error.message : "Lỗi không xác định.";
-      if (errMsg.includes("Quota exceeded") || errMsg.includes("rate-limit")) {
+      var errMsg = json.error ? (json.error.message || json.error).toString() : "Lỗi không xác định.";
+      if (errMsg.indexOf("Quota exceeded") !== -1 || errMsg.indexOf("rate-limit") !== -1) {
           return ContentService.createTextOutput(JSON.stringify({ status: "success", reply: "Sếp hỏi nhanh quá máy chủ Google không phản hồi kịp (Giới hạn 15 câu/phút). Sếp đợi khoảng 5-10 giây rồi hỏi lại nhé!" })).setMimeType(ContentService.MimeType.JSON);
       }
       return ContentService.createTextOutput(JSON.stringify({ status: "success", reply: "Lỗi API: " + errMsg })).setMimeType(ContentService.MimeType.JSON);
