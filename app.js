@@ -983,5 +983,126 @@ function showProvinceOverlay(province, provPOs) {
     overlay.classList.remove('hidden');
 }
 
-// Start app
-loadData();
+// --- AUTHENTICATION LOGIC ---
+function initAuth() {
+    const authOverlay = document.getElementById('auth-overlay');
+    const mainApp = document.getElementById('main-app');
+    
+    // Check if already logged in
+    if (localStorage.getItem('ghn_auth_token') === 'verified') {
+        authOverlay.style.display = 'none';
+        mainApp.style.display = 'flex';
+        loadData(); // Bắt đầu tải dữ liệu dashboard
+        return;
+    }
+    
+    // Switch forms
+    document.getElementById('go-to-register').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('login-form').classList.remove('active');
+        setTimeout(() => document.getElementById('login-form').classList.add('hidden'), 50);
+        document.getElementById('register-form').classList.remove('hidden');
+        setTimeout(() => document.getElementById('register-form').classList.add('active'), 50);
+        hideAuthMessage();
+    });
+    
+    document.getElementById('go-to-login').addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById('register-form').classList.remove('active');
+        setTimeout(() => document.getElementById('register-form').classList.add('hidden'), 50);
+        document.getElementById('login-form').classList.remove('hidden');
+        setTimeout(() => document.getElementById('login-form').classList.add('active'), 50);
+        hideAuthMessage();
+    });
+    
+    // Handle Login
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = document.getElementById('login-username').value;
+        const pass = document.getElementById('login-password').value;
+        const btn = document.getElementById('btn-login');
+        
+        btn.innerHTML = '<span>Đang kiểm tra...</span>';
+        
+        try {
+            // Mật khẩu cửa sau dành cho mày (khi chưa cấu hình xong Apps Script)
+            if (user === 'admin' && pass === 'ghn2026') {
+                setTimeout(() => {
+                    localStorage.setItem('ghn_auth_token', 'verified');
+                    localStorage.setItem('ghn_user_role', 'admin');
+                    authOverlay.style.display = 'none';
+                    mainApp.style.display = 'flex';
+                    loadData();
+                }, 800);
+                return;
+            }
+
+            // Gọi lên Google Sheets API
+            const response = await fetch(`${APPS_SCRIPT_URL}?action=login&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`);
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                localStorage.setItem('ghn_auth_token', 'verified');
+                localStorage.setItem('ghn_user_role', data.role);
+                authOverlay.style.display = 'none';
+                mainApp.style.display = 'flex';
+                loadData();
+            } else {
+                showAuthMessage(data.message || 'Sai tên đăng nhập hoặc mật khẩu!', 'error');
+            }
+        } catch (error) {
+            console.error(error);
+            showAuthMessage('Chưa kết nối được với hệ thống phê duyệt (Google Sheets).', 'error');
+        } finally {
+            btn.innerHTML = '<span>Đăng Nhập</span><i data-lucide="arrow-right"></i>';
+            lucide.createIcons();
+        }
+    });
+
+    // Handle Register
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const fullname = document.getElementById('reg-fullname').value;
+        const user = document.getElementById('reg-username').value;
+        const pass = document.getElementById('reg-password').value;
+        const btn = document.getElementById('btn-register');
+        
+        btn.innerHTML = '<span>Đang gửi...</span>';
+        
+        try {
+            const response = await fetch(`${APPS_SCRIPT_URL}?action=register&fullname=${encodeURIComponent(fullname)}&username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`);
+            const data = await response.json();
+            
+            if (data.status === 'success') {
+                showAuthMessage('Gửi yêu cầu thành công! Đang chờ Sếp duyệt.', 'success');
+                setTimeout(() => {
+                    document.getElementById('go-to-login').click();
+                }, 3000);
+            } else {
+                showAuthMessage(data.message || 'Có lỗi xảy ra khi đăng ký.', 'error');
+            }
+        } catch (error) {
+            console.error(error);
+            showAuthMessage('Hệ thống từ chối (Vui lòng cấu hình Google Apps Script trước).', 'error');
+        } finally {
+            btn.innerHTML = '<span>Gửi Yêu Cầu</span><i data-lucide="send"></i>';
+            lucide.createIcons();
+        }
+    });
+}
+
+function showAuthMessage(msg, type) {
+    const el = document.getElementById('auth-message');
+    el.textContent = msg;
+    el.className = `auth-message ${type}`;
+}
+
+function hideAuthMessage() {
+    const el = document.getElementById('auth-message');
+    el.className = 'auth-message hidden';
+}
+
+// Start app via Auth Flow
+document.addEventListener('DOMContentLoaded', () => {
+    initAuth();
+});
