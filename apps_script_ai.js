@@ -22,8 +22,8 @@ function doGet(e) {
 }
 
 function handleAIChat(userMessage) {
-  if (!GEMINI_API_KEY || GEMINI_API_KEY === "ĐIỀN_API_KEY_CỦA_MÀY_VÀO_ĐÂY") {
-    return ContentService.createTextOutput(JSON.stringify({ status: "success", reply: "Báo cáo sếp, hệ thống AI chưa được kích hoạt." })).setMimeType(ContentService.MimeType.JSON);
+  if (!GEMINI_API_KEY || GEMINI_API_KEY === "ĐIỀN_API_KEY_CỦA_MÀY_VÀO_ĐÂY" || GEMINI_API_KEY === "ĐIỀN_API_KEY_MỚI_CỦA_MÀY_VÀO_ĐÂY") {
+    return ContentService.createTextOutput(JSON.stringify({ status: "success", reply: "Báo cáo sếp, hệ thống AI chưa được kích hoạt (Thiếu API Key)." })).setMimeType(ContentService.MimeType.JSON);
   }
 
   var khoData = "" +
