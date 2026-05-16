@@ -988,6 +988,19 @@ function initAuth() {
     const authOverlay = document.getElementById('auth-overlay');
     const mainApp = document.getElementById('main-app');
     
+    // Handle Logout
+    const btnLogout = document.getElementById('btn-logout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            if(confirm('Bạn có chắc chắn muốn đăng xuất không?')) {
+                localStorage.removeItem('ghn_auth_token');
+                localStorage.removeItem('ghn_user_role');
+                // Tải lại trang để reset toàn bộ trạng thái
+                window.location.reload();
+            }
+        });
+    }
+
     // Check if already logged in
     if (localStorage.getItem('ghn_auth_token') === 'verified') {
         authOverlay.style.display = 'none';
@@ -1089,19 +1102,6 @@ function initAuth() {
             lucide.createIcons();
         }
     });
-
-    // Handle Logout
-    const btnLogout = document.getElementById('btn-logout');
-    if (btnLogout) {
-        btnLogout.addEventListener('click', () => {
-            if(confirm('Bạn có chắc chắn muốn đăng xuất không?')) {
-                localStorage.removeItem('ghn_auth_token');
-                localStorage.removeItem('ghn_user_role');
-                // Tải lại trang để reset toàn bộ trạng thái
-                window.location.reload();
-            }
-        });
-    }
 }
 function showAuthMessage(msg, type) {
     const el = document.getElementById('auth-message');
