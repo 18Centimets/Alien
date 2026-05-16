@@ -701,9 +701,214 @@ function renderInfraHealthModule() {
         });
     }
 
+    // 6. Trend Analysis (Kỳ trước vs Kỳ này)
+    renderTrendAnalysis(infraData);
+
     // Refresh icons for new elements
     lucide.createIcons();
 }
+
+function renderTrendAnalysis(currentData) {
+    // 1. Dữ liệu giả lập của kỳ trước (Tuần 19 - 09/05/2026)
+    const previousData = [
+        // Kết cấu xây dựng
+        { group: 'Kết cấu xây dựng', item: 'Mái tôn khu A', status: 'Tốt' }, // Rớt xuống Khá (-1)
+        { group: 'Kết cấu xây dựng', item: 'Mái tôn khu B', status: 'Tốt' }, 
+        { group: 'Kết cấu xây dựng', item: 'Sơn vạch kẻ đường', status: 'Tốt' }, // Rớt xuống Khá (-1)
+        { group: 'Kết cấu xây dựng', item: 'Rào chắn bảo vệ', status: 'Khá' }, // Rớt xuống Trung bình (-1)
+        
+        // Hệ thống điện
+        { group: 'Hệ thống điện', item: 'Tủ điện tổng MSB', status: 'Tốt' }, // 🚩 Rớt từ Tốt -> Trung bình (-2) Fast Drop!
+        { group: 'Hệ thống điện', item: 'Đèn LED highbay', status: 'Tốt' }, 
+        { group: 'Hệ thống điện', item: 'Dây cáp điện khu phân loại', status: 'Tốt' }, // Rớt xuống Khá (-1)
+        
+        // PCCC
+        { group: 'PCCC', item: 'Sprinkler khu B', status: 'Khá' }, // 🚩 Rớt từ Khá -> Kém (-2) Fast Drop!
+        { group: 'PCCC', item: 'Đèn khẩn cấp khu C', status: 'Trung bình' }, // Rớt từ Trung bình -> Kém (-1)
+        { group: 'PCCC', item: 'Bình chữa cháy', status: 'Tốt' }, // Rớt từ Tốt -> Khá (-1)
+        
+        // Thiết bị vận hành
+        { group: 'Thiết bị vận hành', item: 'Xe nâng điện', status: 'Tốt' }, // 🚩 Rớt từ Tốt -> Trung bình (-2) Fast Drop!
+        { group: 'Thiết bị vận hành', item: 'Cân điện tử', status: 'Tốt' }, // Rớt từ Tốt -> Khá (-1)
+        { group: 'Thiết bị vận hành', item: 'Cửa Dock Leveler số 3', status: 'Khá' }, // 🚩 Rớt từ Khá -> Kém (-2) Fast Drop!
+        
+        // CNTT & An ninh
+        { group: 'CNTT & An ninh', item: 'Mạng LAN nội bộ', status: 'Tốt' }, // 🚩 Rớt từ Tốt -> Trung bình (-2) Fast Drop!
+        { group: 'CNTT & An ninh', item: 'Camera ngoài trời', status: 'Tốt' }, // Rớt từ Tốt -> Khá (-1)
+        
+        // HVAC
+        { group: 'HVAC', item: 'Điều hòa tủ đứng', status: 'Tốt' }, // Rớt từ Tốt -> Khá (-1)
+        { group: 'HVAC', item: 'Quạt hút mái', status: 'Tốt' } // 🚩 Rớt từ Tốt -> Trung bình (-2) Fast Drop!
+    ];
+
+    // Hệ điểm
+    const getScore = (status) => {
+        const s = status.toLowerCase();
+        if (s === 'tốt') return 4;
+        if (s === 'khá') return 3;
+        if (s === 'trung bình' || s === 'tb') return 2;
+        if (s === 'kém') return 1;
+        return 4; // Mặc định Tốt nếu không có dữ liệu
+    };
+
+    // 2. Tính toán điểm tổng thể cho biểu đồ so sánh 2 kỳ
+    const groupsInfo = {
+        'Kết cấu xây dựng': 'Xây dựng', 'Hệ thống điện': 'Điện', 'PCCC': 'PCCC',
+        'Thiết bị vận hành': 'Vận hành', 'CNTT & An ninh': 'CNTT', 'HVAC': 'HVAC'
+    };
+    
+    let prevStats = { 'Kết cấu xây dựng': { total:0, max:0 }, 'Hệ thống điện': { total:0, max:0 }, 'PCCC': { total:0, max:0 }, 'Thiết bị vận hành': { total:0, max:0 }, 'CNTT & An ninh': { total:0, max:0 }, 'HVAC': { total:0, max:0 } };
+    let currStats = { 'Kết cấu xây dựng': { total:0, max:0 }, 'Hệ thống điện': { total:0, max:0 }, 'PCCC': { total:0, max:0 }, 'Thiết bị vận hành': { total:0, max:0 }, 'CNTT & An ninh': { total:0, max:0 }, 'HVAC': { total:0, max:0 } };
+
+    // Điểm kỳ trước
+    previousData.forEach(item => {
+        if(prevStats[item.group]) {
+            prevStats[item.group].total += getScore(item.status);
+            prevStats[item.group].max += 4;
+        }
+    });
+    // Điểm kỳ này
+    currentData.forEach(item => {
+        if(currStats[item.group]) {
+            currStats[item.group].total += getScore(item.status);
+            currStats[item.group].max += 4;
+        }
+    });
+
+    const labels = [];
+    const prevDataArr = [];
+    const currDataArr = [];
+    
+    Object.keys(groupsInfo).forEach(group => {
+        labels.push(groupsInfo[group]);
+        
+        const prevPerc = prevStats[group].max > 0 ? Math.round((prevStats[group].total / prevStats[group].max) * 100) : 100; // Giả sử 100% nếu ko có lỗi
+        prevDataArr.push(prevPerc);
+        
+        const currPerc = currStats[group].max > 0 ? Math.round((currStats[group].total / currStats[group].max) * 100) : 100;
+        currDataArr.push(currPerc);
+    });
+
+    // 3. Render biểu đồ Bar Chart
+    const trendCtx = document.getElementById('trendAnalysisChart');
+    if (trendCtx) {
+        if (window.charts && window.charts.trendAnalysis) {
+            window.charts.trendAnalysis.destroy();
+        }
+        if(!window.charts) window.charts = {};
+        
+        window.charts.trendAnalysis = new Chart(trendCtx.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Tuần 19 (Trước)',
+                        data: prevDataArr,
+                        backgroundColor: '#4ade80', // Màu xanh nhạt
+                        borderRadius: 4
+                    },
+                    {
+                        label: 'Tuần 20 (Này)',
+                        data: currDataArr,
+                        backgroundColor: currDataArr.map((val, idx) => val < prevDataArr[idx] ? '#f59e0b' : '#10b981'), // Cam nếu tuột hạng
+                        borderRadius: 4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: { beginAtZero: true, max: 100, ticks: { color: '#9ba1b0', callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    x: { ticks: { color: '#9ba1b0' }, grid: { display: false } }
+                },
+                plugins: {
+                    legend: { labels: { color: '#9ba1b0', font: { family: "'Inter', sans-serif" } } }
+                }
+            }
+        });
+    }
+
+    // 4. Lọc hạng mục đang xuống cấp (Delta < 0)
+    let degradationList = [];
+    let fastDropCount = 0;
+
+    currentData.forEach(currItem => {
+        const prevItem = previousData.find(p => p.group === currItem.group && p.item === currItem.item);
+        if (prevItem) {
+            const currScore = getScore(currItem.status);
+            const prevScore = getScore(prevItem.status);
+            const delta = currScore - prevScore;
+            
+            if (delta < 0) {
+                degradationList.push({
+                    group: currItem.group,
+                    item: currItem.item,
+                    prevStatus: prevItem.status,
+                    currStatus: currItem.status,
+                    delta: delta
+                });
+                if (delta <= -2) {
+                    fastDropCount++;
+                }
+            }
+        }
+    });
+
+    // Sắp xếp theo mức độ rớt hạng (rớt nhiều xếp trước)
+    degradationList.sort((a, b) => a.delta - b.delta);
+
+    // Cập nhật Badge báo đỏ
+    const badge = document.getElementById('fast-degrade-badge');
+    if (badge) {
+        if (fastDropCount > 0) {
+            badge.textContent = `${fastDropCount} rớt hạng nhanh`;
+            badge.classList.remove('hidden');
+            badge.style.display = 'inline-block';
+        } else {
+            badge.classList.add('hidden');
+        }
+    }
+
+    // Cập nhật Bảng Trend Alert
+    const tbody = document.querySelector('#trendAlertTable tbody');
+    if (tbody) {
+        tbody.innerHTML = '';
+        if (degradationList.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center" style="color:var(--text-muted)">Không có hạng mục nào xuống cấp so với tuần trước.</td></tr>`;
+        } else {
+            degradationList.forEach(item => {
+                let statusBadgeClass = 'warning';
+                let alertText = `<span style="color: var(--ghn-orange);">📉 Đang đi xuống (${item.delta})</span>`;
+                
+                if (item.delta <= -2) {
+                    alertText = `<span style="color: var(--ghn-red); font-weight: bold;"><i data-lucide="alert-triangle" style="width:14px; height:14px; display:inline-block; vertical-align:middle; margin-right:4px;"></i>XUỐNG CẤP NHANH (${item.delta})</span>`;
+                }
+
+                // Màu kỳ này
+                let currBadgeClass = 'warning';
+                if (item.currStatus.toLowerCase() === 'kém') currBadgeClass = 'critical';
+
+                const tr = document.createElement('tr');
+                if (item.delta <= -2) tr.className = 'fast-drop-row';
+                
+                tr.innerHTML = `
+                    <td><strong>${groupsInfo[item.group] || item.group}</strong></td>
+                    <td>${item.item}</td>
+                    <td class="text-center"><span class="status-badge safe">${item.prevStatus}</span></td>
+                    <td class="text-center">
+                        <i data-lucide="arrow-right" style="width: 14px; height: 14px; color: var(--text-muted); margin-right: 8px; vertical-align: middle;"></i>
+                        <span class="status-badge ${currBadgeClass}">${item.currStatus}</span>
+                    </td>
+                    <td>${alertText}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+    }
+}
+
 // Map Search Logic
 function initMapSearch() {
     const poList = document.getElementById('poList');
