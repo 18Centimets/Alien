@@ -1303,3 +1303,160 @@ function initChatbot() {
         history.scrollTop = history.scrollHeight;
     }
 }
+
+// ==========================================
+// EXCEL DRAG & DROP (ZERO-CODE DATABASE)
+// ==========================================
+const dbUploadZone = document.getElementById('db-upload-zone');
+const excelInput = document.getElementById('excel-upload-input');
+
+if (dbUploadZone && excelInput) {
+    dbUploadZone.addEventListener('click', () => excelInput.click());
+    
+    dbUploadZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dbUploadZone.style.borderColor = 'var(--ghn-green)';
+        dbUploadZone.style.background = 'rgba(16, 185, 129, 0.1)';
+    });
+    
+    dbUploadZone.addEventListener('dragleave', (e) => {
+        e.preventDefault();
+        dbUploadZone.style.borderColor = 'rgba(255,255,255,0.2)';
+        dbUploadZone.style.background = 'transparent';
+    });
+    
+    dbUploadZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dbUploadZone.style.borderColor = 'rgba(255,255,255,0.2)';
+        dbUploadZone.style.background = 'transparent';
+        if (e.dataTransfer.files.length) {
+            handleExcelUpload(e.dataTransfer.files[0]);
+        }
+    });
+    
+    excelInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            handleExcelUpload(e.target.files[0]);
+        }
+    });
+}
+
+function handleExcelUpload(file) {
+    if (!file.name.match(/\.(xlsx|xls|csv)$/i)) {
+        alert("Sếp vui lòng chọn file Excel (.xlsx, .xls)!");
+        return;
+    }
+    
+    // Đổi icon thành loading
+    const icon = dbUploadZone.querySelector('i');
+    const originalIcon = icon.getAttribute('data-lucide');
+    icon.setAttribute('data-lucide', 'loader');
+    lucide.createIcons();
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        try {
+            const workbook = XLSX.read(data, {type: 'array'});
+            parseExcelToDashboard(workbook);
+            
+            // Thành công
+            icon.setAttribute('data-lucide', 'check-circle');
+            icon.style.color = 'var(--ghn-green)';
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                icon.setAttribute('data-lucide', originalIcon);
+                icon.style.color = 'var(--ghn-orange)';
+                lucide.createIcons();
+            }, 3000);
+            
+            alert("Đã cập nhật Database thành công từ file Excel!");
+        } catch (error) {
+            console.error(error);
+            alert("Lỗi đọc file Excel. Sếp kiểm tra lại định dạng file nhé!");
+            icon.setAttribute('data-lucide', originalIcon);
+            lucide.createIcons();
+        }
+    };
+    reader.readAsArrayBuffer(file);
+}
+
+function formatExcelDate(serial) {
+    if (!serial) return '';
+    if (typeof serial === 'string') return serial;
+    // Excel date bug offset
+    const date = new Date(Math.round((serial - 25569)*86400*1000));
+    return date.toLocaleDateString('vi-VN');
+}
+
+function parseExcelToDashboard(workbook) {
+    let newAllocations = [];
+    let newForklifts = [];
+    let newInfraHealth = [];
+    
+    // 1. Cấp phát các BC
+    if (workbook.Sheets['Cấp phát các BC']) {
+        const data = XLSX.utils.sheet_to_json(workbook.Sheets['Cấp phát các BC'], {header: 1});
+        for (let i = 1; i < data.length; i++) {
+            let row = data[i];
+            if (row[0] && row[0] !== 'NGÀY THÁNG NĂM' && row[0] !== 'Ngày tháng năm') {
+                newAllocations.push({
+                    date: formatExcelDate(row[0]),
+                    bc: row[1] || 'N/A',
+                    item: row[2] || 'N/A',
+                    quantity: Number(row[3]) || 0,
+                    unit: row[4] || 'N/A',
+                    location: row[5] || 'N/A',
+                    issuer: row[6] || 'N/A'
+                });
+            }
+        }
+    }
+    
+    // 2. Nhật ký xe nâng
+    if (workbook.Sheets['Nhật ký xe nâng']) {
+        const data = XLSX.utils.sheet_to_json(workbook.Sheets['Nhật ký xe nâng'], {header: 1});
+        for (let i = 1; i < data.length; i++) {
+            let row = data[i];
+            if (row[0] && row[0] !== 'Nhà cung cấp' && row[0] !== 'NHÀ CUNG CẤP') {
+                newForklifts.push({
+                    supplier: row[0] || 'N/A',
+                    code: row[1] || 'N/A',
+                    issueTime: formatExcelDate(row[2]),
+                    issueType: row[3] || 'N/A',
+                    fixTime: formatExcelDate(row[4]),
+                    note: row[5] || ''
+                });
+            }
+        }
+    }
+    
+    // 3. KiemTraHaTang
+    if (workbook.Sheets['KiemTraHaTang']) {
+        const data = XLSX.utils.sheet_to_json(workbook.Sheets['KiemTraHaTang'], {header: 1});
+        for (let i = 1; i < data.length; i++) {
+            let row = data[i];
+            if (row[0] && row[0] !== 'Ngày kiểm tra' && row[0] !== 'Ngày') {
+                newInfraHealth.push({
+                    date: formatExcelDate(row[0]),
+                    group: row[1] || 'N/A',
+                    item: row[2] || 'N/A',
+                    status: row[3] || 'N/A',
+                    desc: row[4] || '',
+                    action: row[5] || '-',
+                    inspector: row[6] || 'N/A'
+                });
+            }
+        }
+    }
+    
+    // Cập nhật biến global và render lại
+    if (!window.ghnMaterialsData) window.ghnMaterialsData = {};
+    if(newAllocations.length > 0) ghnMaterialsData.allocations = newAllocations;
+    if(newForklifts.length > 0) ghnMaterialsData.forklifts = newForklifts;
+    if(newInfraHealth.length > 0) ghnMaterialsData.infraHealth = newInfraHealth;
+    
+    // Gọi lại hàm render
+    initDashboard();
+}
