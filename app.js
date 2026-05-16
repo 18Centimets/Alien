@@ -1045,6 +1045,7 @@ function initAuth() {
                     localStorage.setItem('ghn_user_role', 'admin');
                     authOverlay.style.display = 'none';
                     mainApp.style.display = 'flex';
+                    document.getElementById('ai-chat-widget').style.display = 'flex';
                     loadData();
                 }, 800);
                 return;
@@ -1059,6 +1060,7 @@ function initAuth() {
                 localStorage.setItem('ghn_user_role', data.role);
                 authOverlay.style.display = 'none';
                 mainApp.style.display = 'flex';
+                document.getElementById('ai-chat-widget').style.display = 'flex';
                 loadData();
             } else {
                 showAuthMessage(data.message || 'Sai tên đăng nhập hoặc mật khẩu!', 'error');
