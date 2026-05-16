@@ -1,4 +1,4 @@
-var GEMINI_API_KEY = "AIzaSyBu0Ul0MgW6V32cZof9dJMnWsuyjw-03V0";
+var GEMINI_API_KEY = "ĐIỀN_API_KEY_MỚI_CỦA_MÀY_VÀO_ĐÂY"; // LƯU Ý: KHÔNG PUSH KEY LÊN GITHUB NỮA NHÉ
 
 function doGet(e) {
   var action = e ? e.parameter.action : null;
