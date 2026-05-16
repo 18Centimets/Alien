@@ -6,7 +6,7 @@ let ghnData = null;
 let ghnMaterialsData = null;
 let charts = {};
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQWBAoL1zyBZ3v33EtXTChgLK1STa1rzcGdMcwbhExeBNH6As9BjphfX0SRbk67Twf/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzoQM_WcGX6rFSKYWFw42rWqOj2ZEGE_3Cj6MkdI8waMw6kuUWIXWcfY_ciNKM_lRT8HQ/exec';
 
 // Chart.js Global Defaults for Dark Theme
 Chart.defaults.color = '#9ba1b0';
@@ -32,16 +32,7 @@ document.querySelectorAll('.nav-item').forEach(item => {
 // Load Data (From global variable)
 async function fetchOnlineMaterials() {
     try {
-        // Timeout sau 10 giây để tránh treo vô thời hạn
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000);
-        
-        const response = await fetch(APPS_SCRIPT_URL, { 
-            signal: controller.signal,
-            redirect: 'follow'
-        });
-        clearTimeout(timeoutId);
-        
+        const response = await fetch(APPS_SCRIPT_URL);
         if (!response.ok) throw new Error('Network response was not ok');
         const apiData = await response.json();
         
@@ -555,7 +546,7 @@ function renderInfraHealthModule() {
     const alertBanner = document.getElementById('infra-alert-banner');
     if (redItems.length > 0) {
         alertBanner.classList.remove('hidden');
-        alertBanner.querySelector('span').textContent = `CẢNH BÁO: Phát hiện ${redItems.length} hạng mục ĐỎ cần xử lý khẩn cấp trong 48h!`;
+        alertBanner.querySelector('span').textContent = \`CẢNH BÁO: Phát hiện \${redItems.length} hạng mục ĐỎ cần xử lý khẩn cấp trong 48h!\`;
     } else {
         alertBanner.classList.add('hidden');
     }
@@ -590,20 +581,20 @@ function renderInfraHealthModule() {
 
         const card = document.createElement('div');
         card.className = 'infra-card glass-panel';
-        card.innerHTML = `
+        card.innerHTML = \`
             <div class="infra-card-header">
-                <h3>${groupsInfo[gName].id}</h3>
-                <div class="${bgClass}" style="padding: 6px; border-radius: 8px; display: flex;">
-                    <i data-lucide="${groupsInfo[gName].icon}"></i>
+                <h3>\${groupsInfo[gName].id}</h3>
+                <div class="\${bgClass}" style="padding: 6px; border-radius: 8px; display: flex;">
+                    <i data-lucide="\${groupsInfo[gName].icon}"></i>
                 </div>
             </div>
             <div class="infra-card-body">
-                <span class="infra-score ${scoreClass}">${healthScore}%</span>
+                <span class="infra-score \${scoreClass}">\${healthScore}%</span>
             </div>
             <div class="infra-trend">
-                ${trendHtml}
+                \${trendHtml}
             </div>
-        `;
+        \`;
         kpiContainer.appendChild(card);
     });
 
@@ -660,14 +651,14 @@ function renderInfraHealthModule() {
             else if (st === 'tốt') badgeClass = 'safe';
 
             const tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td><strong>${groupsInfo[item.group] ? groupsInfo[item.group].id : item.group}</strong></td>
-                <td>${item.item}</td>
+            tr.innerHTML = \`
+                <td><strong>\${groupsInfo[item.group] ? groupsInfo[item.group].id : item.group}</strong></td>
+                <td>\${item.item}</td>
                 <td class="text-center">
-                    <span class="status-badge ${badgeClass}">${item.status}</span>
+                    <span class="status-badge \${badgeClass}">\${item.status}</span>
                 </td>
-                <td>${item.action || '-'}</td>
-            `;
+                <td>\${item.action || '-'}</td>
+            \`;
             tbody.appendChild(tr);
         });
     }
