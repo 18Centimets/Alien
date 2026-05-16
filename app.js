@@ -532,7 +532,7 @@ function renderInfraHealthModule() {
     const alertBanner = document.getElementById('infra-alert-banner');
     if (redItems.length > 0) {
         alertBanner.classList.remove('hidden');
-        alertBanner.querySelector('span').textContent = \`CẢNH BÁO: Phát hiện \${redItems.length} hạng mục ĐỎ cần xử lý khẩn cấp trong 48h!\`;
+        alertBanner.querySelector('span').textContent = `CẢNH BÁO: Phát hiện ${redItems.length} hạng mục ĐỎ cần xử lý khẩn cấp trong 48h!`;
     } else {
         alertBanner.classList.add('hidden');
     }
@@ -567,20 +567,20 @@ function renderInfraHealthModule() {
 
         const card = document.createElement('div');
         card.className = 'infra-card glass-panel';
-        card.innerHTML = \`
+        card.innerHTML = `
             <div class="infra-card-header">
-                <h3>\${groupsInfo[gName].id}</h3>
-                <div class="\${bgClass}" style="padding: 6px; border-radius: 8px; display: flex;">
-                    <i data-lucide="\${groupsInfo[gName].icon}"></i>
+                <h3>${groupsInfo[gName].id}</h3>
+                <div class="${bgClass}" style="padding: 6px; border-radius: 8px; display: flex;">
+                    <i data-lucide="${groupsInfo[gName].icon}"></i>
                 </div>
             </div>
             <div class="infra-card-body">
-                <span class="infra-score \${scoreClass}">\${healthScore}%</span>
+                <span class="infra-score ${scoreClass}">${healthScore}%</span>
             </div>
             <div class="infra-trend">
-                \${trendHtml}
+                ${trendHtml}
             </div>
-        \`;
+        `;
         kpiContainer.appendChild(card);
     });
 
@@ -637,14 +637,14 @@ function renderInfraHealthModule() {
             else if (st === 'tốt') badgeClass = 'safe';
 
             const tr = document.createElement('tr');
-            tr.innerHTML = \`
-                <td><strong>\${groupsInfo[item.group] ? groupsInfo[item.group].id : item.group}</strong></td>
-                <td>\${item.item}</td>
+            tr.innerHTML = `
+                <td><strong>${groupsInfo[item.group] ? groupsInfo[item.group].id : item.group}</strong></td>
+                <td>${item.item}</td>
                 <td class="text-center">
-                    <span class="status-badge \${badgeClass}">\${item.status}</span>
+                    <span class="status-badge ${badgeClass}">${item.status}</span>
                 </td>
-                <td>\${item.action || '-'}</td>
-            \`;
+                <td>${item.action || '-'}</td>
+            `;
             tbody.appendChild(tr);
         });
     }
