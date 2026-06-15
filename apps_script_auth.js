@@ -47,6 +47,7 @@ function doGet(e) {
   if (action === 'get_today_log')    return ccdcGetTodayLog();
   if (action === 'ccdc_get_all_logs') return ccdcGetAllLogs();
   if (action === 'debug_headers')    return ccdcDebugHeaders(); // tạm thời để fix tên cột
+  if (action === 'tts')              return handleTts(e.parameter.text);
 
 
   return createJsonResponse({ status: "error", message: "Invalid action" });
@@ -747,6 +748,34 @@ function ccdcDebugHeaders() {
     sample_rows: sample,
     all_sheets: allSheets
   });
+}
+
+// API: Gọi Google TTS từ phía Apps Script và trả về Base64 MP3
+function handleTts(text) {
+  if (!text) return createJsonResponse({ status: "error", message: "Missing text" });
+  try {
+    var url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=" + encodeURIComponent(text);
+    var response = UrlFetchApp.fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      muteHttpExceptions: true
+    });
+    
+    if (response.getResponseCode() !== 200) {
+      var urlFallback = "https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=vi&client=gtx&q=" + encodeURIComponent(text);
+      response = UrlFetchApp.fetch(urlFallback, { muteHttpExceptions: true });
+    }
+    
+    if (response.getResponseCode() === 200) {
+      var base64 = Utilities.base64Encode(response.getContent());
+      return createJsonResponse({ status: "success", audio: base64 });
+    } else {
+      return createJsonResponse({ status: "error", message: "Google TTS returned HTTP " + response.getResponseCode() });
+    }
+  } catch(e) {
+    return createJsonResponse({ status: "error", message: e.toString() });
+  }
 }
 
 

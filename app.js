@@ -16,7 +16,7 @@ function escapeHtml(str) {
         .replace(/'/g, '&#039;');
 }
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyj45EoU7IJjRq6r8hbe4RWmPFZB-CBxZiy7RuVPpOAPXYmOx83obvCO__LrE0CtHo0/exec'; // Auth API
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyZUWjTuJ41Q1162sgV49ON8i6Kinz5Y6BxR2nRrzEvGVzEWaFMoUCussregzXdjY_/exec'; // Auth API
 const REPORT_API_URL  = 'https://script.google.com/macros/s/AKfycbzQB5zWptOlgE0Wt5pfhopMVN2GEZ18ConPuvT8HuRHXqUaJ1_nPV-MmmZk7Clxp-jo/exec'; // Data Báo Cáo
 const CCDC_API_URL    = APPS_SCRIPT_URL; // Dùng chung Apps Script URL — chỉ cần deploy lại 1 lần
 
@@ -31,12 +31,38 @@ document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', (e) => {
         e.preventDefault();
         
+        const targetId = item.getAttribute('data-target');
+        
+        // Bảo mật bổ sung: Chặn điều hướng đến các tab không được cấp quyền cho role user
+        const role = localStorage.getItem('ghn_user_role');
+        if (role === 'user') {
+            let myPerms = [];
+            try {
+                const raw = localStorage.getItem('ghn_user_perms');
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) {
+                    myPerms = parsed;
+                } else if (typeof parsed === 'string') {
+                    myPerms = parsed.split(',').map(p => p.trim()).filter(p => p);
+                }
+            } catch(e) {
+                myPerms = ['overview'];
+            }
+            if (myPerms.length === 0) myPerms = ['overview'];
+            
+            // Nếu targetId không nằm trong danh sách quyền và không phải là 'overview', chặn điều hướng
+            if (targetId !== 'overview' && !myPerms.includes(targetId)) {
+                console.warn(`[Security] Cố gắng truy cập trái phép module: ${targetId}`);
+                alert('⚠️ Bạn không có quyền truy cập chức năng này!');
+                return;
+            }
+        }
+        
         // Update active nav
         document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
         item.classList.add('active');
         
         // Show target module
-        const targetId = item.getAttribute('data-target');
         document.querySelectorAll('.module-section').forEach(s => s.classList.remove('active'));
         document.getElementById(targetId).classList.add('active');
     });
@@ -2057,6 +2083,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (typeof ccdcUpdateVoiceUI === 'function') {
         ccdcUpdateVoiceUI();
     }
+    
+    // Tự động kích hoạt (unlock) Audio và AudioContext khi có tương tác đầu tiên của người dùng
+    const ccdcUnlockAudio = () => {
+        try {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) {
+                const tempCtx = new AudioCtx();
+                if (tempCtx.state === 'suspended') {
+                    tempCtx.resume();
+                }
+            }
+            // Phát một đoạn nhạc câm cực ngắn để mở khoá autoplay của thẻ Audio
+            const silent = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
+            silent.play().catch(() => {});
+        } catch(e) {}
+        document.removeEventListener('click', ccdcUnlockAudio);
+        document.removeEventListener('keydown', ccdcUnlockAudio);
+    };
+    document.addEventListener('click', ccdcUnlockAudio);
+    document.addEventListener('keydown', ccdcUnlockAudio);
 });
 
 // --- AI CHATBOT LOGIC ---
@@ -2726,6 +2772,25 @@ let ccdc_empData = null;
 let ccdc_selectedBorrow = null;
 let ccdc_borrowList = [];
 
+// Bộ nhớ đệm danh sách nhân viên để phản hồi nhanh (0ms)
+let ccdc_employeesCache = [];
+let ccdc_cacheLoaded = false;
+
+async function ccdcPreloadEmployees() {
+    if (ccdc_cacheLoaded) return;
+    try {
+        console.log("[CCDC] Bắt đầu tải trước danh sách nhân viên...");
+        const res = await ccdcApiCall({ action: 'get_employees' });
+        if (res && res.status === 'success' && Array.isArray(res.employees)) {
+            ccdc_employeesCache = res.employees;
+            ccdc_cacheLoaded = true;
+            console.log(`[CCDC] Đã tải trước ${ccdc_employeesCache.length} nhân viên vào bộ nhớ đệm.`);
+        }
+    } catch(e) {
+        console.warn("[CCDC] Lỗi khi tải trước danh sách nhân viên:", e);
+    }
+}
+
 // === SWITCH TAB (GIAO / NHẬN) ===
 function ccdcSwitchTab(mode) {
     ccdc_mode = mode;
@@ -2759,54 +2824,204 @@ function ccdcSwitchTab(mode) {
 // === XỬ LÝ SCAN ===
 let ccdc_speechEnabled = localStorage.getItem('ccdc_speech_enabled') !== 'false';
 let ccdc_audioPlayer = null; // Quản lý đối tượng phát âm thanh để dừng khi cần
+let ccdc_speechId = 0; // ID yêu cầu đọc để nhận diện phiên mới nhất và chống phát đè
+let ccdc_lastScanBarcode = ''; // Lưu mã vạch quét cuối cùng chống quét lặp
+let ccdc_lastScanTime = 0; // Lưu thời điểm quét cuối cùng
 
-function ccdcSpeak(text) {
+// Hàm phát tiếng bíp bíp / buzzer bằng Web Audio API (không cần tải file âm thanh)
+function ccdcPlayBeep(type) {
+    try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        
+        if (type === 'success') {
+            // Âm bíp cao, ngắn báo hiệu quét thành công
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1000, ctx.currentTime); // 1000 Hz
+            gain.gain.setValueAtTime(0.08, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.12);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.12);
+        } else if (type === 'error') {
+            // Âm rè buzzer trầm, dài hơn báo lỗi
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, ctx.currentTime); // 150 Hz
+            gain.gain.setValueAtTime(0.12, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.35);
+        }
+    } catch (e) {
+        console.warn("Lỗi phát âm báo Web Audio:", e);
+    }
+}
+
+async function ccdcSpeak(text) {
     if (!ccdc_speechEnabled) return;
     
-    // Dừng âm thanh đang phát trước đó nếu có
+    // Tăng ID phiên phát giọng nói để nhận diện yêu cầu mới nhất
+    const currentSpeechId = ++ccdc_speechId;
+    
+    // Dừng âm thanh Google TTS đang phát trước đó nếu có
     if (ccdc_audioPlayer) {
         try {
             ccdc_audioPlayer.pause();
+            ccdc_audioPlayer.src = ""; // Dừng tải và giải phóng tài nguyên
+            ccdc_audioPlayer.onerror = null;
         } catch (e) {}
         ccdc_audioPlayer = null;
     }
     
-    // Ưu tiên cách 1: Gọi API Google Translate TTS để lấy giọng tiếng Việt chuẩn tự nhiên của Google Assistant
-    try {
-        const ttsUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(text)}`;
-        const audio = new Audio(ttsUrl);
+    // Dừng Web Speech API đang nói trước đó nếu có
+    if ('speechSynthesis' in window) {
+        try {
+            window.speechSynthesis.cancel();
+        } catch (e) {}
+    }
+    
+    let fallbackTriggered = false;
+    
+    // Nguồn Google TTS trực tiếp từ trình duyệt (Siêu nhanh - chỉ 100-200ms)
+    const directUrls = [
+        `https://translate.google.com/translate_tts?ie=UTF-8&tl=vi&client=tw-ob&q=${encodeURIComponent(text)}`,
+        `https://translate.googleapis.com/translate_tts?ie=UTF-8&tl=vi&client=gtx&q=${encodeURIComponent(text)}`
+    ];
+    
+    let currentUrlIndex = 0;
+    
+    // Hàm gọi proxy Apps Script (Chậm hơn - ~1.5s - 2s nhưng chống bị chặn tuyệt đối)
+    const playViaProxy = async () => {
+        if (currentSpeechId !== ccdc_speechId) return;
+        if (fallbackTriggered) return;
+        try {
+            console.log("Thử gọi Google TTS qua proxy Apps Script (chống chặn)...");
+            const res = await ccdcApiCall({ action: 'tts', text: text });
+            
+            if (currentSpeechId !== ccdc_speechId) return; // Kiểm tra lại sau khi API phản hồi chậm
+            
+            if (res && res.status === 'success' && res.audio) {
+                const audio = new Audio("data:audio/mp3;base64," + res.audio);
+                ccdc_audioPlayer = audio;
+                
+                await audio.play();
+                console.log("Phát giọng đọc thành công qua proxy Apps Script!");
+                return;
+            }
+        } catch (e) {
+            if (e.name === 'AbortError') {
+                console.log("Hủy phát âm thanh cũ để chuẩn bị phát âm thanh quét mới.");
+                return;
+            }
+        }
+        
+        if (currentSpeechId !== ccdc_speechId) return;
+        
+        // Nếu proxy cũng lỗi, chuyển sang Web Speech API
+        fallbackTriggered = true;
+        console.warn("Tất cả các nguồn Google TTS trực tiếp và proxy đều thất bại. Chuyển sang Web Speech API.");
+        ccdcSpeakFallbackWebSpeech(text, currentSpeechId);
+    };
+    
+    // Hàm thử các nguồn trực tiếp trước
+    const playNextDirect = () => {
+        if (currentSpeechId !== ccdc_speechId) return;
+        if (fallbackTriggered) return;
+        
+        if (currentUrlIndex >= directUrls.length) {
+            // Hết nguồn trực tiếp, chuyển sang dùng Proxy Apps Script
+            playViaProxy();
+            return;
+        }
+        
+        const ttsUrl = directUrls[currentUrlIndex];
+        currentUrlIndex++;
+        
+        const audio = new Audio();
         ccdc_audioPlayer = audio;
         
-        audio.play().catch(err => {
-            console.warn("Google TTS play blocked by browser autoplay policy, trying Web Speech API fallback:", err);
-            ccdcSpeakFallbackWebSpeech(text);
+        audio.onerror = (e) => {
+            if (currentSpeechId !== ccdc_speechId) {
+                try {
+                    audio.pause();
+                    audio.src = "";
+                } catch(err){}
+                return;
+            }
+            if (ccdc_audioPlayer === audio) {
+                console.warn(`Nguồn Google TTS trực tiếp thất bại (index ${currentUrlIndex - 1}), thử nguồn tiếp theo...`);
+                playNextDirect();
+            }
+        };
+        
+        audio.src = ttsUrl;
+        audio.play().then(() => {
+            if (currentSpeechId !== ccdc_speechId) {
+                try {
+                    audio.pause();
+                    audio.src = "";
+                } catch(err){}
+                return;
+            }
+            console.log("Phát giọng đọc trực tiếp thành công (siêu nhanh)!");
+        }).catch(err => {
+            if (err.name === 'AbortError') {
+                console.log("Hủy phát âm thanh cũ để chuẩn bị phát âm thanh quét mới.");
+                return;
+            }
+            if (currentSpeechId !== ccdc_speechId) return;
+            if (ccdc_audioPlayer === audio) {
+                console.warn(`Lỗi play() trực tiếp với nguồn Google TTS (index ${currentUrlIndex - 1}):`, err.name);
+                playNextDirect();
+            }
         });
-    } catch (e) {
-        console.error("Google TTS error, using Web Speech API fallback:", e);
-        ccdcSpeakFallbackWebSpeech(text);
-    }
+    };
+    
+    playNextDirect();
 }
 
-function ccdcSpeakFallbackWebSpeech(text) {
+function ccdcSpeakFallbackWebSpeech(text, speechId) {
+    if (speechId && speechId !== ccdc_speechId) return;
     if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel(); // Dừng câu nói trước đó
+        try {
+            window.speechSynthesis.cancel(); // Dừng câu nói trước đó
+        } catch (e) {}
         const utterance = new SpeechSynthesisUtterance(text);
         utterance.lang = 'vi-VN';
         
-        // Tìm giọng tiếng Việt chính xác
-        const voices = window.speechSynthesis.getVoices();
-        const viVoice = voices.find(v => {
-            const l = v.lang.toLowerCase();
-            return l === 'vi-vn' || l.startsWith('vi');
-        });
-        
-        if (viVoice) {
-            utterance.voice = viVoice;
+        // Tìm giọng tiếng Việt
+        const setVoiceAndSpeak = () => {
+            if (speechId && speechId !== ccdc_speechId) return;
+            const voices = window.speechSynthesis.getVoices();
+            const viVoice = voices.find(v => v.lang.toLowerCase() === 'vi-vn' || v.lang.toLowerCase().startsWith('vi'));
+            
+            if (viVoice) {
+                utterance.voice = viVoice;
+                utterance.rate = 1.0;
+                utterance.pitch = 1.0;
+                window.speechSynthesis.speak(utterance);
+            } else {
+                console.warn("Không tìm thấy giọng nói tiếng Việt trên thiết bị. Bỏ qua Web Speech API để tránh giọng Anh lai Việt.");
+                // Phát âm báo bíp bíp (success/error) thay thế khi thiết bị không hỗ trợ giọng Việt
+                if (text.includes('Không') || text.includes('Lỗi')) {
+                    ccdcPlayBeep('error');
+                } else {
+                    ccdcPlayBeep('success');
+                }
+            }
+        };
+
+        // getVoices() có thể rỗng khi gọi lần đầu do tải bất đồng bộ
+        if (window.speechSynthesis.getVoices().length === 0) {
+            window.speechSynthesis.addEventListener('voiceschanged', setVoiceAndSpeak, { once: true });
+        } else {
+            setVoiceAndSpeak();
         }
-        
-        utterance.rate = 1.0;
-        utterance.pitch = 1.0;
-        window.speechSynthesis.speak(utterance);
     }
 }
 
@@ -2862,18 +3077,52 @@ async function ccdcProcessScan(raw) {
     if (inp) inp.value = '';
     if (!msnv) return;
 
+    // Chống quét trùng lặp trong thời gian ngắn (< 1500ms cho cùng một mã)
+    const now = Date.now();
+    if (msnv === ccdc_lastScanBarcode && (now - ccdc_lastScanTime) < 1500) {
+        console.log(`[CCDC] Bỏ qua quét trùng lặp mã NV: ${msnv}`);
+        return;
+    }
+    ccdc_lastScanBarcode = msnv;
+    ccdc_lastScanTime = now;
+
     ccdcShowLoading(true);
     try {
         if (ccdc_mode === 'giao') {
-            const res = await ccdcApiCall({ action: 'lookup_employee', msnv });
-            ccdcShowLoading(false);
-            if (res.status === 'found') {
-                ccdc_empData = res;
-                ccdcShowResultGiao(res);
-                ccdcSpeakEmployee(res, 'giao');
+            // Thử tìm kiếm trong cache để phản hồi tức thì (0ms delay)
+            const localEmp = ccdc_employeesCache.find(e => (e.msnv || '').toString().trim().toLowerCase() === msnv.toLowerCase());
+            if (localEmp) {
+                ccdcShowLoading(false);
+                const empData = {
+                    status: 'found',
+                    msnv: localEmp.msnv,
+                    hoten: localEmp.hoten,
+                    ca: localEmp.ca,
+                    quanly: localEmp.quanly
+                };
+                ccdc_empData = empData;
+                ccdcShowResultGiao(empData);
+                ccdcSpeakEmployee(empData, 'giao');
+                
+                // Chạy cập nhật ngầm từ máy chủ
+                ccdcApiCall({ action: 'lookup_employee', msnv }).then(res => {
+                    if (res.status === 'found') {
+                        ccdc_empData = res;
+                        ccdcShowResultGiao(res);
+                    }
+                }).catch(() => {});
             } else {
-                ccdcToast('❌ ' + (res.message || 'Không tìm thấy mã NV: ' + msnv), 'error');
-                ccdcSpeak('Không tìm thấy nhân viên ' + msnv);
+                // Nếu chưa có cache, gọi API đồng bộ bình thường
+                const res = await ccdcApiCall({ action: 'lookup_employee', msnv });
+                ccdcShowLoading(false);
+                if (res.status === 'found') {
+                    ccdc_empData = res;
+                    ccdcShowResultGiao(res);
+                    ccdcSpeakEmployee(res, 'giao');
+                } else {
+                    ccdcToast('❌ ' + (res.message || 'Không tìm thấy mã NV: ' + msnv), 'error');
+                    ccdcSpeak('Không tìm thấy nhân viên ' + msnv);
+                }
             }
         } else {
             const res = await ccdcApiCall({ action: 'lookup_borrowed', msnv });
@@ -3044,6 +3293,7 @@ async function ccdcSubmit() {
     const nguoi_thao_tac = op_fullname ? `${op_msnv} - ${op_fullname}` : op_msnv;
 
     if (ccdc_mode === 'giao') {
+        if (!ccdc_empData) { ccdcToast('⚠️ Không có thông tin nhân viên để giao', 'error'); return; }
         const ma  = document.getElementById('ccdc-f-ma')?.value.trim();
         const ten = document.getElementById('ccdc-f-ten')?.value.trim();
         const ghi = document.getElementById('ccdc-f-ghi')?.value.trim() || '';
@@ -3058,8 +3308,9 @@ async function ccdcSubmit() {
                 nguoi_thao_tac: nguoi_thao_tac
             });
             if (res.status === 'success') {
+                const empName = ccdc_empData.hoten || 'nhân viên';
                 ccdcCloseResult();
-                ccdcToast(`✅ Đã giao "${ten}" cho ${ccdc_empData.hoten}`, 'success');
+                ccdcToast(`✅ Đã giao "${ten}" cho ${empName}`, 'success');
                 ccdcLoadLog();
             } else { ccdcToast('❌ ' + (res.message || 'Lỗi lưu'), 'error'); }
         } catch(e) { ccdcToast('❌ Lỗi kết nối', 'error'); }
@@ -3080,8 +3331,10 @@ async function ccdcSubmit() {
                 nguoi_thao_tac: nguoi_thao_tac
             });
             if (res.status === 'success') {
+                const deviceName = ccdc_selectedBorrow.ten_thiet_bi || 'thiết bị';
+                const empName = ccdc_selectedBorrow.hoten || 'nhân viên';
                 ccdcCloseResult();
-                ccdcToast(`✅ Đã nhận lại "${ccdc_selectedBorrow.ten_thiet_bi}" từ ${ccdc_selectedBorrow.hoten}`, 'success');
+                ccdcToast(`✅ Đã nhận lại "${deviceName}" từ ${empName}`, 'success');
                 ccdcLoadLog();
             } else { ccdcToast('❌ ' + (res.message || 'Lỗi lưu'), 'error'); }
         } catch(e) { ccdcToast('❌ Lỗi kết nối', 'error'); }
@@ -3200,6 +3453,7 @@ document.querySelectorAll('.nav-item[data-target="ccdc-device"]').forEach(nav =>
             const inp = document.getElementById('ccdc-scan-input');
             if (inp) inp.focus();
             ccdcLoadLog();
+            ccdcPreloadEmployees(); // Tải trước danh sách nhân viên để tìm kiếm tức thì
         }, 150);
     });
 });
