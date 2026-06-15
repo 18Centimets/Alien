@@ -162,6 +162,8 @@ function initDashboard() {
     renderProvinceChart();
     renderHeatmapTable();
     renderOverviewSummaries();
+    renderLayoutMap();
+    initMapSearch(); // New function
     if (ghnMaterialsData) {
         if (ghnMaterialsData.allocations && ghnMaterialsData.allocations.length > 0) {
             renderMaterialsTable();
@@ -1481,7 +1483,79 @@ function renderTrendAnalysis(currentData) {
     }
 }
 
+// Map Search Logic
+function initMapSearch() {
+    const poList = document.getElementById('poList');
+    const provList = document.getElementById('provList');
+    const mapSearchPO = document.getElementById('mapSearchPO');
+    const mapSearchProv = document.getElementById('mapSearchProv');
+    const overlay = document.getElementById('mapDetailsOverlay');
+    const closeBtn = document.getElementById('closeMapOverlay');
 
+    if (!poList || !ghnData) return;
+
+    // Populate datalists
+    const pos = ghnData.postOffices;
+    pos.forEach(po => {
+        const opt = document.createElement('option');
+        opt.value = po.name;
+        poList.appendChild(opt);
+    });
+
+    const provinces = [...new Set(pos.map(po => po.province))].sort();
+    provinces.forEach(prov => {
+        const opt = document.createElement('option');
+        opt.value = prov;
+        provList.appendChild(opt);
+    });
+
+    // PO Search Event
+    mapSearchPO.addEventListener('change', (e) => {
+        const found = pos.find(p => p.name === e.target.value);
+        if (found) {
+            showMapOverlay(found);
+        }
+    });
+
+    // Province Search Event
+    mapSearchProv.addEventListener('change', (e) => {
+        const provPOs = pos.filter(p => p.province === e.target.value);
+        if (provPOs.length > 0) {
+            showProvinceOverlay(e.target.value, provPOs);
+        }
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => overlay.classList.add('hidden'));
+    }
+}
+
+function showMapOverlay(po) {
+    const overlay = document.getElementById('mapDetailsOverlay');
+    if (!overlay) return;
+    
+    document.getElementById('overlayName').textContent = po.name;
+    document.getElementById('overlayOrders').textContent = formatNumber(po.volMet);
+    document.getElementById('overlayDistrict').textContent = po.district;
+    document.getElementById('overlayProvince').textContent = po.province;
+    document.getElementById('overlayAM').textContent = po.am;
+    
+    overlay.classList.remove('hidden');
+}
+
+function showProvinceOverlay(province, provPOs) {
+    const overlay = document.getElementById('mapDetailsOverlay');
+    if (!overlay) return;
+
+    const totalOrders = provPOs.reduce((sum, p) => sum + p.volMet, 0);
+    document.getElementById('overlayName').textContent = `Khu vực: ${province}`;
+    document.getElementById('overlayOrders').textContent = formatNumber(totalOrders);
+    document.getElementById('overlayDistrict').textContent = `${provPOs.length} Bưu cục`;
+    document.getElementById('overlayProvince').textContent = province;
+    document.getElementById('overlayAM').textContent = "Danh sách đa dạng";
+    
+    overlay.classList.remove('hidden');
+}
 
 // --- AUTHENTICATION LOGIC ---
 let tempMsnv = ''; // Lưu tạm MSNV để dùng ở bước OTP
@@ -3123,11 +3197,17 @@ function ccdcShowResultGiao(emp) {
     if (form) form.innerHTML = `
         <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
             <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">📋 Thông Tin Thiết Bị Giao</div>
-            <div style="margin-bottom:12px;">
-                <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Mã thiết bị (Quét QR thiết bị vào đây) <span style="color:#e74c3c">*</span></label>
-                <input id="ccdc-f-ma" type="text" placeholder="VD: ASSET001" autocomplete="off"
-                    onkeydown="if(event.key==='Enter'){ event.preventDefault(); ccdcSubmit(); }"
-                    style="width:100%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Mã thiết bị <span style="color:#e74c3c">*</span></label>
+                    <input id="ccdc-f-ma" type="text" placeholder="VD: TB-001" autocomplete="off"
+                        style="width:100%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;">
+                </div>
+                <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Tên thiết bị <span style="color:#e74c3c">*</span></label>
+                    <input id="ccdc-f-ten" type="text" placeholder="VD: Máy scan barcode" autocomplete="off"
+                        style="width:100%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;">
+                </div>
             </div>
             <div>
                 <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Ghi chú</label>
@@ -3193,11 +3273,8 @@ function ccdcShowResultNhan(borrowedList) {
         <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;">
             <div>
                 <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Tình trạng thiết bị khi nhận lại <span style="color:#e74c3c">*</span></label>
-                <select id="ccdc-f-tinh" style="width:100%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px;appearance:none;">
-                    <option value="Bình thường" style="color:#000;">Bình thường</option>
-                    <option value="Lỗi/Hư hỏng" style="color:#000;">Lỗi/Hư hỏng</option>
-                    <option value="Báo Mất" style="color:#000;">Báo Mất</option>
-                </select>
+                <input id="ccdc-f-tinh" type="text" placeholder="VD: Tốt / Hỏng màn hình / Cần sạc pin..."
+                    style="width:100%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px;">
             </div>
             <div>
                 <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Ghi chú</label>
@@ -3234,21 +3311,22 @@ async function ccdcSubmit() {
     if (ccdc_mode === 'giao') {
         if (!ccdc_empData) { ccdcToast('⚠️ Không có thông tin nhân viên để giao', 'error'); return; }
         const ma  = document.getElementById('ccdc-f-ma')?.value.trim();
+        const ten = document.getElementById('ccdc-f-ten')?.value.trim();
         const ghi = document.getElementById('ccdc-f-ghi')?.value.trim() || '';
         if (!ma)  { ccdcToast('⚠️ Vui lòng nhập Mã Thiết Bị', 'error'); return; }
+        if (!ten) { ccdcToast('⚠️ Vui lòng nhập Tên Thiết Bị', 'error'); return; }
         btn.disabled = true; btn.innerHTML = '⏳ Đang lưu...';
         try {
             const res = await ccdcApiCall({
-                action:'submit_giao', 
-                msnv:ccdc_empData.msnv, 
-                thiet_bi_id: ma, 
-                ghi_chu: ghi,
+                action:'submit_giao', msnv:ccdc_empData.msnv, hoten:ccdc_empData.hoten,
+                ca:ccdc_empData.ca, quanly:ccdc_empData.quanly,
+                ma_thiet_bi:ma, ten_thiet_bi:ten, ghi_chu:ghi,
                 nguoi_thao_tac: nguoi_thao_tac
             });
             if (res.status === 'success') {
                 const empName = ccdc_empData.hoten || 'nhân viên';
                 ccdcCloseResult();
-                ccdcToast(`✅ Đã giao thiết bị "${ma}" cho ${empName}`, 'success');
+                ccdcToast(`✅ Đã giao "${ten}" cho ${empName}`, 'success');
                 ccdcLoadLog();
             } else { ccdcToast('❌ ' + (res.message || 'Lỗi lưu'), 'error'); }
         } catch(e) { ccdcToast('❌ Lỗi kết nối', 'error'); }
@@ -3256,18 +3334,16 @@ async function ccdcSubmit() {
 
     } else {
         if (!ccdc_selectedBorrow) { ccdcToast('⚠️ Vui lòng chọn thiết bị cần thu hồi', 'error'); return; }
-        const tinh = document.getElementById('ccdc-f-tinh')?.value;
+        const tinh = document.getElementById('ccdc-f-tinh')?.value.trim();
         const ghi2 = document.getElementById('ccdc-f-ghi2')?.value.trim() || '';
-        if (!tinh) { ccdcToast('⚠️ Vui lòng chọn Tình trạng thiết bị', 'error'); return; }
+        if (!tinh) { ccdcToast('⚠️ Vui lòng nhập Tình trạng thiết bị', 'error'); return; }
         btn.disabled = true; btn.innerHTML = '⏳ Đang lưu...';
         try {
             const res = await ccdcApiCall({
-                action:'submit_nhan', 
-                msnv:ccdc_selectedBorrow.msnv,
-                thiet_bi_id: ccdc_selectedBorrow.ma_thiet_bi,
-                tinh_trang: tinh, 
-                ghi_chu: ghi2,
-                row_index: ccdc_selectedBorrow.row_index,
+                action:'submit_nhan', msnv:ccdc_selectedBorrow.msnv,
+                ma_thiet_bi:ccdc_selectedBorrow.ma_thiet_bi,
+                tinh_trang:tinh, ghi_chu:ghi2,
+                row_index:ccdc_selectedBorrow.row_index,
                 nguoi_thao_tac: nguoi_thao_tac
             });
             if (res.status === 'success') {
@@ -3357,76 +3433,30 @@ function ccdcToast(msg, type='success') {
 }
 
 async function ccdcApiCall(params) {
-    const baseUrl = 'http://localhost:5500/api';
-    const action = params.action;
-    
-    let url = '';
-    let method = 'GET';
-    let body = null;
-    let headers = {
-        'x-user-role': 'TRUONGCA' // Tạm thời hardcode role để test
-    };
+    const baseUrl = (typeof CCDC_API_URL !== 'undefined' && CCDC_API_URL)
+        ? CCDC_API_URL
+        : (typeof APPS_SCRIPT_URL !== 'undefined' ? APPS_SCRIPT_URL : '');
+    if (!baseUrl) throw new Error('Chưa cấu hình CCDC_API_URL');
 
-    if (action === 'get_employees') {
-        url = `${baseUrl}/employees`;
-    } else if (action === 'get_today_log') {
-        url = `${baseUrl}/recent`;
-    } else if (action === 'lookup_employee') {
-        url = `${baseUrl}/employee/${encodeURIComponent(params.msnv)}`;
-    } else if (action === 'lookup_borrowed') {
-        url = `${baseUrl}/borrowed/${encodeURIComponent(params.msnv)}`;
-    } else if (action === 'submit_giao') {
-        url = `${baseUrl}/giao`;
-        method = 'POST';
-        headers['Content-Type'] = 'application/json';
-        body = JSON.stringify({
-            msnv: params.msnv,
-            asset_qr: params.thiet_bi_id,
-            note: params.ghi_chu,
-            operator: params.nguoi_thao_tac || 'Unknown'
-        });
-    } else if (action === 'submit_nhan') {
-        url = `${baseUrl}/nhan`;
-        method = 'POST';
-        headers['Content-Type'] = 'application/json';
-        body = JSON.stringify({
-            msnv: params.msnv,
-            asset_qr: params.thiet_bi_id,
-            status: params.tinh_trang,
-            note: params.ghi_chu,
-            row_index: params.row_index,
-            operator: params.nguoi_thao_tac || 'Unknown'
-        });
-    } else if (action === 'tts') {
-        url = `${baseUrl}/tts`;
-        method = 'POST';
-        headers['Content-Type'] = 'application/json';
-        body = JSON.stringify({ text: params.text });
-    } else {
-        throw new Error('Action không được hỗ trợ ở V2: ' + action);
-    }
+    // Lọc bỏ undefined/null, ép về string
+    const qs = Object.entries(params)
+        .filter(([k, v]) => v !== undefined && v !== null)
+        .map(([k, v]) => k + '=' + encodeURIComponent(String(v)))
+        .join('&');
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
     try {
-        const fetchOptions = {
-            method: method,
-            headers: headers,
+        const res = await fetch(baseUrl + '?' + qs, {
+            redirect: 'follow',
             signal: controller.signal
-        };
-        if (body) fetchOptions.body = body;
-
-        const res = await fetch(url, fetchOptions);
+        });
         clearTimeout(timeoutId);
-        if (!res.ok) {
-            const errBody = await res.json().catch(() => ({}));
-            if (errBody.message) throw new Error(errBody.message);
-            throw new Error('HTTP ' + res.status);
-        }
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
     } catch(e) {
         clearTimeout(timeoutId);
-        if (e.name === 'AbortError') throw new Error('Timeout — máy chủ phản hồi chậm');
+        if (e.name === 'AbortError') throw new Error('Timeout — kiểm tra kết nối mạng');
         throw e;
     }
 }

@@ -1,0 +1,1022 @@
+Title: Live Content
+
+Description: Fetched live
+
+Source: https://docs.google.com/spreadsheets/d/1RFcbHT5HYnghUIkYkBmDJn1ZVvcFN7seZ4HFoIbO9nY/export?format=csv
+
+---
+
+                                                                                                                                                                                                ,BƯU CỤC,HÀNG HÓA CẤP PHÁT,SỐ LƯỢNG,ĐVT,HÀNG VỀ TẠI,Người cấp
+24/04/2026,20781000 - Bưu Cục Thôn Lực Điền-Yên Mỹ-Hưng Yên,Rổ nhựa sóng,9,Cái,kho,Lương
+24/04/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,Dây thít,4,Túi,kho,Trang
+25/04/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Máy in nhiệt,1,Cái,bc,Trang
+25/04/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,Máy in nhiệt,1,Cái,bc,Trang
+26/4/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,Dây thít,4,Túi,kho,Trang
+29/4/2026,20781000 - Bưu Cục Thôn Lực Điền-Yên Mỹ-Hưng Yên,Dây thít,3,Túi,kho,Lương
+29/4/2026,20781000 - Bưu Cục Thôn Lực Điền-Yên Mỹ-Hưng Yên,Súng bắn,1,Cái,kho,Lương
+29/4/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,Rổ nhựa sóng,6,Cái,kho,Lương
+29/4/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,dây thít,3,Túi,kho,Lương
+29/4/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,máy in nhiệt,1,Cái,kho,Lương
+29/4/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,dây thít,5,Túi,kho,Lương + Trang
+29/4/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,dây thít,3,Túi,kho,Lương
+29/4/2026,22476000 - Bưu Cục Đường Doãn Khuê-Phường Vũ Phúc-Thái Bình,máy in nhiệt,1,Cái,kho,Lương
+29/4/2026,22476000 - Bưu Cục Đường Doãn Khuê-Phường Vũ Phúc-Thái Bình,Súng bắn,1,Cái,kho,Lương
+29/4/2026,21459000 - Bưu Cục Thị Trấn Ân Thi-Ân Thi-Hưng Yên,Bao tải xanh,5,Bó,kho,Lương
+29/4/2026,21459000 - Bưu Cục Thị Trấn Ân Thi-Ân Thi-Hưng Yên,dây thít,3,Túi,kho,Lương
+29/4/2026,21459000 - Bưu Cục Thị Trấn Ân Thi-Ân Thi-Hưng Yên,súng bắn,1,Cái,kho,Lương
+29/4/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,Bao tải xanh,5,Bó,kho,Trang
+29/4/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,Giấy in nhiệt trắng,10,Cuộn,kho,Trang
+29/4/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,dây thít,3,Túi,kho,trang
+29/4/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,seal nhựa,3,Túi,kho,trang
+29/4/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,Pin súng bắn,1,Cái,kho,trang
+29/4/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Bao tải xanh,5,Bó,kho,trang
+29/4/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Giấy in nhiệt,10,Cuộn,kho,trang
+29/4/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,dây thít,3,Túi,kho,trang
+29/4/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,seal nhựa,3,Túi,kho,trang
+29/4/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Bao tải xanh,5,Bó,kho,trang
+29/4/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Giấy in nhiệt trắng,10,Cuộn,kho,trang
+29/4/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,dây thít,3,Túi,kho,Lương
+30/4/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,dây thít,3,Túi,kho,Trang
+30/4/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,dây thít,3,Túi,kho,Lương
+30/4/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,súng bắn,1,Cái,kho,Lương
+30/4/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,băng cắt keo,3,Cái,kho,Lương
+30/4/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Màng pe,2,Cuộn,kho,Lương
+30/4/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Bao tải xanh,5,Bó,kho,Lương
+30/4/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Băng dính trong,1,Bao,kho,Lương
+30/4/2026,21493000-Bưu Cục DT 376-Ngọc Long-Yên Mỹ-Hưng Yên ,Bao tải xanh,5,Bó,kho,Lương
+30/4/2026,21493000-Bưu Cục DT 376-Ngọc Long-Yên Mỹ-Hưng Yên ,dây thít,3,Túi,kho,Lương
+30/4/2026,21493000-Bưu Cục DT 376-Ngọc Long-Yên Mỹ-Hưng Yên ,Pin súng bắn,1,Cái,kho,Lương
+30/4/2026,21493000-Bưu Cục DT 376-Ngọc Long-Yên Mỹ-Hưng Yên ,Túi niêm phong,1,KG,kho,Lương
+1/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,dây thít,3,Túi,kho,Lương
+1/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Giấy in nhiệt trắng,10,Cuộn,kho,Lương
+1/5/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,dây thít,3,Túi,kho,Lương
+1/5/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình, Giấy in nhiệt trắng,10,Cuộn,kho,Lương
+1/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,dây thít,3,Túi,kho,Lương
+1/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Giấy in nhiệt trắng,10,Cuộn,kho,Lương
+1/5/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,quạt cây 450,1,Cái,kho,Trang
+3/5/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,quạt cây 450,1,Cái,BC,Trang
+4/5/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,Pin súng bắn,1,Cái,kho,Lương
+4/5/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,Rổ nhựa sóng,9,Cái,BC,Trang
+6/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Băng keo trong ,2,cây,kho,Lương
+6/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,cắt băng keo,2,cái,kho,Lương
+6/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Giấy in nhiệt trắng,10,cuộn,kho,Lương
+7/5/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,dây thít,3,túi,kho,Lương
+7/5/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,dây thít,3,túi,kho,Lương
+7/5/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,cắt băng keo,2,cái,kho,Lương
+8/5/2026,21459000 - Bưu Cục Thị Trấn Ân Thi-Ân Thi-Hưng Yên,súng bắn,1,bộ,BC,Trang
+9/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,dây thít,3,túi,kho,Lương 
+9/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Giấy in nhiệt trắng,10,cuộn,kho,Lương 
+9/5/2026,21476000 - Bưu Cục 176 Nguyễn Đức Cảnh-Hoàng Diệu-Thái Bình,Màng pe,2,cuộn,kho,Lương 
+9/5/2026,21476000 - Bưu Cục 176 Nguyễn Đức Cảnh-Hoàng Diệu-Thái Bình,cắt băng keo,2,cái,kho,Lương 
+9/5/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,dây thít,3,túi,kho,Lương 
+9/6/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,seal nhựa,3,túi,kho,Lương 
+9/6/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Rổ nhựa sóng,2,cái,kho,Lương
+9/5/2026,22476000 - Bưu Cục Đường Doãn Khuê-Phường Vũ Phúc-Thái Bình,dây thít,3,túi,kho,Lương
+9/5/2026,22476000 - Bưu Cục Đường Doãn Khuê-Phường Vũ Phúc-Thái Bình,cắt băng keo,1,cái,kho,Lương
+9/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Rổ nhựa sóng,2,cái,kho,Lương
+9/5/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,Ghế gấp,2,cái,BC,Trang
+9/5/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,Ghế gấp,2,cái,BC,Trang
+9/5/2026,20781000 - Bưu Cục Thôn Lực Điền-Yên Mỹ-Hưng Yên,Pin súng bắn,1,cái,BC,Trang
+10/5/2026,22476000 - Bưu Cục Đường Doãn Khuê-Phường Vũ Phúc-Thái Bình,Rổ nhựa sóng,2,cái,kho,Lương
+10/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,dây thít,3,túi,kho,Lương
+10/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,băng dính trong,8,cây,kho,Lương
+10/5/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,máy in nhiệt,1,cái,kho,Lương
+11/5/2026,,KTC Thái Nguyên 1 thùng seal nhựa,1,thùng,kho,Lý
+12/5/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,Bao tải xanh,5,bó,kho,Trang
+12/5/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,Dây thít,3,túi,kho,Trang
+12/5/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,Bao tải xanh,5,bó,kho,Trang
+12/5/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,Dây thít,3,túi,kho,Trang
+12/5/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,Dây thít,3,túi,kho,Trang
+13/5/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,Giấy in nhiệt trắng,10,cuộn,kho,Trang
+14/5/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,Bao tải xanh,5,bó,kho,Trang
+14/5/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,Dây thít,3,túi,kho,Trang
+14/5/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,Pin súng bắn,2,cái,kho,Trang
+14/5/2026,20679000 - Bưu cục Thôn Đông-Tiền Hải-Thái Bình,Bao tải xanh,5,bó,Kho,Trang
+14/5/2026,20679000 - Bưu cục Thôn Đông-Tiền Hải-Thái Bình,Dây thít,3,túi,Kho,Trang
+14/5/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,Bao tải xanh,5,bó,Kho,Trang
+14/5/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,Bộ tiêu lệnh PCCC,1,bộ,Kho,Trang
+14/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Bộ tiêu lệnh PCCC,1,bộ,Kho,Trang
+14/5/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,Bộ tiêu lệnh PCCC,1,bộ,Kho,Trang
+14/5/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Bộ tiêu lệnh PCCC,1,bộ,Kho,Trang
+16/5/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Bàn làm việc,1,cái,kho,Lương
+16/5/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Ghế gấp,2,cái,kho,Lương
+16/5/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Bao tải xanh,5,bó,kho,Lương
+16/5/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Dây thít,3,túi,kho,Lương
+16/5/2026,20781000 - Bưu Cục Thôn Lực Điền-Yên Mỹ-Hưng Yên,dây thít,3,túi,kho,Lương
+16/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,dây thít,3,túi,kho,Lương
+16/5/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,máy in nhiệt,1,cái,kho,Lương
+16/5/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,ghế gấp,2,cái,kho,Lương
+17/5/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,Bao tải xanh,5,bó,kho,Trang
+17/5/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,Màng pe,1,cuộn,kho,Trang
+17/5/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Bao tải xanh,5,bó,kho,Trang
+17/5/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Giấy in nhiệt,10,cuộn,kho,Trang
+17/5/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,Màng pe,2,cuộn,kho,Trang
+18/5/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,dây thít,3,túi,kho,Lương
+19/5/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,Kệ tầng,9,bộ,kho,Lương
+19/5/2026,21476000 - Bưu Cục 176 Nguyễn Đức Cảnh-Hoàng Diệu-Thái Bình,Kệ tầng,9,bộ,kho,Lương
+19/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Kệ tầng,9,bộ,kho,Lương
+19/5/2026,21459000 - Bưu Cục Thị Trấn Ân Thi-Ân Thi-Hưng Yên,Kệ tầng,9,bộ,kho,Lương
+19/5/2026,20679000 - Bưu cục Thôn Đông-Tiền Hải-Thái Bình,Kệ tầng,9,bộ,kho,Lương
+20/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Bao tải xanh,5,bó,kho,Lương
+20/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,giấy in nhiệt trắng,10,cuộn,kho,Lương
+20/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,máy in nhiệt,1,cái,kho,Lương
+21/5/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,giấy in nhiệt trắng,10,cuộn,kho,Lương
+21/5/2026,22476000 - Bưu Cục Đường Doãn Khuê-Phường Vũ Phúc-Thái Bình,quạt cây 450,2,cái,kho,Lý
+22/5/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Bao tải xanh,5,bó,kho,Lương
+22/5/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,quạt cây 450,1,cái,kho,Lương
+22/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Pin súng bắn,2,cái,kho,Lương
+22/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Quạt cây 450,1,cái,kho,Lương
+22/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,giấy in nhiệt trắng,10,cuộn,kho,Lương
+22/5/2026,1515 - Bưu Cục Đông Hưng-Thái Bình,Quạt cây 450,1,cái,kho,Trang
+22/5/2026,1515 - Bưu Cục Đông Hưng-Thái Bình,Súng bắn,1,bộ,kho,Trang
+22/5/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Quạt cây 450,1,cái,kho,Trang
+22/5/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Súng bắn,1,bộ,kho,Trang
+22/5/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,Máy in A5,1,cái,kho,Trang
+22/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Quạt cây 450,1,cái,kho,Trang
+22/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Súng bắn,1,bộ,kho,Trang
+22/5/2026,20781000 - Bưu Cục Thôn Lực Điền-Yên Mỹ-Hưng Yên,Quạt cây 450,1,cái,kho,Trang
+23/5/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Quạt công nghiệp,1,cái,kho,Lương
+23/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,dây thít,3,túi,kho,Lương
+23/5/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,dây thít,3,túi,kho,Lương
+23/5/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,dây thít,3,túi,kho,Lương
+23/5/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,Rổ nhựa sóng,2,cái,kho,Lương
+23/5/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,Hót rác,2,cái,kho,Lương
+23/5/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,nước lau sàn,1,can,kho,Lương
+23/5/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,rổ nhựa sóng,2,cái,kho,Lương
+23/5/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,rổ nhựa sóng,6,cái,kho,Lương
+23/5/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,rổ nhựa sóng,3,cái,kho,Lương
+23/5/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,rổ nhựa sóng,4,cái,kho,Lương
+23/5/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,rổ nhựa sóng,10,cái,kho,Lương
+23/5/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,rổ nhựa sóng,3,cái,kho,Lương
+23/5/2026,21459000 - Bưu Cục Thị Trấn Ân Thi-Ân Thi-Hưng Yên,quạt cây,1,cái,kho,Hân
+23/5/2026,21459000 - Bưu Cục Thị Trấn Ân Thi-Ân Thi-Hưng Yên,dây thít,3,túi,kho,Hân
+23/5/2026,21459000 - Bưu Cục Thị Trấn Ân Thi-Ân Thi-Hưng Yên,Bao tải xanh,5,bó,kho,Hân
+23/5/2026,21493000-Bưu Cục DT 376-Ngọc Long-Yên Mỹ-Hưng Yên ,Bao tải xanh,5,bó,kho,Hân
+23/5/2026,22476000 - Bưu Cục Đường Doãn Khuê-Phường Vũ Phúc-Thái Bình,Quạt công nghiệp,1,cái,kho,Hân
+23/5/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,Bao tải xanh,5,bó,kho,Lương
+24/5/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,dây thít,3,túi,kho,Lương
+24/5/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,chổi lúa,1,cái,kho,Lương
+24/5/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,Hót rác,1,cái,kho,Lương
+24/5/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Hót rác,1,cái,kho,Lương
+24/5/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,Súng bắn,1,cái,kho,Trang
+24/5/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Quạt cây 450,1,cái,kho,Hân
+25/5/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Pin súng bắn,1,cái,kho,Trang
+25/5/2026,20679000 - Bưu cục Thôn Đông-Tiền Hải-Thái Bình,Pin súng bắn,2,cái,kho,Trang
+25/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Rổ nhựa sóng,5,cái,kho,Lương
+25/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,chổi lúa,1,cái,kho,Lương
+25/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Hót rác,1,cái,kho,Lương
+25/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Rổ nhựa sóng,3,cái,kho,Lương
+25/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Quạt cây 450,1,cái,kho,Lương
+25/5/2026,21476000 - Bưu Cục 176 Nguyễn Đức Cảnh-Hoàng Diệu-Thái Bình,Giấy A4,5,bịch,kho,Lương
+25/5/2026,21476000 - Bưu Cục 176 Nguyễn Đức Cảnh-Hoàng Diệu-Thái Bình,Rổ nhựa sóng,5,cái,kho,Lương
+25/5/2026,21476000 - Bưu Cục 176 Nguyễn Đức Cảnh-Hoàng Diệu-Thái Bình,Quạt công nghiệp,1,cái,kho,Hân
+26/6/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,Bao tải xanh,10,Bó,Kho,Hân
+26/6/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,Bao tải xanh,5,Bó,Kho,Hân
+26/6/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,Dây thít,3,Túi,Kho,Hân
+27/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Pin súng bắn,2,cái,Kho,Trang
+27/5/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Bao tải xanh,5,bó,Kho,Lương
+27/5/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,dây thít,3,túi,Kho,Lương
+27/5/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,giấy in nhiệt trắng,10,cuộn,Kho,Lương
+27/5/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,bao tải xanh,5,bó,Kho,Lương
+27/5/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,dây thít,3,túi,Kho,Lương
+27/5/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,giấy in nhiệt trắng,10,cuộn,Kho,Lương
+28/5/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,Dây thít,3,túi,Kho,Hân
+28/5/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,Tẩy bồn cồn,1,chai,Kho,Hân
+28/5/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,Dây thít,3,túi,Kho,Hân
+28/5/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,chổi lau nhà,1,cái,Kho,Hân
+28/5/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,Túi niêm phong,30,cái,Kho,Hân
+28/5/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,Băng keo trong ,5,cây,Kho,Trang
+28/5/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,Rổ nhựa sóng,6,cái,Kho,Trang
+29/5/2026,21493000-Bưu Cục DT 376-Ngọc Long-Yên Mỹ-Hưng Yên ,Máy in nhiệt,1,cái,kho,Hân
+29/5/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,Quạt cây 450,1,cái,kho,Hân
+31/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Dây thít,3,túi,kho,Hân
+31/5/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,giấy in nhiệt trắng,8,cuộn,kho,Hân
+31/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,dây thít,3,túi,kho,Hân
+31/5/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,giấy in nhiệt trắng,8,cuộn,kho,Hân
+31/5/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,giấy in nhiệt trắng,10,cuộn,kho,Hân
+31/5/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,máy in nhiệt,1,cái,kho,Hân
+31/5/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,máy in giấy A4,1,cái,kho,Hân
+31/5/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,rổ nhựa sóng,3,cái,kho,Hân
+1/6/2026,20781000 - Bưu Cục Thôn Lực Điền-Yên Mỹ-Hưng Yên,"chổi lau nhà, nhờ lực điền gửi về trung hưng",1,cái,Kho,Trang
+2/6/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,bao tải xanh,5,bó,Kho,Trang
+2/6/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,bao tải xanh,5,bó,Kho,Trang
+2/6/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Giấy in nhiệt,20,cuộn,Kho,Trang
+2/6/2026,1515 - Bưu Cục Đông Hưng-Thái Bình,Giấy in nhiệt,10,cuộn,Kho,Trang
+3/6/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,Giấy in nhiệt,10,cuộn,kho,Hân
+3/6/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,dây thít,3,túi,kho,Hân
+3/6/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,bao tải xanh,5,bó,kho,Hân
+3/6/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Băng keo trong ,1,cây,kho,Hân
+3/6/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,Súng bắn,1,bộ,kho,Hân
+3/6/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,Súng bắn,1,bộ,kho,Trang
+3/6/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,Súng bắn,1,bộ,kho,Trang
+3/6/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Súng bắn,1,bộ,kho,Trang
+4/6/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,bao tải xanh,10,cọc,kho ,Hân
+4/6/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,dây thít,3,túi,kho,Hân
+4/6/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,bao tải xanh,5,cọc,kho,Hân
+4/6/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Súng bắn,1,bộ,kho,Hân
+5/6/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Giấy in nhiệt,10,cuộn,kho,hân
+5/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Bao tải xanh,5,cọc,kho,Hân
+5/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Dây thít,3,túi,kho,Hân
+5/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,cắt băng keo,1,cái,kho,Hân
+5/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Dao dọc giấy,2,cái,kho,Hân
+5/6/2026,20679000 - Bưu cục Thôn Đông-Tiền Hải-Thái Bình,Bao tải xanh,5,cọc,kho,Hân
+5/6/2026,20679000 - Bưu cục Thôn Đông-Tiền Hải-Thái Bình,Dao dọc giấy,2,cái,kho,Hân
+4/6/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Bao tải xanh,5,cọc,kho,Hân
+4/6/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,Bao tải xanh,10,cọc,kho,Hân
+4/6/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,Dây thít,3,túi,kho,Hân
+5/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Bao tải xanh,5,cọc,kho,Hân
+5/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Dây thít,3,túi,kho,Hân
+5/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,cắt băng keo,1,cái,kho,Hân
+5/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Dao dọc giấy,2,cái,kho,Hân
+5/6/2026,22671000 - Bưu Cục Thôn Vũ Hạ-Xã Phụ Dực-Thái Bình,Giấy in nhiệt,10,cuộn,kho,Hân
+5/6/2026,20679000 - Bưu cục Thôn Đông-Tiền Hải-Thái Bình,Bao tải xanh,5,cọc,kho,Hân
+5/6/2026,20679000 - Bưu cục Thôn Đông-Tiền Hải-Thái Bình,Dao dọc giấy,2,cái,kho,Hân
+6/6/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,Bao tải xanh,5,cọc,kho,Hân
+6/6/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,chổi lúa,1,cái,kho,Hân
+6/6/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,Bao tải xanh,5,cọc,kho,Hân
+6/6/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,Dây thít,3,túi,kho,Hân
+7/6/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Dây thít,3,túi,kho,Hân
+7/6/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Giấy in nhiệt trắng,20,cuộn,kho,Hân
+7/6/2026,21493000-Bưu Cục DT 376-Ngọc Long-Yên Mỹ-Hưng Yên ,Bao tải xanh,5,cọc,kho,Hân
+7/6/2026,22523000 - Bưu Cục Cầu Khé DT377-Xã Khoái Châu-Hưng Yên,dây thít,3,túi,kho,Hân
+7/6/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,súng bắn,1,bộ,kho,Trang
+7/6/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,súng bắn,1,bộ,Kho,Trang
+7/6/2026,20148000-Bưu Cục Nhân Hòa-Mỹ Hào-Hưng Yên,Máy in a4,1,cái,Kho,Trang
+7/6/2026,21493000-Bưu Cục DT 376-Ngọc Long-Yên Mỹ-Hưng Yên ,Dây thít\,3,túi,kho,Trang
+8/6/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Bao tải xanh,10,cọc,kho,Hân
+8/6/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Bao tải xanh,5,cọc,kho,Hân
+8/6/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Dao dọc giấy,1,cái,kho,Hân
+8/6/2026,21069000 - Bưu Cục Minh Khai-Vũ Thư-Thái Bình,Bút dạ,2,cái,kho,Hân
+8/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Màng pe,2,cái,kho,Hân
+8/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Bút dạ,3,cái,kho,Hân
+9/6/2026,20623000 - Bưu Cục Quỳnh Hội-Quỳnh Phụ-Thái Bình,Dây thít,3,túi,kho,Hân
+9/6/2026,20133000 - Bưu Cục 90 Nguyễn Lương Bằng-Kim Động-Hưng Yên,Dây thít,3,túi,kho,Hân
+10/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Bao tải xanh,5,cọc,kho,Hân
+10/6/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,Bao tải xanh,5,cọc,kho,Hân
+10/6/2026,1515 - Bưu Cục Đông Hưng-Thái Bình,Súng bắn,1,bộ,kho,Hân
+10/6/2026,1515 - Bưu Cục Đông Hưng-Thái Bình,seal nhựa,1,túi,kho,Hân
+10/6/2026,1515 - Bưu Cục Đông Hưng-Thái Bình,Giấy in nhiệt trắng,10,cuộn,kho,Hân
+10/6/2026,20790000 - Bưu Cục Xóm 2 Thụy Sơn-Thái Thụy-Thái Bình,Bao tải xanh,5,cọc,kho,Hân
+10/6/2026,21496000-Bưu Cục Xã Tân Tiến-Văn Giang-Hưng Yên,Bao tải xanh,5,cọc,kho,Hân
+10/6/2026,1215-Bưu Cục 11 Chu Mạnh Trinh-TP.Hưng Yên,Bao tải xanh,5,cọc,kho,Hân
+10/6/2026,20261000 - Bưu Cục Quốc Lộ 39B-Kiến Xương- Thái Bình,Bao tải xanh,5,cọc,kho,Hân
+10/6/2026,1515 - Bưu Cục Đông Hưng-Thái Bình,Máy in A4,1,bộ,kho,Hân
+11/6/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Giấy in nhiệt,10,cuộn,kho,Hân
+11/6/2026,21380000 - Bưu Cục Xã Thống Nhất-Hưng Hà-Thái Bình,Bao tải xanh,5,cọc,kho,Hân
+11/6/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,Bao tải xanh,10,cọc,kho,Hân
+11/6/2026,20719000-Bưu Cục Thị Trấn Như Quỳnh-Văn Lâm-Hưng Yên,Dây thít,3,túi,kho,Hân
+11/6/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,băng dính trong,12,cuộn,kho,Hân
+11/6/2026,22078000-Bưu Cục Thôn Cao Xá-Trần Cao-Phù Cừ-Hưng Yên ,Dây thít,3,túi,kho,Hân
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+,,,,,,
+26/5/2026,,,,,,
+26/5/2026,,,,,,
+
