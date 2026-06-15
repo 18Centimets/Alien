@@ -2862,8 +2862,20 @@ function ccdcPlayBeep(type) {
     }
 }
 
+let ccdc_lastSpokenText = "";
+let ccdc_lastSpokenTime = 0;
+
 async function ccdcSpeak(text) {
     if (!ccdc_speechEnabled) return;
+    
+    // Ngăn chặn gọi trùng lặp cùng 1 nội dung trong thời gian ngắn (1.5 giây)
+    const now = Date.now();
+    if (text === ccdc_lastSpokenText && (now - ccdc_lastSpokenTime) < 1500) {
+        console.log("Bỏ qua đọc trùng lặp nội dung:", text);
+        return;
+    }
+    ccdc_lastSpokenText = text;
+    ccdc_lastSpokenTime = now;
     
     // Tăng ID phiên phát giọng nói để nhận diện yêu cầu mới nhất
     const currentSpeechId = ++ccdc_speechId;
@@ -2872,7 +2884,9 @@ async function ccdcSpeak(text) {
     if (ccdc_audioPlayer) {
         try {
             ccdc_audioPlayer.pause();
+            ccdc_audioPlayer.removeAttribute('src'); // Xóa cache thuộc tính
             ccdc_audioPlayer.src = ""; // Dừng tải và giải phóng tài nguyên
+            ccdc_audioPlayer.load(); // Ép trình duyệt hủy luồng tải
             ccdc_audioPlayer.onerror = null;
         } catch (e) {}
         ccdc_audioPlayer = null;
@@ -2954,6 +2968,7 @@ async function ccdcSpeak(text) {
                 return;
             }
             if (ccdc_audioPlayer === audio) {
+                ccdc_audioPlayer = null; // Khóa chặn chạy đè
                 console.warn(`Nguồn Google TTS trực tiếp thất bại (index ${currentUrlIndex - 1}), thử nguồn tiếp theo...`);
                 playNextDirect();
             }
@@ -2976,6 +2991,7 @@ async function ccdcSpeak(text) {
             }
             if (currentSpeechId !== ccdc_speechId) return;
             if (ccdc_audioPlayer === audio) {
+                ccdc_audioPlayer = null; // Khóa chặn chạy đè
                 console.warn(`Lỗi play() trực tiếp với nguồn Google TTS (index ${currentUrlIndex - 1}):`, err.name);
                 playNextDirect();
             }
