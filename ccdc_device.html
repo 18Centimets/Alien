@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CCDC — Quản Lý Thiết Bị | GHN KTC Hưng Yên</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --orange:    #f26522;
+      --orange-d:  #e55a1c;
+      --orange-l:  rgba(242,101,34,0.12);
+      --green:     #27ae60;
+      --green-l:   rgba(39,174,96,0.12);
+      --red:       #e74c3c;
+      --red-l:     rgba(231,76,60,0.12);
+      --blue:      #2980b9;
+      --yellow:    #f39c12;
+      --bg:        #0d1b2a;
+      --bg2:       #142032;
+      --bg3:       #1a2d42;
+      --border:    rgba(255,255,255,0.08);
+      --text:      #e8edf3;
+      --text-s:    #8fa3b8;
+      --radius:    14px;
+      --shadow:    0 8px 32px rgba(0,0,0,0.4);
+    }
+    html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+
+    /* ===== TOPBAR ===== */
+    .topbar {
+      background: linear-gradient(135deg, var(--orange) 0%, var(--orange-d) 100%);
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(242,101,34,0.4);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 12px; }
+    .topbar-logo { font-size: 28px; }
+    .topbar-title { font-size: 18px; font-weight: 800; color: #fff; letter-spacing: -0.3px; }
+    .topbar-sub   { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 1px; }
+    .topbar-clock { font-size: 22px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; }
+
+    /* ===== MAIN LAYOUT ===== */
+    .main { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
+
+    /* ===== MODE TABS ===== */
+    .mode-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .mode-tab {
+      background: var(--bg2);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.25s;
+    }
+    .mode-tab:hover { border-color: rgba(255,255,255,0.2); transform: translateY(-1px); }
+    .mode-tab.active.giao { border-color: var(--orange); background: rgba(242,101,34,0.08); }
+    .mode-tab.active.nhan { border-color: var(--green);  background: rgba(39,174,96,0.08); }
+    .tab-icon {
+      width: 46px; height: 46px;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .giao .tab-icon { background: var(--orange-l); }
+    .nhan .tab-icon { background: var(--green-l);  }
+    .tab-label { font-size: 16px; font-weight: 700; }
+    .tab-desc  { font-size: 12px; color: var(--text-s); margin-top: 2px; }
+
+    /* ===== SCAN CARD ===== */
+    .scan-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .scan-card-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-s);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .scan-input-wrap {
+      position: relative;
+    }
+    .scan-input {
+      width: 100%;
+      background: var(--bg3);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 50px 16px 18px;
+      color: var(--text);
+      font-size: 20px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      letter-spacing: 2px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .scan-input:focus { border-color: var(--orange); box-shadow: 0 0 0 4px rgba(242,101,34,0.12); }
+    .scan-input.mode-nhan:focus { border-color: var(--green); box-shadow: 0 0 0 4px rgba(39,174,96,0.12); }
+    .scan-input::placeholder { color: var(--text-s); font-weight: 400; letter-spacing: 0; font-size: 15px; }
+    .scan-icon {
+      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+      color: var(--text-s);
+    }
+    .scan-hint {
+      font-size: 12px; color: var(--text-s);
+      margin-top: 10px; display: flex; align-items: center; gap: 6px;
+    }
+
+    /* ===== PULSE ANIMATION (scan ready) ===== */
+    .scan-ready .scan-input { border-color: var(--orange); }
+    .pulse-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); display: inline-block;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.4;transform:scale(0.7)} }
+
+    /* ===== RESULT POPUP / CARD ===== */
+    .result-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+      padding: 16px;
+    }
+    .result-overlay.show { display: flex; }
+    .result-card {
+      background: var(--bg2);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      width: 100%; max-width: 540px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
+    .result-header {
+      padding: 20px 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .result-header.giao { background: linear-gradient(135deg, rgba(242,101,34,0.2), rgba(242,101,34,0.05)); border-bottom: 1px solid rgba(242,101,34,0.2); }
+    .result-header.nhan { background: linear-gradient(135deg, rgba(39,174,96,0.2),  rgba(39,174,96,0.05));  border-bottom: 1px solid rgba(39,174,96,0.2);  }
+    .result-avatar {
+      width: 52px; height: 52px; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .giao .result-avatar { background: var(--orange-l); }
+    .nhan .result-avatar { background: var(--green-l); }
+    .result-name  { font-size: 18px; font-weight: 700; }
+    .result-msnv  { font-size: 13px; color: var(--text-s); margin-top: 3px; }
+    .result-body  { padding: 20px 24px; }
+
+    /* Info grid */
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+    .info-item { background: var(--bg3); border-radius: 10px; padding: 12px 14px; }
+    .info-label { font-size: 11px; color: var(--text-s); text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+    .info-value { font-size: 14px; font-weight: 600; margin-top: 4px; }
+
+    /* Borrow list (mode nhận) */
+    .borrow-list { margin-bottom: 20px; }
+    .borrow-item {
+      background: var(--bg3); border: 1px solid rgba(39,174,96,0.2);
+      border-radius: 10px; padding: 12px 14px; margin-bottom: 8px;
+      cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .borrow-item:hover, .borrow-item.selected { border-color: var(--green); background: var(--green-l); }
+    .borrow-item .bi-icon { font-size: 20px; }
+    .borrow-item .bi-code { font-size: 12px; color: var(--text-s); }
+    .borrow-item .bi-name { font-size: 14px; font-weight: 600; }
+    .borrow-item .bi-time { font-size: 11px; color: var(--text-s); }
+    .borrow-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+    .borrow-item.selected .borrow-radio { border-color: var(--green); background: var(--green); }
+    .borrow-item.selected .borrow-radio::after { content:''; width:6px; height:6px; border-radius:50%; background:#fff; }
+
+    /* Form fields */
+    .form-row { margin-bottom: 14px; }
+    .form-row label { font-size: 12px; font-weight: 600; color: var(--text-s); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 7px; }
+    .form-row input, .form-row textarea {
+      width: 100%;
+      background: var(--bg3);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-row input:focus, .form-row textarea:focus { border-color: var(--orange); }
+    .form-row.nhan-field input:focus, .form-row.nhan-field textarea:focus { border-color: var(--green); }
+    .form-row textarea { min-height: 72px; resize: vertical; }
+    .form-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* Action buttons */
+    .result-footer { padding: 16px 24px 20px; display: flex; gap: 10px; }
+    .btn-cancel { flex: 1; background: transparent; border: 1.5px solid var(--border); color: var(--text-s); border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-cancel:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+    .btn-submit {
+      flex: 2; border: none; border-radius: 10px; padding: 12px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all 0.2s;
+    }
+    .btn-submit.giao { background: linear-gradient(135deg, var(--orange), var(--orange-d)); color: #fff; box-shadow: 0 4px 14px rgba(242,101,34,0.4); }
+    .btn-submit.nhan { background: linear-gradient(135deg, var(--green), #219150);           color: #fff; box-shadow: 0 4px 14px rgba(39,174,96,0.4); }
+    .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ===== LOG TABLE ===== */
+    .log-section { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .log-header {
+      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+    .log-title { font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .log-refresh-btn {
+      background: transparent; border: 1px solid var(--border);
+      border-radius: 8px; padding: 6px 12px; color: var(--text-s);
+      cursor: pointer; font-size: 12px; font-weight: 600;
+      display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+    }
+    .log-refresh-btn:hover { border-color: var(--orange); color: var(--orange); }
+    .log-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th {
+      background: var(--bg); color: var(--text-s);
+      text-transform: uppercase; font-size: 10px;
+      letter-spacing: 0.6px; padding: 10px 14px;
+      text-align: left; border-bottom: 1px solid var(--border);
+      white-space: nowrap;
+    }
+    td { padding: 11px 14px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+    .badge-out  { background: var(--orange-l); color: var(--orange); border: 1px solid rgba(242,101,34,0.3); }
+    .badge-in   { background: var(--green-l);  color: var(--green);  border: 1px solid rgba(39,174,96,0.3); }
+    .log-empty { text-align: center; color: var(--text-s); padding: 40px; font-size: 14px; }
+
+    /* ===== TOAST ===== */
+    #toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 22px;
+      font-size: 14px; font-weight: 600;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: var(--shadow); z-index: 999;
+      opacity: 0; transition: all 0.35s;
+      max-width: 90vw; white-space: nowrap;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.success { border-color: var(--green); color: var(--green); }
+    #toast.error   { border-color: var(--red);   color: var(--red); }
+
+    /* ===== SPINNER ===== */
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ===== LOADING OVERLAY ===== */
+    #loading { display:none; position:fixed; inset:0; z-index:500; background:rgba(0,0,0,0.5); align-items:center; justify-content:center; }
+    #loading.show { display:flex; }
+    .loading-box { background:var(--bg2); border-radius:16px; padding:28px 40px; display:flex; flex-direction:column; align-items:center; gap:14px; }
+    .loading-spinner { width:36px; height:36px; border:3px solid rgba(255,255,255,0.1); border-top-color:var(--orange); border-radius:50%; animation:spin 0.8s linear infinite; }
+    .loading-text { font-size:14px; color:var(--text-s); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 560px) {
+      .info-grid { grid-template-columns: 1fr; }
+      .form-2col { grid-template-columns: 1fr; }
+      .mode-tab  { padding: 14px; }
+      .tab-desc  { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-logo">📦</div>
+    <div>
+      <div class="topbar-title">CCDC — Quản Lý Thiết Bị</div>
+      <div class="topbar-sub">KTC Hưng Yên · GHN Command Center</div>
+    </div>
+  </div>
+  <div class="topbar-clock" id="clock">--:--:--</div>
+</div>
+
+<!-- LOADING -->
+<div id="loading"><div class="loading-box"><div class="loading-spinner"></div><div class="loading-text">Đang xử lý...</div></div></div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- RESULT OVERLAY -->
+<div class="result-overlay" id="resultOverlay">
+  <div class="result-card" id="resultCard">
+    <!-- Filled by JS -->
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- MODE TABS -->
+  <div class="mode-tabs">
+    <div class="mode-tab giao active" id="tabGiao" onclick="switchMode('giao')">
+      <div class="tab-icon">🔵</div>
+      <div>
+        <div class="tab-label">GIAO THIẾT BỊ</div>
+        <div class="tab-desc">Cấp phát cho nhân viên</div>
+      </div>
+    </div>
+    <div class="mode-tab nhan" id="tabNhan" onclick="switchMode('nhan')">
+      <div class="tab-icon">🟢</div>
+      <div>
+        <div class="tab-label">NHẬN THIẾT BỊ</div>
+        <div class="tab-desc">Thu hồi thiết bị về kho</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCAN CARD -->
+  <div class="scan-card scan-ready">
+    <div class="scan-card-title">
+      <span class="pulse-dot"></span>
+      <span id="scanTitle">QUÉT QR — GIAO THIẾT BỊ</span>
+    </div>
+    <div class="scan-input-wrap">
+      <input
+        type="text"
+        id="scanInput"
+        class="scan-input"
+        placeholder="Scan QR hoặc nhập Mã NV rồi nhấn Enter..."
+        autocomplete="off"
+        autofocus
+      >
+      <div class="scan-icon"><i data-lucide="scan-line" style="width:22px;height:22px;"></i></div>
+    </div>
+    <div class="scan-hint">
+      <i data-lucide="info" style="width:13px;height:13px;"></i>
+      Súng scan tự động nhấn Enter sau khi quét · Hoặc gõ Mã NV và nhấn Enter
+    </div>
+  </div>
+
+  <!-- LOG TABLE -->
+  <div class="log-section">
+    <div class="log-header">
+      <div class="log-title">
+        <i data-lucide="history" style="width:16px;height:16px;color:#f26522;"></i>
+        Giao Dịch Hôm Nay
+      </div>
+      <button class="log-refresh-btn" onclick="loadTodayLog()">
+        <i data-lucide="refresh-cw" style="width:12px;height:12px;"></i>
+        Làm mới
+      </button>
+    </div>
+    <div class="log-wrap">
+      <table id="logTable">
+        <thead>
+          <tr>
+            <th>Thời Gian</th>
+            <th>Mã NV</th>
+            <th>Họ Tên</th>
+            <th>Mã Thiết Bị</th>
+            <th>Tên Thiết Bị</th>
+            <th>Trạng Thái</th>
+          </tr>
+        </thead>
+        <tbody id="logBody">
+          <tr><td colspan="6" class="log-empty">Đang tải dữ liệu...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// =============================================
+// CONFIG — Anh Bảo điền URL Apps Script CCDC sau khi Deploy
+// =============================================
+const CCDC_API = 'https://script.google.com/macros/s/AKfycbyj45EoU7IJjRq6r8hbe4RWmPFZB-CBxZiy7RuVPpOAPXYmOx83obvCO__LrE0CtHo0/exec';
+// =============================================
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+let currentMode = 'giao';
+let selectedBorrowItem = null;
+let pendingEmpData = null;
+let currentBorrowedList = [];
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', () => {
+  lucide.createIcons();
+  startClock();
+  loadTodayLog();
+
+  const inp = document.getElementById('scanInput');
+  inp.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const val = inp.value.trim();
+      if (val) processBarcode(val);
+    }
+  });
+
+  // Luôn giữ focus trên ô scan
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#resultOverlay') && !e.target.closest('.log-refresh-btn')) {
+      inp.focus();
+    }
+  });
+  inp.focus();
+});
+
+// ===== CLOCK =====
+function startClock() {
+  const el = document.getElementById('clock');
+  setInterval(() => {
+    el.textContent = new Date().toLocaleTimeString('vi-VN');
+  }, 1000);
+}
+
+// ===== MODE SWITCH =====
+function switchMode(mode) {
+  currentMode = mode;
+  const inp = document.getElementById('scanInput');
+  const tabGiao = document.getElementById('tabGiao');
+  const tabNhan = document.getElementById('tabNhan');
+  const title   = document.getElementById('scanTitle');
+
+  tabGiao.className = 'mode-tab giao' + (mode === 'giao' ? ' active' : '');
+  tabNhan.className = 'mode-tab nhan' + (mode === 'nhan' ? ' active' : '');
+
+  if (mode === 'giao') {
+    inp.className = 'scan-input';
+    inp.placeholder = 'Scan QR hoặc nhập Mã NV rồi nhấn Enter...';
+    title.textContent = 'QUÉT QR — GIAO THIẾT BỊ';
+  } else {
+    inp.className = 'scan-input mode-nhan';
+    inp.placeholder = 'Scan QR để tra cứu thiết bị đang mượn...';
+    title.textContent = 'QUÉT QR — NHẬN THIẾT BỊ';
+  }
+  inp.value = '';
+  inp.focus();
+}
+
+// ===== PROCESS BARCODE =====
+async function processBarcode(msnv) {
+  document.getElementById('scanInput').value = '';
+  showLoading(true);
+
+  try {
+    if (currentMode === 'giao') {
+      const res = await apiCall({ action: 'lookup_employee', msnv });
+      showLoading(false);
+      if (res.status === 'found') {
+        showGiaoPopup(res);
+      } else {
+        showToast('❌ ' + (res.message || 'Không tìm thấy nhân viên'), 'error');
+      }
+    } else {
+      const res = await apiCall({ action: 'lookup_borrowed', msnv });
+      showLoading(false);
+      if (res.status === 'has_borrow') {
+        showNhanPopup(res.borrowed);
+      } else if (res.status === 'no_borrow') {
+        const emp = res.emp || {};
+        showToast(`⚠️ ${emp.hoten || msnv} — Không có thiết bị đang mượn`, 'error');
+      } else {
+        showToast('❌ ' + (res.message || 'Không tìm thấy nhân viên'), 'error');
+      }
+    }
+  } catch (err) {
+    showLoading(false);
+    showToast('❌ Lỗi kết nối. Kiểm tra URL Apps Script.', 'error');
+    console.error(err);
+  }
+}
+
+// ===== POPUP GIAO =====
+function showGiaoPopup(emp) {
+  pendingEmpData = emp;
+  const overlay = document.getElementById('resultOverlay');
+  const card    = document.getElementById('resultCard');
+
+  card.innerHTML = `
+    <div class="result-header giao">
+      <div class="result-avatar giao">👤</div>
+      <div>
+        <div class="result-name">${escapeHtml(emp.hoten) || '---'}</div>
+        <div class="result-msnv">Mã NV: <strong>${escapeHtml(emp.msnv)}</strong></div>
+      </div>
+    </div>
+    <div class="result-body">
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Ca làm việc</div>
+          <div class="info-value">${escapeHtml(emp.ca) || '---'}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Quản lý trực tiếp</div>
+          <div class="info-value">${escapeHtml(emp.quanly) || '---'}</div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:18px;margin-bottom:18px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text-s);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">📋 Thông Tin Thiết Bị Giao</div>
+        <div class="form-2col">
+          <div class="form-row">
+            <label>Mã thiết bị <span style="color:var(--red)">*</span></label>
+            <input id="fMaThietBi" type="text" placeholder="VD: TB-001" autocomplete="off">
+          </div>
+          <div class="form-row">
+            <label>Tên thiết bị <span style="color:var(--red)">*</span></label>
+            <input id="fTenThietBi" type="text" placeholder="VD: Máy quét barcode" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Ghi chú (không bắt buộc)</label>
+          <input id="fGhiChuGiao" type="text" placeholder="Ghi chú thêm nếu cần...">
+        </div>
+      </div>
+    </div>
+    <div class="result-footer">
+      <button class="btn-cancel" onclick="closePopup()">Huỷ</button>
+      <button class="btn-submit giao" onclick="submitGiao()">
+        <i data-lucide="check-circle" style="width:16px;height:16px;"></i>
+        Xác Nhận Giao
+      </button>
+    </div>
+  `;
+
+  overlay.classList.add('show');
+  lucide.createIcons();
+  setTimeout(() => document.getElementById('fMaThietBi')?.focus(), 100);
+}
+
+// ===== POPUP NHẬN =====
+function showNhanPopup(borrowedList) {
+  selectedBorrowItem = null;
+  currentBorrowedList = borrowedList;
+  const overlay = document.getElementById('resultOverlay');
+  const card    = document.getElementById('resultCard');
+
+  const first = borrowedList[0];
+  let itemsHtml = borrowedList.map((b, i) => `
+    <div class="borrow-item" id="borrow-${i}" onclick="selectBorrowItem(${i})">
+      <div class="borrow-radio" id="radio-${i}"></div>
+      <div style="flex:1;">
+        <div class="bi-code">Mã TB: <strong>${escapeHtml(b.ma_thiet_bi)}</strong> &nbsp;·&nbsp; Giao lúc: ${escapeHtml(b.timestamp.substring(0,16))}</div>
+        <div class="bi-name" style="margin-top:3px;">${escapeHtml(b.ten_thiet_bi)}</div>
+      </div>
+      <div style="font-size:20px;">📦</div>
+    </div>
+  `).join('');
+
+  // Nếu chỉ có 1 thiết bị, auto-select
+  const autoSelect = borrowedList.length === 1;
+
+  card.innerHTML = `
+    <div class="result-header nhan">
+      <div class="result-avatar nhan">👤</div>
+      <div>
+        <div class="result-name">${escapeHtml(first.hoten) || '---'}</div>
+        <div class="result-msnv">Mã NV: <strong>${escapeHtml(first.msnv)}</strong> &nbsp;·&nbsp; Ca: ${escapeHtml(first.ca) || '---'}</div>
+      </div>
+    </div>
+    <div class="result-body">
+      <div class="info-grid" style="margin-bottom:16px;">
+        <div class="info-item">
+          <div class="info-label">Ca làm việc</div>
+          <div class="info-value">${escapeHtml(first.ca) || '---'}</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Quản lý trực tiếp</div>
+          <div class="info-value">${escapeHtml(first.quanly) || '---'}</div>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:16px;margin-bottom:16px;">
+        <div style="font-size:12px;font-weight:700;color:var(--text-s);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:12px;">
+          📦 Thiết Bị Đang Mượn ${borrowedList.length > 1 ? '(chọn thiết bị thu hồi)' : ''}
+        </div>
+        <div class="borrow-list">${itemsHtml}</div>
+      </div>
+
+      <div style="border-top:1px solid var(--border);padding-top:16px;">
+        <div class="form-row nhan-field">
+          <label>Tình trạng thiết bị khi nhận lại <span style="color:var(--red)">*</span></label>
+          <input id="fTinhTrang" type="text" placeholder="VD: Tốt / Hỏng màn hình / Cần sạc pin...">
+        </div>
+        <div class="form-row nhan-field">
+          <label>Ghi chú (không bắt buộc)</label>
+          <input id="fGhiChuNhan" type="text" placeholder="Ghi chú thêm nếu cần...">
+        </div>
+      </div>
+    </div>
+    <div class="result-footer">
+      <button class="btn-cancel" onclick="closePopup()">Huỷ</button>
+      <button class="btn-submit nhan" onclick="submitNhan()">
+         <i data-lucide="package-check" style="width:16px;height:16px;"></i>
+         Xác Nhận Nhận
+      </button>
+    </div>
+  `;
+
+  overlay.classList.add('show');
+  lucide.createIcons();
+
+  if (autoSelect) {
+    selectBorrowItem(0);
+  }
+  setTimeout(() => document.getElementById('fTinhTrang')?.focus(), 100);
+}
+
+function selectBorrowItem(idx) {
+  selectedBorrowItem = currentBorrowedList[idx];
+  document.querySelectorAll('.borrow-item').forEach((el, i) => {
+    el.classList.toggle('selected', i === idx);
+  });
+}
+
+// ===== SUBMIT GIAO =====
+async function submitGiao() {
+  const ma  = document.getElementById('fMaThietBi')?.value.trim();
+  const ten = document.getElementById('fTenThietBi')?.value.trim();
+  const ghi = document.getElementById('fGhiChuGiao')?.value.trim();
+
+  if (!ma)  { showToast('⚠️ Vui lòng nhập Mã Thiết Bị', 'error'); return; }
+  if (!ten) { showToast('⚠️ Vui lòng nhập Tên Thiết Bị', 'error'); return; }
+
+  const btn = document.querySelector('.btn-submit.giao');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Đang lưu...';
+
+  try {
+    const res = await apiCall({
+      action:       'submit_giao',
+      msnv:         pendingEmpData.msnv,
+      hoten:        pendingEmpData.hoten,
+      ca:           pendingEmpData.ca,
+      quanly:       pendingEmpData.quanly,
+      ma_thiet_bi:  ma,
+      ten_thiet_bi: ten,
+      ghi_chu:      ghi
+    });
+
+    if (res.status === 'success') {
+      closePopup();
+      showToast(`✅ Đã giao ${ten} cho ${pendingEmpData.hoten}`, 'success');
+      loadTodayLog();
+    } else {
+      showToast('❌ ' + (res.message || 'Lỗi lưu dữ liệu'), 'error');
+    }
+  } catch(e) {
+    showToast('❌ Lỗi kết nối', 'error');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i data-lucide="check-circle" style="width:16px;height:16px;"></i> Xác Nhận Giao';
+  lucide.createIcons();
+}
+
+// ===== SUBMIT NHẬN =====
+async function submitNhan() {
+  if (!selectedBorrowItem) { showToast('⚠️ Vui lòng chọn thiết bị cần thu hồi', 'error'); return; }
+  const tinh  = document.getElementById('fTinhTrang')?.value.trim();
+  const ghi   = document.getElementById('fGhiChuNhan')?.value.trim();
+  if (!tinh) { showToast('⚠️ Vui lòng nhập Tình trạng thiết bị', 'error'); return; }
+
+  const btn = document.querySelector('.btn-submit.nhan');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div> Đang lưu...';
+
+  try {
+    const res = await apiCall({
+      action:       'submit_nhan',
+      msnv:         selectedBorrowItem.msnv,
+      ma_thiet_bi:  selectedBorrowItem.ma_thiet_bi,
+      tinh_trang:   tinh,
+      ghi_chu:      ghi,
+      row_index:    selectedBorrowItem.row_index
+    });
+
+    if (res.status === 'success') {
+      closePopup();
+      showToast(`✅ Đã nhận lại ${selectedBorrowItem.ten_thiet_bi} từ ${selectedBorrowItem.hoten}`, 'success');
+      loadTodayLog();
+    } else {
+      showToast('❌ ' + (res.message || 'Lỗi lưu dữ liệu'), 'error');
+    }
+  } catch(e) {
+    showToast('❌ Lỗi kết nối', 'error');
+  }
+  btn.disabled = false;
+  btn.innerHTML = '<i data-lucide="package-check" style="width:16px;height:16px;"></i> Xác Nhận Nhận';
+  lucide.createIcons();
+}
+
+// ===== LOAD TODAY LOG =====
+async function loadTodayLog() {
+  const tbody = document.getElementById('logBody');
+  tbody.innerHTML = '<tr><td colspan="6" class="log-empty"><div class="spinner" style="margin:0 auto"></div></td></tr>';
+  try {
+    const res = await apiCall({ action: 'get_today_log' });
+    if (res.status === 'success' && res.log.length > 0) {
+      tbody.innerHTML = res.log.map(r => `
+        <tr>
+          <td style="white-space:nowrap;color:var(--text-s);font-size:12px;">${escapeHtml(r.timestamp.substring(0,16))}</td>
+          <td><strong>${escapeHtml(r.msnv)}</strong></td>
+          <td>${escapeHtml(r.hoten)}</td>
+          <td><code style="background:var(--bg3);padding:2px 8px;border-radius:6px;font-size:12px;">${escapeHtml(r.ma_thiet_bi)}</code></td>
+          <td>${escapeHtml(r.ten_thiet_bi)}</td>
+          <td>
+            ${r.da_thu_hoi
+              ? `<span class="badge badge-in">✅ Đã nhận&nbsp;<span style="opacity:0.7;font-size:10px;">${escapeHtml(r.thu_hoi_luc.substring(11,16)||'')}</span></span>`
+              : `<span class="badge badge-out">🔵 Đang mượn</span>`
+            }
+          </td>
+        </tr>
+      `).join('');
+    } else {
+      tbody.innerHTML = '<tr><td colspan="6" class="log-empty">Chưa có giao dịch nào hôm nay</td></tr>';
+    }
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="6" class="log-empty" style="color:var(--red);">⚠️ Không tải được dữ liệu — kiểm tra kết nối</td></tr>';
+  }
+}
+
+// ===== HELPERS =====
+function closePopup() {
+  document.getElementById('resultOverlay').classList.remove('show');
+  selectedBorrowItem = null;
+  pendingEmpData     = null;
+  document.getElementById('scanInput').focus();
+}
+
+function showLoading(show) {
+  document.getElementById('loading').classList.toggle('show', show);
+}
+
+let toastTimer;
+function showToast(msg, type = 'success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { t.className = ''; }, 3500);
+}
+
+async function apiCall(params) {
+  const url = CCDC_API + '?' + Object.entries(params).map(([k,v]) => k + '=' + encodeURIComponent(v)).join('&');
+  const res  = await fetch(url);
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+// Đóng popup khi click ra ngoài
+document.getElementById('resultOverlay').addEventListener('click', function(e) {
+  if (e.target === this) closePopup();
+});
+</script>
+</body>
+</html>

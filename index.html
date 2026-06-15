@@ -9,6 +9,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+    <!-- Thư viện Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <!-- AUTHENTICATION OVERLAY -->
@@ -20,13 +22,13 @@
                 <p>Hệ thống Quản trị & Vận hành Nội bộ</p>
             </div>
             
-            <!-- Login Form -->
+            <!-- Bước 1: Login Form (MSNV + Password) -->
             <form id="login-form" class="auth-form active">
                 <div class="form-group">
-                    <label>Tên đăng nhập</label>
+                    <label>Mã số nhân viên (MSNV)</label>
                     <div class="input-with-icon">
                         <i data-lucide="user"></i>
-                        <input type="text" id="login-username" required placeholder="Nhập tài khoản GHN">
+                        <input type="text" id="login-username" required placeholder="Ví dụ: ADMIN001">
                     </div>
                 </div>
                 <div class="form-group">
@@ -40,44 +42,185 @@
                     <span>Đăng Nhập</span>
                     <i data-lucide="arrow-right"></i>
                 </button>
-                <div class="auth-switch">
-                    Chưa có tài khoản? <a href="#" id="go-to-register">Đăng ký cấp quyền</a>
+                
+                <div class="divider" style="margin: 20px 0; text-align: center; color: var(--text-muted); font-size: 13px; position: relative;">
+                    <span style="background: var(--bg-dark); padding: 0 10px; position: relative; z-index: 1;">HOẶC</span>
+                    <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(255,255,255,0.1); z-index: 0;"></div>
+                </div>
+
+                <!-- Google Sign In Button -->
+                <div id="g_id_onload"
+                     data-client_id="YOUR_GOOGLE_CLIENT_ID_HERE.apps.googleusercontent.com"
+                     data-context="signin"
+                     data-ux_mode="popup"
+                     data-callback="handleCredentialResponse"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-shape="rectangular"
+                     data-theme="filled_black"
+                     data-text="signin_with"
+                     data-size="large"
+                     data-logo_alignment="left"
+                     style="display: flex; justify-content: center;">
+                </div>
+                
+                <div class="auth-switch" style="margin-top: 20px; font-size: 13px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-muted);">Chưa có tài khoản? <a href="#" id="open-register" style="color: var(--ghn-orange); font-weight: 600;">Tạo mới</a></span>
+                    <a href="#" id="open-telegram-guide" style="color: var(--text-muted); display: inline-flex; align-items: center; gap: 4px; font-size: 12px;"><i data-lucide="help-circle" style="width: 13px; height: 13px;"></i> Chat ID?</a>
                 </div>
             </form>
 
-            <!-- Register Form -->
-            <form id="register-form" class="auth-form hidden">
-                <div class="form-group">
-                    <label>Họ và Tên</label>
-                    <div class="input-with-icon">
-                        <i data-lucide="badge-check"></i>
-                        <input type="text" id="reg-fullname" required placeholder="Ví dụ: Nguyễn Văn Bảo">
-                    </div>
+            <!-- Bước 2: OTP Form -->
+            <form id="otp-form" class="auth-form hidden">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <i data-lucide="smartphone" style="width: 48px; height: 48px; color: var(--ghn-orange); margin-bottom: 10px;"></i>
+                    <h3 style="color: var(--text-primary);">Xác thực bảo mật 2 lớp</h3>
+                    <p style="color: var(--text-secondary); font-size: 13px;">Chúng tôi đã gửi mã OTP gồm 6 chữ số qua Telegram của bạn. Vui lòng kiểm tra và nhập mã bên dưới.</p>
                 </div>
                 <div class="form-group">
-                    <label>Tên đăng nhập</label>
-                    <div class="input-with-icon">
-                        <i data-lucide="user"></i>
-                        <input type="text" id="reg-username" required placeholder="Ví dụ: baonv">
-                    </div>
+                    <label style="text-align: center; display: block;">Mã xác thực OTP</label>
+                    <input type="text" id="otp-input" required placeholder="•• •• ••" maxlength="6" style="text-align: center; font-size: 24px; letter-spacing: 5px;">
+                </div>
+                <button type="submit" class="btn-primary btn-block" id="btn-verify-otp">
+                    <span>Xác Nhận & Truy Cập</span>
+                    <i data-lucide="shield-check"></i>
+                </button>
+                <div class="auth-switch" style="margin-top: 15px;">
+                    <a href="#" id="go-to-login">Quay lại đăng nhập</a>
+                </div>
+            </form>
+
+            <!-- Bước Phụ: Chat ID Request Form (Khi chưa có Chat ID) -->
+            <form id="chatid-form" class="auth-form hidden">
+                <div style="text-align: center; margin-bottom: 20px;">
+                    <i data-lucide="send" style="width: 48px; height: 48px; color: #0088cc; margin-bottom: 10px;"></i>
+                    <h3 style="color: var(--text-primary);">Đăng ký Chat ID</h3>
+                    <p style="color: var(--text-secondary); font-size: 13px;">Tài khoản của bạn chưa được liên kết Telegram. Vui lòng nhập Chat ID để gửi yêu cầu duyệt tới Admin.</p>
                 </div>
                 <div class="form-group">
-                    <label>Mật khẩu</label>
-                    <div class="input-with-icon">
-                        <i data-lucide="lock"></i>
-                        <input type="password" id="reg-password" required placeholder="Tạo mật khẩu an toàn">
+                    <label>Mã Chat ID của bạn <a href="#" id="open-telegram-guide-2" style="color: var(--ghn-orange); font-size: 12px; margin-left: 5px;">(Hướng dẫn lấy mã)</a></label>
+                    <div class="input-icon">
+                        <i data-lucide="hash"></i>
+                        <input type="text" id="chatid-input" required placeholder="VD: 1014440614">
                     </div>
                 </div>
-                <button type="submit" class="btn-primary btn-block" id="btn-register">
-                    <span>Gửi Yêu Cầu</span>
+                <button type="submit" class="btn-primary btn-block" id="btn-submit-chatid" style="background: #0088cc;">
+                    <span>Gửi Yêu Cầu Duyệt</span>
                     <i data-lucide="send"></i>
                 </button>
-                <div class="auth-switch">
-                    Đã có tài khoản? <a href="#" id="go-to-login">Quay lại đăng nhập</a>
+                <div class="auth-switch" style="margin-top: 15px;">
+                    <a href="#" id="go-to-login-from-chatid">Quay lại đăng nhập</a>
+                </div>
+            </form>
+
+            <!-- Form Đăng Ký Tài Khoản Mới -->
+            <form id="register-form" class="auth-form hidden">
+                <div style="text-align: center; margin-bottom: 18px;">
+                    <i data-lucide="user-plus" style="width: 44px; height: 44px; color: var(--ghn-orange); margin-bottom: 8px;"></i>
+                    <h3 style="color: var(--text-primary); font-size: 18px; margin: 0;">Tạo Tài Khoản Mới</h3>
+                    <p style="color: var(--text-secondary); font-size: 12px; margin-top: 5px;">Điền đầy đủ thông tin — Admin sẽ duyệt trong vòng 24h</p>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 12px;">Họ &amp; Tên <span style="color:#ef4444">*</span></label>
+                        <div class="input-with-icon">
+                            <i data-lucide="user"></i>
+                            <input type="text" id="reg-fullname" required placeholder="Nguyễn Văn A">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 12px;">Mã NV (GHN) <span style="color:#ef4444">*</span></label>
+                        <div class="input-with-icon">
+                            <i data-lucide="badge"></i>
+                            <input type="text" id="reg-msnv" required placeholder="VD: 3006216">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 12px; margin-bottom: 0;">
+                    <label style="font-size: 12px;">Mật khẩu <span style="color:#ef4444">*</span></label>
+                    <div class="input-with-icon" style="position: relative;">
+                        <i data-lucide="lock"></i>
+                        <input type="password" id="reg-password" required placeholder="Tối thiểu 8 ký tự" oninput="checkRegPassword()">
+                        <button type="button" onclick="togglePassVis('reg-password', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0;"><i data-lucide="eye" style="width:16px;height:16px;"></i></button>
+                    </div>
+                    <!-- Password strength indicators -->
+                    <div id="pwd-rules" style="margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                        <div id="rule-len" class="pwd-rule"><i data-lucide="x-circle" style="width:13px;height:13px;"></i> ≥ 8 ký tự</div>
+                        <div id="rule-upper" class="pwd-rule"><i data-lucide="x-circle" style="width:13px;height:13px;"></i> Chữ in hoa</div>
+                        <div id="rule-lower" class="pwd-rule"><i data-lucide="x-circle" style="width:13px;height:13px;"></i> Chữ in thường</div>
+                        <div id="rule-num" class="pwd-rule"><i data-lucide="x-circle" style="width:13px;height:13px;"></i> Có số</div>
+                        <div id="rule-special" class="pwd-rule" style="grid-column: span 2;"><i data-lucide="x-circle" style="width:13px;height:13px;"></i> Ký tự đặc biệt (!@#$...)</div>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 12px; margin-bottom: 0;">
+                    <label style="font-size: 12px;">Nhập lại mật khẩu <span style="color:#ef4444">*</span></label>
+                    <div class="input-with-icon" style="position: relative;">
+                        <i data-lucide="lock"></i>
+                        <input type="password" id="reg-password2" required placeholder="Xác nhận mật khẩu" oninput="checkRegPassword()">
+                        <button type="button" onclick="togglePassVis('reg-password2', this)" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-muted);cursor:pointer;padding:0;"><i data-lucide="eye" style="width:16px;height:16px;"></i></button>
+                    </div>
+                    <div id="pwd-match-msg" style="font-size: 12px; margin-top: 4px;"></div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 12px;">Số điện thoại GHN <span style="color:#ef4444">*</span></label>
+                        <div class="input-with-icon">
+                            <i data-lucide="phone"></i>
+                            <input type="tel" id="reg-phone" required placeholder="0987xxxxxx">
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label style="font-size: 12px;">Telegram Chat ID <a href="#" id="open-tg-from-reg" style="color:var(--ghn-orange);font-size:11px;margin-left:3px;">(Lấy ID?)</a></label>
+                        <div class="input-with-icon">
+                            <i data-lucide="send"></i>
+                            <input type="text" id="reg-chatid" placeholder="VD: 1014440614">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary btn-block" id="btn-register" style="margin-top: 16px;">
+                    <span>Gửi Yêu Cầu Đăng Ký</span>
+                    <i data-lucide="send"></i>
+                </button>
+                <div class="auth-switch" style="margin-top: 12px; text-align: center; font-size: 13px;">
+                    <a href="#" id="go-to-login-from-reg">← Quay lại đăng nhập</a>
                 </div>
             </form>
             
             <div id="auth-message" class="auth-message hidden"></div>
+        </div>
+    </div>
+
+    <!-- TELEGRAM GUIDE MODAL -->
+    <div id="telegram-guide-modal" class="modal-overlay hidden" style="z-index: 10000; position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div class="glass-panel" style="max-width: 450px; width: 90%; padding: 30px; border-radius: 16px; position: relative;">
+            <button id="close-telegram-guide" style="position: absolute; top: 15px; right: 15px; background: none; border: none; color: var(--text-muted); cursor: pointer;"><i data-lucide="x"></i></button>
+            
+            <div style="text-align: center; margin-bottom: 20px;">
+                <i data-lucide="send" style="width: 40px; height: 40px; color: #0088cc; margin-bottom: 10px;"></i>
+                <h3 style="color: var(--text-primary); font-size: 18px;">Hướng Dẫn Lấy Chat ID Telegram</h3>
+                <p style="color: var(--text-secondary); font-size: 13px; margin-top: 5px;">Thực hiện 1 lần duy nhất để bảo mật tài khoản</p>
+            </div>
+            
+            <div style="color: var(--text-primary); font-size: 14px; line-height: 1.6;">
+                <ol style="padding-left: 20px; margin-bottom: 20px;">
+                    <li style="margin-bottom: 12px;">Mở ứng dụng Telegram, tìm kiếm bot <strong>@userinfobot</strong> và bấm <strong>Start</strong>.</li>
+                    <li style="margin-bottom: 12px;">Bot sẽ trả về một dãy số dòng <strong>Id</strong> (Ví dụ: <code>1014440614</code>). Đây chính là Chat ID của bạn.</li>
+                    <li style="margin-bottom: 12px;">Gửi mã Chat ID này cho <strong>Admin (Quản trị viên)</strong> để gán vào tài khoản của bạn trên hệ thống.</li>
+                    <li style="margin-bottom: 12px;">Tiếp theo, tìm tên <strong>Bot OTP của GHN</strong> do Admin cung cấp và bấm <strong>Start</strong> để cho phép Bot gửi tin nhắn.</li>
+                    <li>Sau khi Admin xác nhận hoàn tất, bạn có thể đăng nhập bình thường.</li>
+                </ol>
+            </div>
+            
+            <button id="btn-understood-guide" class="btn-primary btn-block" style="background: #0088cc; box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);">
+                <span>Đã hiểu</span>
+            </button>
         </div>
     </div>
 
@@ -117,6 +260,16 @@
                 <a href="#transport-map" class="nav-item" data-target="transport-map">
                     <i data-lucide="map"></i> Bản Đồ Vận Tải
                 </a>
+                <a href="#ccdc-device" class="nav-item" data-target="ccdc-device">
+                    <i data-lucide="scan-barcode"></i> CCDC Thiết Bị
+                </a>
+                <a href="#ccdc-report" class="nav-item" data-target="ccdc-report">
+                    <i data-lucide="bar-chart-3"></i> Quản Lý Thiết Bị
+                </a>
+                <!-- Admin Only Menu -->
+                <a href="#user-management" class="nav-item admin-only" data-target="user-management" style="margin-top: auto;">
+                    <i data-lucide="users"></i> Quản Lý Nhân Sự
+                </a>
             </nav>
             
             <div style="padding: 0 15px 15px;">
@@ -132,16 +285,6 @@
                 <input type="file" id="excel-upload-input" accept=".xlsx, .xls" style="display: none;">
             </div>
 
-            <div class="user-profile">
-                <img src="https://ui-avatars.com/api/?name=Admin+GHN&background=f26522&color=fff" alt="User">
-                <div class="user-info" style="flex: 1;">
-                    <span class="user-name">Quản lý Vận hành</span>
-                    <span class="user-role">SCOMMERCE</span>
-                </div>
-                <button id="btn-logout" class="btn-logout" title="Đăng xuất">
-                    <i data-lucide="log-out"></i>
-                </button>
-            </div>
         </aside>
 
         <!-- Main Content -->
@@ -157,10 +300,22 @@
                         <i data-lucide="calendar"></i>
                         <span>22/04/2026 - 28/04/2026</span>
                     </div>
-                    <button class="icon-btn glass-panel notification-btn">
+                    <div class="icon-btn glass-panel">
                         <i data-lucide="bell"></i>
-                        <span class="badge">3</span>
-                    </button>
+                        <span class="badge"></span>
+                    </div>
+                    <!-- User Profile & Logout Header -->
+                    <div class="user-profile glass-panel" style="display: flex; align-items: center; gap: 12px; padding: 6px 12px; margin-left: 10px; border-radius: 12px;">
+                        <img src="https://ui-avatars.com/api/?name=Admin+GHN&background=f26522&color=fff" alt="User" style="width: 32px; height: 32px; border-radius: 50%;">
+                        <div class="user-info" style="display: flex; flex-direction: column;">
+                            <span class="user-name" style="font-size: 13px; font-weight: 600; color: var(--text-primary);">Quản lý Vận hành</span>
+                            <span class="user-role" style="font-size: 11px; color: var(--text-secondary);">SCOMMERCE</span>
+                        </div>
+                        <div style="width: 1px; height: 24px; background: var(--border-color); margin: 0 4px;"></div>
+                        <button id="btn-logout" class="btn-logout" title="Đăng xuất" style="background: rgba(239, 68, 68, 0.15); color: var(--status-red); border-radius: 8px; padding: 6px 10px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; cursor: pointer; border: none; transition: all 0.2s;">
+                            <i data-lucide="log-out" style="width: 16px; height: 16px;"></i> <span>Thoát</span>
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -173,9 +328,42 @@
                 
                 <!-- Module 1: Overview -->
                 <section id="overview" class="module-section active">
-                    <div class="section-header">
-                        <h2>Tổng Quan Vận Hành Toàn Quốc</h2>
-                        <p class="subtitle">Trạng thái Giao / Lấy của 157 Bưu cục trọng điểm</p>
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+                        <div>
+                            <h2>Tổng Quan Vận Hành Toàn Quốc</h2>
+                            <p class="subtitle">Trạng thái Giao / Lấy của 157 Bưu cục trọng điểm</p>
+                        </div>
+
+                        <!-- EXPORT TOOLBAR -->
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <!-- Lọc kỳ -->
+                            <div style="display: flex; gap: 5px;">
+                                <button class="filter-period-btn active" id="rpt-btn-all"   onclick="setReportFilter('all',   this)">Tất cả</button>
+                                <button class="filter-period-btn"        id="rpt-btn-week"  onclick="setReportFilter('week',  this)">Tuần</button>
+                                <button class="filter-period-btn"        id="rpt-btn-month" onclick="setReportFilter('month', this)">Tháng</button>
+                            </div>
+                            <!-- Chọn tuần cụ thể -->
+                            <div id="rpt-week-picker" style="display:none; align-items:center; gap:6px;">
+                                <input type="week" id="rpt-filter-week"
+                                    style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--text-primary);padding:5px 10px;font-family:inherit;font-size:12px;"
+                                    onchange="updateReportPeriodLabel()">
+                            </div>
+                            <!-- Chọn tháng cụ thể -->
+                            <div id="rpt-month-picker" style="display:none; align-items:center; gap:6px;">
+                                <input type="month" id="rpt-filter-month"
+                                    style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--text-primary);padding:5px 10px;font-family:inherit;font-size:12px;"
+                                    onchange="updateReportPeriodLabel()">
+                            </div>
+                            <!-- Nhãn kỳ hiện tại -->
+                            <span id="rpt-period-label" style="font-size:12px;color:var(--text-muted);background:rgba(255,255,255,0.05);padding:4px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.08);">Toàn bộ dữ liệu</span>
+                            <!-- Nút xuất -->
+                            <button onclick="exportCombinedReport()"
+                                style="display:flex;align-items:center;gap:7px;padding:8px 18px;background:linear-gradient(135deg,#f26522,#e55a1c);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;box-shadow:0 4px 14px rgba(242,101,34,0.35);transition:opacity 0.2s;"
+                                onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+                                <i data-lucide="file-down" style="width:16px;height:16px;"></i>
+                                Xuất Báo Cáo
+                            </button>
+                        </div>
                     </div>
 
                     <!-- KPIs -->
@@ -266,6 +454,75 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- PHÂN TÍCH & ĐÁNH GIÁ: XE NÂNG & VẬT TƯ -->
+                    <div style="margin-top: 24px;">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                            <div style="width: 4px; height: 28px; background: linear-gradient(180deg, var(--ghn-orange), #f59e0b); border-radius: 2px;"></div>
+                            <h3 style="color: var(--text-primary); font-size: 16px; font-weight: 700; margin: 0;">Phân Tích & Đánh Giá Vận Hành</h3>
+                            <span style="font-size: 12px; color: var(--text-muted); background: rgba(255,255,255,0.07); padding: 3px 10px; border-radius: 20px;">Tự động từ dữ liệu thực</span>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                            <div class="glass-panel" style="padding: 20px; border-radius: 16px; border-left: 3px solid #ef4444;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                    <div>
+                                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Xe Nâng Sự Cố Nhiều Nhất</div>
+                                        <div id="insight-fork-worst" style="font-size: 22px; font-weight: 800; color: #ef4444;">--</div>
+                                    </div>
+                                    <div style="width: 40px; height: 40px; background: rgba(239,68,68,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                        <i data-lucide="alert-triangle" style="width: 20px; height: 20px; color: #ef4444;"></i>
+                                    </div>
+                                </div>
+                                <div id="insight-fork-worst-count" style="font-size: 13px; color: var(--text-secondary);"></div>
+                            </div>
+
+                            <div class="glass-panel" style="padding: 20px; border-radius: 16px; border-left: 3px solid #f59e0b;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                    <div style="flex: 1; min-width: 0;">
+                                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Lỗi Phổ Biến Nhất</div>
+                                        <div id="insight-fork-top-issue" style="font-size: 14px; font-weight: 700; color: #f59e0b; line-height: 1.3;">--</div>
+                                    </div>
+                                    <div style="width: 40px; height: 40px; background: rgba(245,158,11,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 10px;">
+                                        <i data-lucide="zap" style="width: 20px; height: 20px; color: #f59e0b;"></i>
+                                    </div>
+                                </div>
+                                <div id="insight-fork-top-count" style="font-size: 13px; color: var(--text-secondary);"></div>
+                            </div>
+
+                            <div class="glass-panel" style="padding: 20px; border-radius: 16px; border-left: 3px solid #10b981;">
+                                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                    <div style="flex: 1; min-width: 0;">
+                                        <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">Vật Tư Cấp Nhiều Nhất</div>
+                                        <div id="insight-mat-top-item" style="font-size: 14px; font-weight: 700; color: #10b981; line-height: 1.3;">--</div>
+                                    </div>
+                                    <div style="width: 40px; height: 40px; background: rgba(16,185,129,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 10px;">
+                                        <i data-lucide="package-2" style="width: 20px; height: 20px; color: #10b981;"></i>
+                                    </div>
+                                </div>
+                                <div id="insight-mat-top-count" style="font-size: 13px; color: var(--text-secondary);"></div>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                            <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+                                <h4 style="color: var(--text-primary); margin: 0 0 14px 0; font-size: 14px; font-weight: 600;">🔧 Sự Cố Xe Nâng Theo Nhà Cung Cấp</h4>
+                                <canvas id="forkSupplierChart" height="160"></canvas>
+                            </div>
+                            <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+                                <h4 style="color: var(--text-primary); margin: 0 0 14px 0; font-size: 14px; font-weight: 600;">📦 Top Vật Tư Được Cấp Phát</h4>
+                                <canvas id="matItemChart" height="160"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="glass-panel" style="padding: 20px; border-radius: 16px;">
+                            <h4 style="color: var(--text-primary); margin: 0 0 16px 0; font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px;">
+                                <i data-lucide="lightbulb" style="width: 16px; height: 16px; color: #f59e0b;"></i>
+                                Đánh Giá Tổng Thể & Khuyến Nghị
+                            </h4>
+                            <div id="analysis-insights" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;"></div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Module: Layout Map 2D -->
@@ -345,12 +602,33 @@
                     </div>
 
                     <div class="table-container glass-panel">
-                        <div class="table-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                            <h3>Lịch sử cấp phát mới nhất</h3>
-                            <div class="search-bar" style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
-                                <input type="text" id="searchMaterials" placeholder="Tìm bưu cục, vật tư..." style="background: transparent; border: none; color: var(--text-primary); outline: none; font-family: inherit;">
+                        <!-- Filter + Export toolbar -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.06);">
+                            <h3 style="flex: 1; min-width: 160px;">Lịch sử cấp phát mới nhất</h3>
+                            <!-- Lọc chế độ -->
+                            <div style="display: flex; gap: 6px;">
+                                <button class="filter-period-btn active" data-module="mat" data-mode="all" onclick="setMatFilter('all', this)">Tất cả</button>
+                                <button class="filter-period-btn" data-module="mat" data-mode="week" onclick="setMatFilter('week', this)">Tuần này</button>
+                                <button class="filter-period-btn" data-module="mat" data-mode="month" onclick="setMatFilter('month', this)">Tháng này</button>
                             </div>
+                            <!-- Chọn tuần / tháng cụ thể -->
+                            <div id="mat-week-picker" style="display:none; gap: 6px; align-items: center;">
+                                <label style="font-size:12px; color:var(--text-muted);">Tuần:</label>
+                                <input type="week" id="mat-filter-week" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: var(--text-primary); padding: 5px 10px; font-family: inherit; font-size: 13px;" onchange="applyMatDateFilter()">
+                            </div>
+                            <div id="mat-month-picker" style="display:none; gap: 6px; align-items: center;">
+                                <label style="font-size:12px; color:var(--text-muted);">Tháng:</label>
+                                <input type="month" id="mat-filter-month" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: var(--text-primary); padding: 5px 10px; font-family: inherit; font-size: 13px;" onchange="applyMatDateFilter()">
+                            </div>
+                            <!-- Tìm kiếm -->
+                            <div class="search-bar" style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.4rem 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i data-lucide="search" style="width: 15px; height: 15px; color: var(--text-muted);"></i>
+                                <input type="text" id="searchMaterials" placeholder="Tìm bưu cục, vật tư..." style="background: transparent; border: none; color: var(--text-primary); outline: none; font-family: inherit; width: 160px;">
+                            </div>
+                            <!-- Xuất báo cáo -->
+                            <button onclick="exportReport('materials')" style="display:flex; align-items:center; gap:7px; padding: 7px 16px; background: linear-gradient(135deg,#f26522,#e55a1c); border: none; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+                                <i data-lucide="download" style="width:15px;height:15px;"></i> Xuất HTML
+                            </button>
                         </div>
                         <div class="table-wrapper">
                             <table id="materialsTable">
@@ -381,12 +659,29 @@
                     </div>
 
                     <div class="table-container glass-panel">
-                        <div class="table-actions" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                            <h3>Lịch sử sự cố</h3>
-                            <div class="search-bar" style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.5rem 1rem; display: flex; align-items: center; gap: 0.5rem;">
-                                <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
-                                <input type="text" id="searchForklifts" placeholder="Tìm mã xe, loại sự cố..." style="background: transparent; border: none; color: var(--text-primary); outline: none; font-family: inherit;">
+                        <!-- Filter + Export toolbar -->
+                        <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid rgba(255,255,255,0.06);">
+                            <h3 style="flex: 1; min-width: 160px;">Lịch sử sự cố</h3>
+                            <div style="display: flex; gap: 6px;">
+                                <button class="filter-period-btn active" data-module="fork" data-mode="all" onclick="setForkFilter('all', this)">Tất cả</button>
+                                <button class="filter-period-btn" data-module="fork" data-mode="week" onclick="setForkFilter('week', this)">Tuần này</button>
+                                <button class="filter-period-btn" data-module="fork" data-mode="month" onclick="setForkFilter('month', this)">Tháng này</button>
                             </div>
+                            <div id="fork-week-picker" style="display:none; gap: 6px; align-items: center;">
+                                <label style="font-size:12px; color:var(--text-muted);">Tuần:</label>
+                                <input type="week" id="fork-filter-week" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: var(--text-primary); padding: 5px 10px; font-family: inherit; font-size: 13px;" onchange="applyForkDateFilter()">
+                            </div>
+                            <div id="fork-month-picker" style="display:none; gap: 6px; align-items: center;">
+                                <label style="font-size:12px; color:var(--text-muted);">Tháng:</label>
+                                <input type="month" id="fork-filter-month" style="background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 8px; color: var(--text-primary); padding: 5px 10px; font-family: inherit; font-size: 13px;" onchange="applyForkDateFilter()">
+                            </div>
+                            <div class="search-bar" style="background: rgba(255,255,255,0.05); border-radius: 8px; padding: 0.4rem 0.8rem; display: flex; align-items: center; gap: 0.5rem;">
+                                <i data-lucide="search" style="width: 15px; height: 15px; color: var(--text-muted);"></i>
+                                <input type="text" id="searchForklifts" placeholder="Tìm mã xe, loại sự cố..." style="background: transparent; border: none; color: var(--text-primary); outline: none; font-family: inherit; width: 160px;">
+                            </div>
+                            <button onclick="exportReport('forklifts')" style="display:flex; align-items:center; gap:7px; padding: 7px 16px; background: linear-gradient(135deg,#f26522,#e55a1c); border: none; border-radius: 8px; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;">
+                                <i data-lucide="download" style="width:15px;height:15px;"></i> Xuất HTML
+                            </button>
                         </div>
                         <div class="table-wrapper">
                             <table id="forkliftsTable">
@@ -572,10 +867,310 @@
                             <iframe id="mapIframe" src="https://www.google.com/maps/d/u/0/embed?mid=1rIvXNdrMwLoLnAUq0i7FsHQxEaINlGM&ehbc=2E312F" width="100%" height="100%" style="border:0;"></iframe>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
-            </div>
+            <!-- ========================================== -->
+            <!-- CCDC DEVICE MODULE                         -->
+            <!-- ========================================== -->
+            <section id="ccdc-device" class="module-section">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2>CCDC — Quản Lý Thiết Bị</h2>
+                        <p class="subtitle">Giao & Thu hồi thiết bị bằng súng scan QR — Lưu tự động Google Sheets</p>
+                    </div>
+                    <!-- Mode tabs -->
+                    <div style="display:flex; gap:10px;">
+                        <button id="ccdc-tab-giao" class="filter-period-btn active"
+                            style="padding:8px 18px;display:flex;align-items:center;gap:7px;background:linear-gradient(135deg,#f26522,#e55a1c);color:#fff;border:none;border-radius:10px;font-weight:700;cursor:pointer;"
+                            onclick="ccdcSwitchTab('giao')">
+                            🔵 GIAO THIẾT BỊ
+                        </button>
+                        <button id="ccdc-tab-nhan" class="filter-period-btn"
+                            style="padding:8px 18px;display:flex;align-items:center;gap:7px;background:rgba(39,174,96,0.15);color:#27ae60;border:1px solid rgba(39,174,96,0.35);border-radius:10px;font-weight:700;cursor:pointer;"
+                            onclick="ccdcSwitchTab('nhan')">
+                            🟢 NHẬN THIẾT BỊ
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SCAN CARD -->
+                <div class="glass-panel" style="padding:24px;margin-bottom:20px;border-radius:14px;">
+                    <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;width:100%;">
+                        <div style="display:flex;align-items:center;gap:8px;">
+                            <span id="ccdc-pulse" style="width:8px;height:8px;border-radius:50%;background:#27ae60;display:inline-block;animation:ccdcPulse 1.5s infinite;"></span>
+                            <span id="ccdc-scan-title">QUÉT QR — GIAO THIẾT BỊ</span>
+                        </div>
+                        <button id="ccdc-voice-toggle" onclick="ccdcToggleVoice()" style="background:rgba(242,101,34,0.1);border:none;color:var(--ghn-orange);cursor:pointer;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:4px 8px;border-radius:6px;transition:all 0.2s;" title="Bật/Tắt âm thanh đọc thông tin">
+                            <i id="ccdc-voice-icon" data-lucide="volume-2" style="width:14px;height:14px;color:var(--ghn-orange);"></i>
+                            <span id="ccdc-voice-text">Đọc âm thanh: BẬT</span>
+                        </button>
+                    </div>
+                    <div style="position:relative;">
+                        <input
+                            type="text"
+                            id="ccdc-scan-input"
+                            placeholder="Scan QR hoặc nhập Mã NV rồi nhấn Enter..."
+                            autocomplete="off"
+                            style="width:100%;background:rgba(255,255,255,0.05);border:2px solid rgba(255,255,255,0.1);border-radius:12px;padding:16px 50px 16px 18px;color:var(--text-primary);font-size:18px;font-weight:600;font-family:inherit;letter-spacing:2px;outline:none;transition:border-color 0.2s;"
+                            onfocus="this.style.borderColor='#f26522'; this.style.boxShadow='0 0 0 4px rgba(242,101,34,0.12)';"
+                            onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.boxShadow='none';"
+                            onkeydown="if(event.key==='Enter'){event.preventDefault();ccdcProcessScan(this.value);}"
+                        >
+                        <i data-lucide="scan-line" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);width:22px;height:22px;color:var(--text-muted);"></i>
+                    </div>
+                    <div style="font-size:12px;color:var(--text-muted);margin-top:10px;display:flex;align-items:center;gap:6px;">
+                        <i data-lucide="info" style="width:13px;height:13px;"></i>
+                        Súng scan tự nhấn Enter sau khi quét · Hoặc gõ Mã NV và nhấn Enter
+                    </div>
+                </div>
+
+                <!-- RESULT CARD (ẩn mặc định) -->
+                <div id="ccdc-result-wrap" style="display:none;margin-bottom:20px;">
+                    <div class="glass-panel" style="padding:0;border-radius:14px;overflow:hidden;">
+                        <!-- Header NV -->
+                        <div id="ccdc-emp-header" style="padding:18px 22px;border-bottom:1px solid rgba(255,255,255,0.08);"></div>
+                        <!-- Info grid -->
+                        <div style="padding:18px 22px;">
+                            <div id="ccdc-info-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;"></div>
+                            <!-- Borrow list (mode nhận) -->
+                            <div id="ccdc-borrow-list" style="display:none;margin-bottom:18px;"></div>
+                            <!-- Form fields -->
+                            <div id="ccdc-form-fields"></div>
+                            <!-- Actions -->
+                            <div style="display:flex;gap:10px;margin-top:16px;">
+                                <button onclick="ccdcCloseResult()" style="flex:1;background:transparent;border:1.5px solid rgba(255,255,255,0.15);color:var(--text-muted);border-radius:10px;padding:11px;font-size:14px;font-weight:600;cursor:pointer;">
+                                    Huỷ
+                                </button>
+                                <button id="ccdc-submit-btn" style="flex:2;border:none;border-radius:10px;padding:11px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;"
+                                    onclick="ccdcSubmit()">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LOG TABLE -->
+                <div class="glass-panel table-container" style="border-radius:14px;overflow:hidden;">
+                    <div class="table-actions" style="display:flex;justify-content:space-between;align-items:center;">
+                        <span style="font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;">
+                            <i data-lucide="history" style="width:16px;height:16px;color:var(--ghn-orange);"></i>
+                            Giao Dịch Hôm Nay
+                        </span>
+                        <button onclick="ccdcLoadLog()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:6px 12px;color:var(--text-muted);cursor:pointer;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;">
+                            <i data-lucide="refresh-cw" style="width:12px;height:12px;"></i> Làm mới
+                        </button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Thời Gian</th>
+                                    <th>Mã NV</th>
+                                    <th>Họ Tên</th>
+                                    <th>Mã Thiết Bị</th>
+                                    <th>Tên Thiết Bị</th>
+                                    <th class="text-center">Trạng Thái</th>
+                                    <th>Người Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ccdc-log-tbody">
+                                <tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px;">Chưa có dữ liệu hôm nay</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- CCDC REPORT MODULE                         -->
+            <!-- ========================================== -->
+            <section id="ccdc-report" class="module-section">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                    <div>
+                        <h2>Báo Cáo & Thống Kê Thiết Bị CCDC</h2>
+                        <p class="subtitle">Tổng hợp lịch sử cấp phát, thu hồi công cụ dụng cụ từ hoạt động quét mã</p>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="filter-period-btn" style="padding: 8px 16px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; background: rgba(46,204,113,0.15); color: #2ecc71;" onclick="ccdcReportExportCSV()">
+                            <i data-lucide="download" style="width: 14px; height: 14px;"></i> Tải Báo Cáo Excel
+                        </button>
+                        <button class="filter-period-btn active" style="padding: 8px 16px; border-radius: 8px; border: none; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; background: rgba(242,101,34,0.15); color: var(--ghn-orange);" onclick="ccdcReportRefresh()">
+                            <i data-lucide="rotate-cw" style="width: 14px; height: 14px;"></i> Làm Mới Dữ Liệu
+                        </button>
+                    </div>
+                </div>
+
+                <!-- OVERVIEW CARDS -->
+                <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div class="glass-panel" style="padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 16px;">
+                        <div style="width: 48px; height: 48px; border-radius: 10px; background: rgba(52,152,219,0.15); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #3498db;">📦</div>
+                        <div>
+                            <div style="font-size: 13px; color: var(--text-muted);">Tổng Lượt Giao</div>
+                            <div id="ccdc-kpi-total" style="font-size: 24px; font-weight: 700; color: var(--text-primary); margin-top: 4px;">0</div>
+                        </div>
+                    </div>
+                    <div class="glass-panel" style="padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 16px;">
+                        <div style="width: 48px; height: 48px; border-radius: 10px; background: rgba(241,196,15,0.15); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #f1c40f;">⏳</div>
+                        <div>
+                            <div style="font-size: 13px; color: var(--text-muted);">Đang Mượn (Chưa Trả)</div>
+                            <div id="ccdc-kpi-active" style="font-size: 24px; font-weight: 700; color: #f1c40f; margin-top: 4px;">0</div>
+                        </div>
+                    </div>
+                    <div class="glass-panel" style="padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 16px;">
+                        <div style="width: 48px; height: 48px; border-radius: 10px; background: rgba(46,204,113,0.15); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #2ecc71;">✅</div>
+                        <div>
+                            <div style="font-size: 13px; color: var(--text-muted);">Đã Thu Hồi (Đã Trả)</div>
+                            <div id="ccdc-kpi-returned" style="font-size: 24px; font-weight: 700; color: #2ecc71; margin-top: 4px;">0</div>
+                        </div>
+                    </div>
+                    <div class="glass-panel" style="padding: 20px; border-radius: 12px; display: flex; align-items: center; gap: 16px;">
+                        <div style="width: 48px; height: 48px; border-radius: 10px; background: rgba(155,89,182,0.15); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #9b59b6;">📈</div>
+                        <div>
+                            <div style="font-size: 13px; color: var(--text-muted);">Tỷ Lệ Thu Hồi</div>
+                            <div id="ccdc-kpi-rate" style="font-size: 24px; font-weight: 700; color: #9b59b6; margin-top: 4px;">0%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FILTER BAR -->
+                <div class="glass-panel" style="padding: 16px 20px; border-radius: 12px; margin-bottom: 20px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 200px; position: relative;">
+                        <input type="text" id="ccdc-rep-search" placeholder="Tìm kiếm theo Mã NV, Họ tên hoặc Mã thiết bị..." oninput="ccdcReportFilter()"
+                            style="width:100%; background:rgba(255,255,255,0.05); border:1.5px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 14px 10px 38px; color:var(--text-primary); font-size:14px; outline:none; font-family:inherit;">
+                        <i data-lucide="search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; color: var(--text-muted);"></i>
+                    </div>
+                    <div style="min-width: 150px;">
+                        <select id="ccdc-rep-filter-status" onchange="ccdcReportFilter()"
+                            style="width:100%; background:rgba(255,255,255,0.05); border:1.5px solid rgba(255,255,255,0.1); border-radius:8px; padding:10px 14px; color:var(--text-primary); font-size:14px; outline:none; font-family:inherit; cursor:pointer;">
+                            <option value="all">Tất cả trạng thái</option>
+                            <option value="active">Đang mượn (Chưa trả)</option>
+                            <option value="returned">Đã thu hồi (Đã trả)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- DETAIL TABLE -->
+                <div class="glass-panel" style="padding: 0; border-radius: 12px; overflow: hidden;">
+                    <div style="max-height: 500px; overflow-y: auto;">
+                        <table class="table" id="ccdc-report-table" style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: rgba(255,255,255,0.02); text-align: left;">
+                                    <th style="padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.08);">Thời Gian Giao</th>
+                                    <th style="padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.08);">Nhân Viên</th>
+                                    <th style="padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.08);">Ca & Quản Lý</th>
+                                    <th style="padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.08);">Thiết Bị Cấp Phát</th>
+                                    <th style="padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.08);">Trạng Thái Thu Hồi</th>
+                                    <th style="padding: 14px 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.08);">Ghi Chú</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ccdc-report-tbody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+                                        Đang tải dữ liệu báo cáo thiết bị...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================== -->
+            <!-- USER MANAGEMENT MODULE (ADMIN ONLY)        -->
+            <!-- ========================================== -->
+            <section id="user-management" class="module-section">
+                <div class="section-header" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div>
+                        <h2>Quản Lý Nhân Sự & Phân Quyền</h2>
+                        <p class="subtitle">Thêm, sửa, xóa và cấp quyền Menu cho các tài khoản Vận hành</p>
+                    </div>
+                    <button class="btn-primary" id="btn-add-user" style="display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="user-plus" style="width: 18px; height: 18px;"></i> Thêm Tài Khoản
+                    </button>
+                </div>
+                
+                <div class="glass-panel table-container">
+                    <div class="table-actions">
+                        <div class="search-bar" style="background: rgba(255,255,255,0.05); padding: 8px 15px;">
+                            <i data-lucide="search"></i>
+                            <input type="text" id="user-search" placeholder="Tìm theo MSNV, Tên...">
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th>MSNV</th>
+                                    <th>Họ & Tên</th>
+                                    <th>Chức Vụ</th>
+                                    <th>Telegram Chat ID</th>
+                                    <th>Trạng Thái</th>
+                                    <th class="text-right">Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Data will be loaded by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </main>
+    </div>
+
+    <!-- Modal: Thêm / Sửa User -->
+    <div id="modal-user-form" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-user-title">Thêm Tài Khoản Mới</h3>
+                <button class="close-modal-btn" id="close-user-modal"><i data-lucide="x"></i></button>
+            </div>
+            <form id="user-form">
+                <div class="form-group">
+                    <label>Mã Số Nhân Viên (MSNV)</label>
+                    <input type="text" id="um-msnv" required placeholder="VD: USER002" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: white; border-radius: 8px; outline: none;">
+                </div>
+                <div class="form-group">
+                    <label>Mật Khẩu</label>
+                    <input type="password" id="um-password" placeholder="Nhập mật khẩu" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: white; border-radius: 8px; outline: none;">
+                    <small style="color: var(--text-muted); font-size: 11px;">(Để trống nếu không muốn đổi mật khẩu khi Edit)</small>
+                </div>
+                <div class="form-group">
+                    <label>Họ và Tên</label>
+                    <input type="text" id="um-fullname" required placeholder="Nguyễn Văn A" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: white; border-radius: 8px; outline: none;">
+                </div>
+                <div class="form-group">
+                    <label>Chat ID Telegram</label>
+                    <input type="text" id="um-chatid" required placeholder="1014440614" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: white; border-radius: 8px; outline: none;">
+                </div>
+                <div class="form-group">
+                    <label>Chức Vụ (Role)</label>
+                    <select id="um-role" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: white; border-radius: 8px; outline: none;">
+                        <option value="user">Nhân Viên Kho (User)</option>
+                        <option value="admin">Quản Trị Viên (Admin)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary btn-block" style="margin-top: 10px;">Lưu Tài Khoản</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Phân Quyền Menu -->
+    <div id="modal-permissions" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Phân Quyền: <span id="perm-user-name" style="color: var(--ghn-orange);"></span></h3>
+                <button class="close-modal-btn" id="close-perm-modal"><i data-lucide="x"></i></button>
+            </div>
+            <p style="color: var(--text-secondary); font-size: 13px; margin-bottom: 20px;">Bật/Tắt các Menu mà nhân sự này được phép truy cập trên Sidebar.</p>
+            
+            <div class="permission-list" id="permission-list-container">
+                <!-- JS sẽ render danh sách Menu ở đây -->
+            </div>
+            
+            <button id="btn-save-permissions" class="btn-primary btn-block">Lưu Phân Quyền</button>
+        </div>
     </div>
 
     <!-- AI CHATBOT WIDGET -->
