@@ -30,10 +30,10 @@ var GEMINI_API_KEY = scriptProperties.getProperty('GEMINI_API_KEY') || '';
 
 // Cấu hình sheet nhân viên
 var EMP_SHEET_NAME = 'DS nhân sự';
-var EMP_COL_MSNV   = 'Mã NV';
+var EMP_COL_MSNV   = 'ID';
 var EMP_COL_HOTEN  = 'Họ và tên';
-var EMP_COL_CA     = 'Ca làm việc';
-var EMP_COL_QUANLY = 'Quản lý';
+var EMP_COL_CA     = 'Trạng thái';         // Cột C — Đang làm việc / Đã nghỉ
+var EMP_COL_QUANLY = 'Sup/lead Tháng 5';   // Cột E — Quản lý trực tiếp (format: MSNV-Họ Tên)
 
 // Xử lý CORS và preflight request
 function doOptions(e) {
@@ -72,6 +72,7 @@ function doGet(e) {
   if (action === 'submit_nhan')      return ccdcSubmitNhan(e.parameter);
   if (action === 'get_today_log')    return ccdcGetTodayLog();
   if (action === 'ccdc_get_all_logs') return ccdcGetAllLogs();
+  if (action === 'ccdc_get_all_logs_nhan') return ccdcGetAllNhanLogs();
   if (action === 'debug_headers')    return ccdcDebugHeaders();
   if (action === 'tts')              return handleTts(e.parameter.text);
 
@@ -746,6 +747,34 @@ function ccdcGetAllLogs() {
 }
 
 
+// API: Lấy toàn bộ lịch sử thu hồi thiết bị (CCDC_Nhan)
+function ccdcGetAllNhanLogs() {
+  var ss = getSpreadsheet();
+  var sheet = ss.getSheetByName('CCDC_Nhan');
+  if (!sheet) return createJsonResponse({ status: 'error', message: 'Không tìm thấy sheet CCDC_Nhan' });
+  var data = sheet.getDataRange().getValues();
+  var log = [];
+  // Cấu trúc CCDC_Nhan: [Thời Gian Thu Hồi, Mã NV, Họ Tên, Ca Làm Việc, Quản Lý, Mã Thiết Bị, Tên Thiết Bị, Tình Trạng, Ghi Chú, Người Thao Tác]
+  for (var i = data.length - 1; i >= 1; i--) {
+    var row = data[i];
+    if (row[1]) {
+      log.push({
+        timestamp:       row[0] ? row[0].toString() : '',
+        msnv:            row[1] ? row[1].toString() : '',
+        hoten:           row[2] ? row[2].toString() : '',
+        ca:              row[3] ? row[3].toString() : '',
+        quanly:          row[4] ? row[4].toString() : '',
+        ma_thiet_bi:     row[5] ? row[5].toString() : '',
+        ten_thiet_bi:    row[6] ? row[6].toString() : '',
+        tinh_trang:      row[7] ? row[7].toString() : '',
+        ghi_chu:         row[8] ? row[8].toString() : '',
+        nguoi_thao_tac:  row[9] ? row[9].toString() : ''
+      });
+    }
+  }
+  return createJsonResponse({ status: 'success', log: log });
+}
+
 // HELPER: Tạo / lấy sheet CCDC_Giao
 function ccdcGetOrCreateGiaoSheet(ss) {
   var sheet = ss.getSheetByName('CCDC_Giao');
@@ -837,18 +866,21 @@ function getEmployeeSheetMap() {
   var sheet = ss.getSheetByName(EMP_SHEET_NAME);
   if (!sheet) return { error: 'Không tìm thấy sheet "' + EMP_SHEET_NAME + '"' };
   var data = sheet.getDataRange().getValues();
-  var headers = data[0].map(function(h) { return h.toString().trim(); });
+  // Dòng 1 (data[0]) là tiêu đề merge — dòng 2 (data[1]) mới là header thật
+  var HEADER_ROW = 1;
+  var headers = data[HEADER_ROW].map(function(h) { return h.toString().trim(); });
   var idx = {
     msnv:   headers.indexOf(EMP_COL_MSNV),
     hoten:  headers.indexOf(EMP_COL_HOTEN),
     ca:     headers.indexOf(EMP_COL_CA),
     quanly: headers.indexOf(EMP_COL_QUANLY)
   };
-  if (idx.msnv   < 0) idx.msnv   = 0;
-  if (idx.hoten  < 0) idx.hoten  = 1;
-  if (idx.ca     < 0) idx.ca     = 2;
-  if (idx.quanly < 0) idx.quanly = 3;
-  return { data: data, idx: idx, headers: headers };
+  // Fallback theo vị trí cột thực tế đã xác nhận
+  if (idx.msnv   < 0) idx.msnv   = 0;  // Cột A: ID
+  if (idx.hoten  < 0) idx.hoten  = 1;  // Cột B: Họ và tên
+  if (idx.ca     < 0) idx.ca     = 2;  // Cột C: Trạng thái
+  if (idx.quanly < 0) idx.quanly = 4;  // Cột E: Sup/lead Tháng 5
+  return { data: data, idx: idx, headers: headers, dataStart: HEADER_ROW + 1 };
 }
 
 function ccdcGetEmployees() {
@@ -856,13 +888,21 @@ function ccdcGetEmployees() {
   if (map.error) return createJsonResponse({ status: 'error', message: map.error });
   var data = map.data; var idx = map.idx;
   var list = [];
-  for (var i = 1; i < data.length; i++) {
+  // Data bắt đầu từ dòng sau header (dataStart = 2)
+  for (var i = map.dataStart; i < data.length; i++) {
     var msnv = (data[i][idx.msnv] || '').toString().trim();
-    if (msnv) list.push({
+    if (!msnv || msnv === 'ID') continue;
+    // Parse tên quản lý: format "MSNV-Họ Tên" → lấy phần sau dấu '-'
+    var rawQuanly = (data[i][idx.quanly] || '').toString().trim();
+    var quanlyName = rawQuanly;
+    if (rawQuanly.indexOf('-') > 0) {
+      quanlyName = rawQuanly.substring(rawQuanly.indexOf('-') + 1).trim();
+    }
+    list.push({
       msnv:   msnv,
       hoten:  (data[i][idx.hoten]  || '').toString().trim(),
       ca:     (data[i][idx.ca]     || '').toString().trim(),
-      quanly: (data[i][idx.quanly] || '').toString().trim()
+      quanly: quanlyName
     });
   }
   return createJsonResponse({ status: 'success', employees: list });

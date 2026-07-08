@@ -3458,22 +3458,38 @@ let ccdcReportData = [];
 async function ccdcReportLoad() {
     const tbody = document.getElementById('ccdc-report-tbody');
     if (tbody) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">🔄 Đang tải lịch sử cấp phát từ Google Server...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">🔄 Đang tải lịch sử cấp phát từ Google Server...</td></tr>';
     }
 
     try {
-        const res = await ccdcApiCall({ action: 'ccdc_get_all_logs' });
-        if (res && res.status === 'success' && Array.isArray(res.log)) {
-            ccdcReportData = res.log;
-            ccdcReportUpdateKPIs(ccdcReportData);
-            ccdcReportRender(ccdcReportData);
-        } else {
-            throw new Error('Dữ liệu không đúng định dạng');
-        }
+        // Fetch song song cả 2 sheets: CCDC_Giao và CCDC_Nhan
+        const [resGiao, resNhan] = await Promise.all([
+            ccdcApiCall({ action: 'ccdc_get_all_logs' }),
+            ccdcApiCall({ action: 'ccdc_get_all_logs_nhan' })
+        ]);
+
+        const giaoLog = (resGiao && resGiao.status === 'success' && Array.isArray(resGiao.log))
+            ? resGiao.log.map(item => ({ ...item, _type: 'giao' }))
+            : [];
+
+        const nhanLog = (resNhan && resNhan.status === 'success' && Array.isArray(resNhan.log))
+            ? resNhan.log.map(item => ({ ...item, _type: 'nhan' }))
+            : [];
+
+        // Merge và sắp xếp mới nhất lên trên
+        const merged = [...giaoLog, ...nhanLog].sort((a, b) => {
+            const ta = a.timestamp || '', tb = b.timestamp || '';
+            return tb.localeCompare(ta);
+        });
+
+        ccdcReportData = merged;
+        ccdcReportUpdateKPIs(ccdcReportData);
+        ccdcReportRender(ccdcReportData);
+
     } catch (err) {
         console.error('[CCDC Report]', err);
         if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px 20px; color: var(--status-red);">⚠️ Lỗi không thể tải dữ liệu: ' + escapeHtml(err.message || err) + '</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px 20px; color: var(--status-red);">⚠️ Lỗi không thể tải dữ liệu: ' + escapeHtml(err.message || err) + '</td></tr>';
         }
     }
 }
@@ -3500,18 +3516,27 @@ function ccdcReportRender(list) {
     if (!tbody) return;
 
     if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">Chưa có dữ liệu nào khớp với bộ lọc</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">Chưa có dữ liệu nào khớp với bộ lọc</td></tr>';
         return;
     }
 
     tbody.innerHTML = list.map(item => {
+        // Badge loại: Giao hoặc Thu hồi
+        const typeBadge = item._type === 'nhan'
+            ? '<span class="status-badge safe" style="font-size:11px;padding:2px 8px;">📥 Thu hồi</span>'
+            : '<span class="status-badge warning" style="font-size:11px;padding:2px 8px;">📤 Giao</span>';
+
         let statusBadge = '';
-        if (item.da_thu_hoi) {
+        if (item._type === 'nhan') {
+            // Nhận thiết bị: hiển thị tình trạng khi thu hồi
+            const tinhTrang = item.tinh_trang ? escapeHtml(item.tinh_trang) : 'N/A';
+            statusBadge = `<span class="status-badge safe" style="display:inline-block;">✅ Đã nhận</span><div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Tình trạng: <strong>${tinhTrang}</strong></div>`;
+        } else if (item.da_thu_hoi) {
             statusBadge = `
                 <span class="status-badge safe" style="display:inline-block; margin-bottom:4px;">Đã thu hồi</span>
                 <div style="font-size:11px; color:var(--text-muted); line-height:1.3;">
-                    Trả lúc: ${escapeHtml(item.thu_hoi_luc.substring(0, 16))}<br>
-                    Tình trạng: <strong>${escapeHtml(item.tinh_trang)}</strong>
+                    Trả lúc: ${escapeHtml((item.thu_hoi_luc || '').substring(0, 16))}<br>
+                    Tình trạng: <strong>${escapeHtml(item.tinh_trang || '')}</strong>
                 </div>
             `;
         } else {
@@ -3523,26 +3548,27 @@ function ccdcReportRender(list) {
 
         return `
             <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)';" onmouseout="this.style.background='transparent';">
-                <td style="padding: 14px 20px; font-size: 14px;">
-                    ${escapeHtml(item.timestamp.substring(0, 16))}
+                <td style="padding: 12px 16px; font-size: 13px;">${typeBadge}</td>
+                <td style="padding: 12px 16px; font-size: 13px;">
+                    ${escapeHtml((item.timestamp || '').substring(0, 16))}
                 </td>
-                <td style="padding: 14px 20px; font-size: 14px;">
-                    <strong style="color:var(--text-primary);">${escapeHtml(item.hoten)}</strong>
-                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Mã số: ${escapeHtml(item.msnv)}</div>
+                <td style="padding: 12px 16px; font-size: 13px;">
+                    <strong style="color:var(--text-primary);">${escapeHtml(item.hoten || '')}</strong>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Mã số: ${escapeHtml(item.msnv || '')}</div>
                 </td>
-                <td style="padding: 14px 20px; font-size: 14px;">
+                <td style="padding: 12px 16px; font-size: 13px;">
                     <div>Ca: ${escapeHtml(item.ca || 'N/A')}</div>
-                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">QL: ${escapeHtml(item.quanly || 'N/A')}</div>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">QL: ${escapeHtml(item.quanly || 'N/A')}</div>
                 </td>
-                <td style="padding: 14px 20px; font-size: 14px;">
-                    <strong style="color:var(--ghn-orange);">${escapeHtml(item.ma_thiet_bi)}</strong>
-                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">${escapeHtml(item.ten_thiet_bi)}</div>
+                <td style="padding: 12px 16px; font-size: 13px;">
+                    <strong style="color:var(--ghn-orange);">${escapeHtml(item.ma_thiet_bi || '')}</strong>
+                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${escapeHtml(item.ten_thiet_bi || '')}</div>
                 </td>
-                <td style="padding: 14px 20px; font-size: 14px;">
+                <td style="padding: 12px 16px; font-size: 13px;">
                     ${statusBadge}
                     ${operatorInfo}
                 </td>
-                <td style="padding: 14px 20px; font-size: 14px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${note}">
+                <td style="padding: 12px 16px; font-size: 13px; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${note}">
                     ${note}
                 </td>
             </tr>
