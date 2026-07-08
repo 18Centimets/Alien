@@ -33,7 +33,7 @@ var EMP_SHEET_NAME = 'DS nhân sự';
 var EMP_COL_MSNV   = 'ID';
 var EMP_COL_HOTEN  = 'Họ và tên';
 var EMP_COL_CA     = 'Trạng thái';         // Cột C — Đang làm việc / Đã nghỉ
-var EMP_COL_QUANLY = 'Sup/lead Tháng 5';   // Cột E — Quản lý trực tiếp (format: MSNV-Họ Tên)
+var EMP_COL_QUANLY = 'Sup/lead';             // Tìm cột chứa 'Sup/lead' — không hardcode tháng
 
 // Xử lý CORS và preflight request
 function doOptions(e) {
@@ -492,7 +492,7 @@ var CCDC_HEADER_ROW  = 1;   // 0-indexed: dòng 2 trong Sheet = header thật
 var CCDC_COL_MSNV    = 'ID';
 var CCDC_COL_HOTEN   = 'Họ và tên';
 var CCDC_COL_CA      = 'Trạng thái';          // Cột C — Đang làm việc / Đã nghỉ
-var CCDC_COL_QUANLY  = 'Sup/lead Tháng 5'; // Cột E — quản lý trực tiếp
+var CCDC_COL_QUANLY  = 'Sup/lead';           // Tìm cột chứa 'Sup/lead' — không hardcode tháng
 
 
 // Đọc sheet nhân viên và tạo bản đồ index cột theo tên header
@@ -508,7 +508,8 @@ function ccdcGetEmpMap() {
     msnv:   headers.indexOf(CCDC_COL_MSNV),
     hoten:  headers.indexOf(CCDC_COL_HOTEN),
     ca:     headers.indexOf(CCDC_COL_CA),
-    quanly: headers.indexOf(CCDC_COL_QUANLY)
+    // Tìm cột quản lý theo pattern 'Sup/lead' — tự động thích nghi khi đổi tên tháng
+    quanly: headers.findIndex(function(h) { return h.indexOf('Sup/lead') >= 0 || h.indexOf('Quản lý') >= 0; })
   };
   // Fallback hardcode theo vị trí thực tế đã xác nhận
   if (idx.msnv   < 0) idx.msnv   = 0;  // ID
@@ -880,7 +881,8 @@ function getEmployeeSheetMap() {
     msnv:   headers.indexOf(EMP_COL_MSNV),
     hoten:  headers.indexOf(EMP_COL_HOTEN),
     ca:     headers.indexOf(EMP_COL_CA),
-    quanly: headers.indexOf(EMP_COL_QUANLY)
+    // Tìm cột quản lý theo pattern 'Sup/lead' — tự động thích nghi khi đổi tên tháng
+    quanly: headers.findIndex(function(h) { return h.indexOf('Sup/lead') >= 0 || h.indexOf('Quản lý') >= 0; })
   };
   // Fallback theo vị trí cột thực tế đã xác nhận
   if (idx.msnv   < 0) idx.msnv   = 0;  // Cột A: ID
@@ -932,7 +934,7 @@ function handleAIChat(userMessage) {
   // Từ khóa kích hoạt tra cứu nhân viên
   var lookupKeywords = ['tra mã', 'tra cứu', 'tìm nhân viên', 'mã nv', 'msnv', 'nhân viên mã',
     'quản lý của', 'ca của', 'ai quản lý', 'thuộc team', 'thuộc nhóm', 'ai là trưởng'];
-  var hasMsnv = /\b3\d{6}\b/.test(userMessage); // Mã NV GHN: 7 số, bắt đầu bằng 3
+  var hasMsnv = /\b\d{7}\b/.test(userMessage); // Mã NV GHN: 7 chữ số
   var hasLookupIntent = hasMsnv || lookupKeywords.some(function(k) { return msg.indexOf(k) >= 0; });
 
   if (hasLookupIntent) {
@@ -943,8 +945,8 @@ function handleAIChat(userMessage) {
         var idx = map.idx;
         var found = [];
 
-        // Lấy tất cả mã NV xuất hiện trong câu hỏi
-        var msnvList = userMessage.match(/\b3\d{6}\b/g) || [];
+        // Lấy tất cả mã NV 7 chữ số xuất hiện trong câu hỏi
+        var msnvList = userMessage.match(/\b\d{7}\b/g) || [];
 
         for (var i = map.dataStart; i < data.length; i++) {
           var empMsnv = (data[i][idx.msnv] || '').toString().trim();
