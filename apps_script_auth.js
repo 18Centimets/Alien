@@ -1,15 +1,29 @@
 /**
  * ĐOẠN CODE NÀY DÙNG ĐỂ DÁN VÀO GOOGLE APPS SCRIPT
  * Hãy chép đè vào file Apps Script hiện tại của bạn và Deploy lại (New Deployment).
+ * 
+ * SAU KHI DÁN, VÀO: Project Settings → Script Properties → Thêm 2 key:
+ *   TELEGRAM_BOT_TOKEN = [token Telegram của anh]
+ *   GEMINI_API_KEY     = [API key Gemini của anh]
  */
 
 var scriptProperties = PropertiesService.getScriptProperties();
 var TELEGRAM_BOT_TOKEN = scriptProperties.getProperty('TELEGRAM_BOT_TOKEN');
 if (!TELEGRAM_BOT_TOKEN) {
-  // Tự động gán fallback để duy trì tính hoạt động ban đầu
+  // Fallback hardcode để đảm bảo Telegram OTP không bị đứt khi chưa cấu hình Properties
   scriptProperties.setProperty('TELEGRAM_BOT_TOKEN', '8690867509:AAF3M1JamzUJ4jYhDIeWYlpSGnmkUIdciQc');
   TELEGRAM_BOT_TOKEN = '8690867509:AAF3M1JamzUJ4jYhDIeWYlpSGnmkUIdciQc';
 }
+
+// GEMINI KEY — đọc từ Script Properties, KHÔNG hardcode trong code
+var GEMINI_API_KEY = scriptProperties.getProperty('GEMINI_API_KEY') || '';
+
+// Cấu hình sheet nhân viên
+var EMP_SHEET_NAME = 'DS nhân sự';
+var EMP_COL_MSNV   = 'Mã NV';
+var EMP_COL_HOTEN  = 'Họ và tên';
+var EMP_COL_CA     = 'Ca làm việc';
+var EMP_COL_QUANLY = 'Quản lý';
 
 // Xử lý CORS và preflight request
 function doOptions(e) {
@@ -26,6 +40,7 @@ function doGet(e) {
   var action = e.parameter.action;
   
   if (action === 'login') return handleLogin(e.parameter.msnv, e.parameter.password);
+  if (action === 'chat') return handleAIChat(e.parameter.message);
   if (action === 'google_login') return handleGoogleAuth(e.parameter.email);
   if (action === 'request_otp') return handleRequestOTP(e.parameter.msnv);
   if (action === 'verify_otp') return handleVerifyOTP(e.parameter.msnv, e.parameter.otp);
@@ -40,15 +55,15 @@ function doGet(e) {
   if (action === 'delete_user') return handleDeleteUser(e.parameter.msnv);
 
   // APIs cho CCDC Quản Lý Thiết Bị
+  if (action === 'get_employees')    return ccdcGetEmployees();
   if (action === 'lookup_employee')  return ccdcLookupEmployee(e.parameter.msnv);
   if (action === 'lookup_borrowed')  return ccdcLookupBorrowed(e.parameter.msnv);
   if (action === 'submit_giao')      return ccdcSubmitGiao(e.parameter);
   if (action === 'submit_nhan')      return ccdcSubmitNhan(e.parameter);
   if (action === 'get_today_log')    return ccdcGetTodayLog();
   if (action === 'ccdc_get_all_logs') return ccdcGetAllLogs();
-  if (action === 'debug_headers')    return ccdcDebugHeaders(); // tạm thời để fix tên cột
+  if (action === 'debug_headers')    return ccdcDebugHeaders();
   if (action === 'tts')              return handleTts(e.parameter.text);
-
 
   return createJsonResponse({ status: "error", message: "Invalid action" });
 }
@@ -779,3 +794,105 @@ function handleTts(text) {
 }
 
 
+// ============================================================
+// CCDC: Danh sách nhân viên (dùng cho đồng bộ LocalStorage)
+// ============================================================
+function getEmployeeSheetMap() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(EMP_SHEET_NAME);
+  if (!sheet) return { error: 'Không tìm thấy sheet "' + EMP_SHEET_NAME + '"' };
+  var data = sheet.getDataRange().getValues();
+  var headers = data[0].map(function(h) { return h.toString().trim(); });
+  var idx = {
+    msnv:   headers.indexOf(EMP_COL_MSNV),
+    hoten:  headers.indexOf(EMP_COL_HOTEN),
+    ca:     headers.indexOf(EMP_COL_CA),
+    quanly: headers.indexOf(EMP_COL_QUANLY)
+  };
+  if (idx.msnv   < 0) idx.msnv   = 0;
+  if (idx.hoten  < 0) idx.hoten  = 1;
+  if (idx.ca     < 0) idx.ca     = 2;
+  if (idx.quanly < 0) idx.quanly = 3;
+  return { data: data, idx: idx, headers: headers };
+}
+
+function ccdcGetEmployees() {
+  var map = getEmployeeSheetMap();
+  if (map.error) return createJsonResponse({ status: 'error', message: map.error });
+  var data = map.data; var idx = map.idx;
+  var list = [];
+  for (var i = 1; i < data.length; i++) {
+    var msnv = (data[i][idx.msnv] || '').toString().trim();
+    if (msnv) list.push({
+      msnv:   msnv,
+      hoten:  (data[i][idx.hoten]  || '').toString().trim(),
+      ca:     (data[i][idx.ca]     || '').toString().trim(),
+      quanly: (data[i][idx.quanly] || '').toString().trim()
+    });
+  }
+  return createJsonResponse({ status: 'success', employees: list });
+}
+
+// ============================================================
+// AI CHATBOT — Kỹ Sư Trưởng GHN Hưng Yên (Gemini 2.5 Flash)
+// ============================================================
+function handleAIChat(userMessage) {
+  if (!GEMINI_API_KEY) {
+    return createJsonResponse({ status: 'success', reply: 'Báo cáo Sếp, hệ thống AI chưa được kích hoạt. Sếp vào Project Settings → Script Properties → thêm GEMINI_API_KEY nhé!' });
+  }
+
+  var khoData = 'BÁO CÁO DATA TỔNG HỢP DỰ ÁN KHO TRUNG CHUYỂN GHN - HƯNG YÊN (GIAI ĐOẠN 1)\n' +
+    'Tên dự án: Trung tâm Phân loại, Đóng gói GHN-Hưng Yên (Giai đoạn 1)\n' +
+    'Địa điểm: Lô B11, B12, B13, B24, B25, B26 - KCN số 03, Xã Xuân Trúc, Tỉnh Hưng Yên.\n\n' +
+    '1. Thông tin quy mô:\n' +
+    '- Tổng diện tích đất dự án: 85.500 m2 (8.55 ha).\n' +
+    '- Diện tích Sorting Building: 25.382 m2.\n' +
+    '- Khu Inbound/Outbound: Khu 1 (27 xe tải, 20 container), Khu 2 (42 xe tải, 17 container, 19 xe tải).\n\n' +
+    '2. Hạ tầng kỹ thuật:\n' +
+    '- Móng: Cọc PHC D300-180 (12-13m). Móng điển hình 1500x1500x800mm.\n' +
+    '- Cột 300x400mm, thép chủ 8D20. Khoảng cách cột: Dọc 7.5m, Ngang 6m.\n' +
+    '- Dầm: 300x600mm, thép chủ 4D20.\n' +
+    '- Cửa Dock leveler: 6 cửa (7x5m), 2 cửa (7.5x3m), 1 cửa (16.5x3m).\n\n' +
+    '3. Thiết bị CCDC chủ lực:\n' +
+    '- PDA Zebra: 250 cái (hoạt động: 210, sửa: 40).\n' +
+    '- Xe nâng điện Toyota: 12 xe (hoạt động: 10, bảo trì: 2).\n' +
+    '- Xe nâng tay OPK: 45 xe. Lồng hàng xanh navy: 1.200 lồng.\n\n' +
+    '4. Nhân sự:\n' +
+    '- Tổng: 420 người. Ca 1 (06-14h): 110 NV - TC Nguyễn Hoàng Nam.\n' +
+    '- Ca 2 (14-22h): 140 NV - TC Trần Quốc Anh. Ca 3 (22-06h): 170 NV - TC Lê Minh Trí.\n' +
+    '- Ban QL: 15 người. Phó phòng KTC: Nguyễn Văn Bảo.\n\n' +
+    '5. Các SOP chính:\n' +
+    '- SOP-01: Xử lý sự cố thiết bị (RCA 5-Why), lập biên bản trong 15 phút.\n' +
+    '- SOP-02: Kiểm tra hạ tầng an toàn đầu mỗi ca.\n' +
+    '- SOP-03: Giao nhận CCDC < 3 giây/giao dịch bằng QR.\n\n' +
+    '6. Dự án đang triển khai:\n' +
+    '- SPARK (tự động hóa băng chuyền): 85% hoàn thành.\n' +
+    '- Nâng cấp PCCC: đang nghiệm thu pha 2, hoàn thành dự kiến 25/08/2026.\n' +
+    '- Xanh hóa KTC (tái sử dụng màng co): giảm 18% rác thải nhựa tại Ca 2.';
+
+  var systemPrompt = 'Bạn là Kỹ sư trưởng đầy kinh nghiệm chuyên quản lý hạ tầng và vận hành logistics của Giao Hàng Nhanh (GHN).\n' +
+    'Nhiệm vụ: tư vấn, giải đáp mọi vấn đề kỹ thuật, vận hành kho bãi, máy móc, và quản lý nhân sự.\n' +
+    'Khi hỏi về KTC Hưng Yên, tham khảo dữ liệu sau:\n--- DỮ LIỆU KHO HƯNG YÊN ---\n' + khoData + '\n---\n' +
+    'Quy tắc giao tiếp: xưng "Tôi", gọi người dùng là "Sếp". Trả lời súc tích, gãy gọn, dùng Markdown.';
+
+  var payload = {
+    'contents': [{ 'role': 'user', 'parts': [{ 'text': systemPrompt + '\n\nSếp hỏi: ' + userMessage }] }],
+    'generationConfig': { 'temperature': 0.3 }
+  };
+  var options = { 'method': 'post', 'contentType': 'application/json', 'payload': JSON.stringify(payload), 'muteHttpExceptions': true };
+
+  try {
+    var response = UrlFetchApp.fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + GEMINI_API_KEY, options);
+    var json = JSON.parse(response.getContentText());
+    if (json.candidates && json.candidates.length > 0) {
+      return createJsonResponse({ status: 'success', reply: json.candidates[0].content.parts[0].text });
+    }
+    var errMsg = json.error ? (json.error.message || json.error).toString() : 'Lỗi không xác định.';
+    if (errMsg.indexOf('Quota exceeded') !== -1 || errMsg.indexOf('rate-limit') !== -1) {
+      return createJsonResponse({ status: 'success', reply: 'Sếp hỏi nhanh quá, hệ thống chưa kịp phản hồi (giới hạn 15 câu/phút). Sếp đợi 5-10 giây rồi hỏi lại nhé!' });
+    }
+    return createJsonResponse({ status: 'success', reply: 'Lỗi API Gemini: ' + errMsg });
+  } catch (error) {
+    return createJsonResponse({ status: 'success', reply: 'Lỗi hệ thống AI: ' + error.toString() });
+  }
+}

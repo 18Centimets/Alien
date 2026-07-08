@@ -150,20 +150,54 @@ app.post('/api/giao', requireAuth, (req, res) => {
 app.post('/api/nhan', requireAuth, (req, res) => {
     const { msnv, asset_qr, status, note, row_index, operator } = req.body;
     
-    db.run("UPDATE transactions SET returned = 1 WHERE id = ?", [row_index], (err) => {
-        if (err) return res.status(500).json({ status: 'error' });
+    // Chuẩn hóa trạng thái từ dropdown tiếng Việt sang DB
+    let assetStatus = 'NORMAL';
+    if (!status || status === '' || status === 'Bình Thường' || status === 'Hoạt động tốt') assetStatus = 'NORMAL';
+    else if (status === 'Lỗi/Hư hỏng' || status === 'Hỏng') assetStatus = 'BROKEN';
+    else if (status === 'Báo Mất' || status === 'Mất') assetStatus = 'LOST';
+    else if (status === 'Bảo hành') assetStatus = 'WARRANTY';
+    else if (status === 'Cần sạc pin') assetStatus = 'NORMAL'; // Ghi chú nhưng vẫn bình thường
 
-        let assetStatus = 'NORMAL';
-        if (status === 'Lỗi/Hư hỏng') assetStatus = 'BROKEN';
-        if (status === 'Báo Mất') assetStatus = 'LOST';
-
-        db.run("UPDATE assets SET status = ? WHERE qr_code = ?", [assetStatus, asset_qr], (err) => {
-            db.run("INSERT INTO transactions (asset_qr, msnv, action, returned, note, operator) VALUES (?, ?, 'RETURN', 1, ?, ?)",
-                [asset_qr, msnv, note || '', operator || 'Unknown'], function(err) {
-                    res.json({ status: 'success' });
+    // Hàm thực hiện UPDATE sau khi tìm được transaction ID
+    function doReturn(txId) {
+        db.run("UPDATE transactions SET returned = 1, return_time = datetime('now', '+7 hours'), lifecycle_status = ? WHERE id = ?",
+            [status || 'Bình Thường', txId], (err) => {
+            if (err) {
+                console.error('[/api/nhan] UPDATE error:', err);
+                return res.status(500).json({ status: 'error', message: 'Lỗi cập nhật giao dịch.' });
+            }
+            db.run("UPDATE assets SET status = ? WHERE qr_code = ?", [assetStatus, asset_qr], (err2) => {
+                if (err2) console.error('[/api/nhan] asset UPDATE error:', err2);
+                db.run("INSERT INTO transactions (asset_qr, msnv, action, returned, note, operator) VALUES (?, ?, 'RETURN', 1, ?, ?)",
+                    [asset_qr, msnv, note || '', operator || 'Unknown'], function(err3) {
+                        if (err3) console.error('[/api/nhan] INSERT RETURN error:', err3);
+                        res.json({ status: 'success', message: 'Thu hồi thiết bị thành công!' });
+                });
             });
         });
-    });
+    }
+
+    // Thử tìm bằng row_index trước, nếu không thấy thì fallback theo asset_qr + msnv
+    if (row_index) {
+        db.get("SELECT id FROM transactions WHERE id = ? AND returned = 0", [row_index], (err, tx) => {
+            if (tx) {
+                doReturn(tx.id);
+            } else {
+                // Fallback: tìm bản ghi BORROW chưa trả theo asset_qr
+                db.get("SELECT id FROM transactions WHERE asset_qr = ? AND action = 'BORROW' AND returned = 0 ORDER BY id DESC LIMIT 1",
+                    [asset_qr], (err2, tx2) => {
+                    if (!tx2) return res.json({ status: 'error', message: 'Không tìm thấy bản ghi mượn tương ứng.' });
+                    doReturn(tx2.id);
+                });
+            }
+        });
+    } else {
+        db.get("SELECT id FROM transactions WHERE asset_qr = ? AND action = 'BORROW' AND returned = 0 ORDER BY id DESC LIMIT 1",
+            [asset_qr], (err, tx) => {
+            if (!tx) return res.json({ status: 'error', message: 'Không tìm thấy bản ghi mượn tương ứng.' });
+            doReturn(tx.id);
+        });
+    }
 });
 
 // 6. Lấy lịch sử giao dịch gần đây

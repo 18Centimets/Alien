@@ -2073,8 +2073,8 @@ function initChatbot() {
         scrollToBottom();
 
         try {
-            // Call Apps Script Backend
-            const response = await fetch(`${REPORT_API_URL}?action=chat&message=${encodeURIComponent(text)}`);
+            // Call Apps Script Backend (Integrated V2)
+            const response = await fetch(`${APPS_SCRIPT_URL}?action=chat&message=${encodeURIComponent(text)}`);
             const data = await response.json();
             
             removeElement(typingId);
@@ -2365,7 +2365,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = `SỰ CỐ KHẨN CẤP: Tôi vừa phát hiện sự cố tại khu vực: ${location}. Mức độ: ${priorityText}. Mô tả hiện tượng: ${desc}. Là Kỹ Sư Trưởng, hãy đánh giá mức độ rủi ro và đưa ra 3 bước sơ cứu/xử lý tạm thời ngay lập tức trước khi đội bảo trì đến. Trình bày dưới dạng gạch đầu dòng ngắn gọn.`;
             
             try {
-                const response = await fetch(`${REPORT_API_URL}?action=chat&message=${encodeURIComponent(message)}`, {
+                const response = await fetch(`${APPS_SCRIPT_URL}?action=chat&message=${encodeURIComponent(message)}`, {
                     method: 'GET'
                 });
                 
@@ -2418,7 +2418,6 @@ const allMenus = [
     { id: 'forklifts', name: 'Nhật Ký Xe Nâng' },
     { id: 'infra-health', name: 'Sức Khỏe Kho' },
     { id: 'purchases', name: 'Tình Trạng Đặt Mua' },
-    { id: 'transport-map', name: 'Bản Đồ Vận Tải' },
     { id: 'ccdc-device', name: 'CCDC Thiết Bị' },
     { id: 'ccdc-report', name: 'Quản Lý Thiết Bị' }
 ];
@@ -2705,15 +2704,58 @@ let ccdc_cacheLoaded = false;
 async function ccdcPreloadEmployees() {
     if (ccdc_cacheLoaded) return;
     try {
-        console.log("[CCDC] Bắt đầu tải trước danh sách nhân viên...");
+        const cachedStr = localStorage.getItem('ccdc_employees');
+        const syncTimeStr = localStorage.getItem('ccdc_employees_time');
+        
+        if (cachedStr) {
+            ccdc_employeesCache = JSON.parse(cachedStr);
+            ccdc_cacheLoaded = true;
+            console.log(`[CCDC] Đã load ${ccdc_employeesCache.length} nhân viên từ LocalStorage.`);
+            const statusEl = document.getElementById('ccdc-sync-status');
+            if (statusEl && syncTimeStr) {
+                statusEl.textContent = `Cập nhật: ${syncTimeStr}`;
+            }
+            return;
+        }
+        await ccdcSyncEmployees();
+    } catch(e) {
+        console.warn("[CCDC] Lỗi khi tải trước danh sách nhân viên:", e);
+    }
+}
+
+async function ccdcSyncEmployees() {
+    const btn = document.getElementById('ccdc-sync-btn');
+    const statusEl = document.getElementById('ccdc-sync-status');
+    if (btn) btn.innerHTML = `<i data-lucide="loader-2" class="spin" style="width:14px; height:14px;"></i> Đang tải...`;
+    if (statusEl) statusEl.textContent = "Đang tải dữ liệu...";
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    try {
+        console.log("[CCDC] Bắt đầu đồng bộ danh sách nhân viên từ Apps Script...");
         const res = await ccdcApiCall({ action: 'get_employees' });
         if (res && res.status === 'success' && Array.isArray(res.employees)) {
             ccdc_employeesCache = res.employees;
             ccdc_cacheLoaded = true;
-            console.log(`[CCDC] Đã tải trước ${ccdc_employeesCache.length} nhân viên vào bộ nhớ đệm.`);
+            
+            localStorage.setItem('ccdc_employees', JSON.stringify(res.employees));
+            
+            const now = new Date();
+            const timeStr = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+            localStorage.setItem('ccdc_employees_time', timeStr);
+
+            console.log(`[CCDC] Đã đồng bộ ${ccdc_employeesCache.length} nhân viên.`);
+            if (statusEl) statusEl.textContent = `Cập nhật: ${timeStr}`;
+            ccdcToast(`Đã đồng bộ ${ccdc_employeesCache.length} nhân sự`, 'success');
+        } else {
+            throw new Error(res.message || "Lỗi không xác định");
         }
     } catch(e) {
-        console.warn("[CCDC] Lỗi khi tải trước danh sách nhân viên:", e);
+        console.warn("[CCDC] Lỗi đồng bộ:", e);
+        if (statusEl) statusEl.textContent = "Lỗi đồng bộ!";
+        ccdcToast(`Lỗi đồng bộ: ${e.message}`, 'error');
+    } finally {
+        if (btn) btn.innerHTML = `<i data-lucide="refresh-cw" style="width:14px; height:14px;"></i> Đồng bộ nhân sự`;
+        if (typeof lucide !== 'undefined') lucide.createIcons();
     }
 }
 
@@ -3357,76 +3399,42 @@ function ccdcToast(msg, type='success') {
 }
 
 async function ccdcApiCall(params) {
-    const baseUrl = 'http://localhost:5500/api';
-    const action = params.action;
-    
-    let url = '';
-    let method = 'GET';
-    let body = null;
-    let headers = {
-        'x-user-role': 'TRUONGCA' // Tạm thời hardcode role để test
-    };
+    const baseUrl = (typeof CCDC_API_URL !== 'undefined' && CCDC_API_URL)
+        ? CCDC_API_URL
+        : (typeof APPS_SCRIPT_URL !== 'undefined' ? APPS_SCRIPT_URL : '');
+    if (!baseUrl) throw new Error('Chưa cấu hình CCDC_API_URL');
 
-    if (action === 'get_employees') {
-        url = `${baseUrl}/employees`;
-    } else if (action === 'get_today_log') {
-        url = `${baseUrl}/recent`;
-    } else if (action === 'lookup_employee') {
-        url = `${baseUrl}/employee/${encodeURIComponent(params.msnv)}`;
-    } else if (action === 'lookup_borrowed') {
-        url = `${baseUrl}/borrowed/${encodeURIComponent(params.msnv)}`;
-    } else if (action === 'submit_giao') {
-        url = `${baseUrl}/giao`;
-        method = 'POST';
-        headers['Content-Type'] = 'application/json';
-        body = JSON.stringify({
-            msnv: params.msnv,
-            asset_qr: params.thiet_bi_id,
-            note: params.ghi_chu,
-            operator: params.nguoi_thao_tac || 'Unknown'
-        });
-    } else if (action === 'submit_nhan') {
-        url = `${baseUrl}/nhan`;
-        method = 'POST';
-        headers['Content-Type'] = 'application/json';
-        body = JSON.stringify({
-            msnv: params.msnv,
-            asset_qr: params.thiet_bi_id,
-            status: params.tinh_trang,
-            note: params.ghi_chu,
-            row_index: params.row_index,
-            operator: params.nguoi_thao_tac || 'Unknown'
-        });
-    } else if (action === 'tts') {
-        url = `${baseUrl}/tts`;
-        method = 'POST';
-        headers['Content-Type'] = 'application/json';
-        body = JSON.stringify({ text: params.text });
-    } else {
-        throw new Error('Action không được hỗ trợ ở V2: ' + action);
+    let qsParams = { ...params };
+    if (params.action === 'submit_giao') {
+        qsParams.ma_thiet_bi = params.thiet_bi_id;
+        qsParams.ten_thiet_bi = 'Thiết bị ' + params.thiet_bi_id;
+        if (typeof ccdc_empData !== 'undefined' && ccdc_empData) {
+            qsParams.hoten = ccdc_empData.hoten;
+            qsParams.ca = ccdc_empData.ca;
+            qsParams.quanly = ccdc_empData.quanly;
+        }
+    } else if (params.action === 'submit_nhan') {
+        qsParams.ma_thiet_bi = params.thiet_bi_id;
     }
+
+    const qs = Object.entries(qsParams)
+        .filter(([k, v]) => v !== undefined && v !== null)
+        .map(([k, v]) => k + '=' + encodeURIComponent(String(v)))
+        .join('&');
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 15000);
     try {
-        const fetchOptions = {
-            method: method,
-            headers: headers,
+        const res = await fetch(baseUrl + '?' + qs, {
+            redirect: 'follow',
             signal: controller.signal
-        };
-        if (body) fetchOptions.body = body;
-
-        const res = await fetch(url, fetchOptions);
+        });
         clearTimeout(timeoutId);
-        if (!res.ok) {
-            const errBody = await res.json().catch(() => ({}));
-            if (errBody.message) throw new Error(errBody.message);
-            throw new Error('HTTP ' + res.status);
-        }
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
     } catch(e) {
         clearTimeout(timeoutId);
-        if (e.name === 'AbortError') throw new Error('Timeout — máy chủ phản hồi chậm');
+        if (e.name === 'AbortError') throw new Error('Timeout — kiểm tra kết nối mạng');
         throw e;
     }
 }
