@@ -16,7 +16,7 @@ function escapeHtml(str) {
         .replace(/'/g, '&#039;');
 }
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNmWrYPRI9ggtWkYzjMWdHqnn6TUuPR4vYPozpVQvTDGKGKj49pAIuH8YwGXFNsJCj/exec'; // Auth + CCDC + AI API
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyZUWjTuJ41Q1162sgV49ON8i6Kinz5Y6BxR2nRrzEvGVzEWaFMoUCussregzXdjY_/exec'; // Auth + CCDC + AI — trỏ vào Sheet chính
 const REPORT_API_URL  = 'https://script.google.com/macros/s/AKfycbzQB5zWptOlgE0Wt5pfhopMVN2GEZ18ConPuvT8HuRHXqUaJ1_nPV-MmmZk7Clxp-jo/exec'; // Data Báo Cáo
 const CCDC_API_URL    = APPS_SCRIPT_URL; // Dùng chung Apps Script URL
 

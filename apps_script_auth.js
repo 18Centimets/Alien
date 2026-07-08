@@ -7,6 +7,16 @@
  *   GEMINI_API_KEY     = [API key Gemini của anh]
  */
 
+// ===========================================================
+// CẤU HÌNH CHÍNH — ID file Google Sheet chứa toàn bộ data
+// ===========================================================
+var SPREADSHEET_ID = '1RFcbHT5HYnghUIkYkBmDJn1ZVvcFN7seZ4HFoIbO9nY';
+
+// Hàm helper: luôn mở đúng file Sheet của anh Bảo (standalone script)
+function getSpreadsheet() {
+  return SpreadsheetApp.openById(SPREADSHEET_ID);
+}
+
 var scriptProperties = PropertiesService.getScriptProperties();
 var TELEGRAM_BOT_TOKEN = scriptProperties.getProperty('TELEGRAM_BOT_TOKEN');
 if (!TELEGRAM_BOT_TOKEN) {
@@ -73,7 +83,7 @@ function createJsonResponse(obj) {
 }
 
 function getAuthSheet() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = getSpreadsheet();
   var sheet = ss.getSheetByName("Tài khoản");
   
   // Tự động tạo Tab nếu chưa có
@@ -108,10 +118,27 @@ function handleLogin(msnv, password) {
 
   var sheet = getAuthSheet();
   var data = sheet.getDataRange().getValues();
+  
+  // Tự động tìm cột "Trạng thái" dựa vào header — tương thích cả sheet cũ lấn mới
+  var headers = data[0].map(function(h) { return h.toString().trim(); });
+  var statusCol = headers.indexOf('Trạng thái');
+  if (statusCol < 0) statusCol = 4; // fallback: format mới (cột 4)
+  var roleCol = headers.indexOf('Phân quyền');
+  if (roleCol < 0) roleCol = statusCol + 1;
+  var permCol = headers.indexOf('Quyền Menu');
+  if (permCol < 0) permCol = 9;
+  var fullnameCol = headers.indexOf('Họ Tên');
+  if (fullnameCol < 0) fullnameCol = 2;
+
   for (var i = 1; i < data.length; i++) {
     if (data[i][0].toString() === msnv && data[i][1].toString() === password) {
-      if (data[i][4].toString() === "Đã duyệt") {
-        return createJsonResponse({ status: 'success', msnv: data[i][0].toString(), message: 'Xác thực thành công. Vui lòng xác thực OTP.' });
+      var status = data[i][statusCol] ? data[i][statusCol].toString() : '';
+      if (status === 'Đã duyệt') {
+        return createJsonResponse({ 
+          status: 'success', 
+          msnv: data[i][0].toString(),
+          message: 'Xác thực thành công. Vui lòng xác thực OTP.'
+        });
       } else {
         return createJsonResponse({ status: 'error', message: 'Tài khoản đang bị khóa!' });
       }
@@ -123,9 +150,17 @@ function handleLogin(msnv, password) {
 function handleGoogleAuth(email) {
   var sheet = getAuthSheet();
   var data = sheet.getDataRange().getValues();
+  var headers = data[0].map(function(h) { return h.toString().trim(); });
+  var statusCol = headers.indexOf('Trạng thái');
+  if (statusCol < 0) statusCol = 4;
+  var emailCol = headers.indexOf('Email');
+  if (emailCol < 0) emailCol = 3;
+
   for (var i = 1; i < data.length; i++) {
-    if (data[i][3].toString().toLowerCase() === email.toLowerCase()) {
-      if (data[i][4].toString() === "Đã duyệt") {
+    var sheetEmail = data[i][emailCol] ? data[i][emailCol].toString() : '';
+    if (sheetEmail.toLowerCase() === email.toLowerCase()) {
+      var status = data[i][statusCol] ? data[i][statusCol].toString() : '';
+      if (status === 'Đã duyệt') {
         return createJsonResponse({ status: 'success', msnv: data[i][0].toString(), message: 'Xác thực Google thành công. Vui lòng xác thực OTP.' });
       } else {
         return createJsonResponse({ status: 'error', message: 'Tài khoản đang bị khóa!' });
@@ -461,7 +496,7 @@ var CCDC_COL_QUANLY  = 'Sup/lead Tháng 5'; // Cột E — quản lý trực ti�
 
 // Đọc sheet nhân viên và tạo bản đồ index cột theo tên header
 function ccdcGetEmpMap() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = getSpreadsheet();
   var sheet = ss.getSheetByName(CCDC_EMP_SHEET);
   if (!sheet) return { error: 'Không tìm thấy sheet "' + CCDC_EMP_SHEET + '"' };
   var data = sheet.getDataRange().getValues();
@@ -518,7 +553,7 @@ function ccdcLookupEmployee(msnv) {
 // API: Tìm thiết bị đang mượn của 1 nhân viên
 function ccdcLookupBorrowed(msnv) {
   if (!msnv) return createJsonResponse({ status: 'error', message: 'Thiếu mã NV' });
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = getSpreadsheet();
   var sheet = ccdcGetOrCreateGiaoSheet(ss);
   var data = sheet.getDataRange().getValues();
   var q = msnv.toString().trim().toLowerCase();
@@ -558,7 +593,7 @@ function ccdcSubmitGiao(params) {
   var lock = LockService.getScriptLock();
   try {
     lock.waitLock(15000);
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var ss = getSpreadsheet();
     var sheet = ccdcGetOrCreateGiaoSheet(ss);
     var ts = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy HH:mm:ss');
     sheet.appendRow([ts, msnv, hoten, ca, quanly, ma, ten, 'false', '', '', ghi, nguoi_thao_tac]);
@@ -582,7 +617,7 @@ function ccdcSubmitNhan(params) {
   var lock = LockService.getScriptLock();
   try {
     lock.waitLock(15000);
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var ss = getSpreadsheet();
     var giaoSheet = ccdcGetOrCreateGiaoSheet(ss);
     var ts = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy HH:mm:ss');
     
@@ -655,7 +690,7 @@ function ccdcSubmitNhan(params) {
 
 // API: Log giao dịch hôm nay
 function ccdcGetTodayLog() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = getSpreadsheet();
   var sheet = ccdcGetOrCreateGiaoSheet(ss);
   var data = sheet.getDataRange().getValues();
   var today = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy');
@@ -683,7 +718,7 @@ function ccdcGetTodayLog() {
 
 // API: Lấy toàn bộ lịch sử giao nhận CCDC thiết bị
 function ccdcGetAllLogs() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = getSpreadsheet();
   var sheet = ccdcGetOrCreateGiaoSheet(ss);
   var data = sheet.getDataRange().getValues();
   var log = [];
@@ -739,7 +774,7 @@ function ccdcGetOrCreateNhanSheet(ss) {
 
 // DEBUG: Đọc tên cột thực tế trong "DS nhân sự" để fix config
 function ccdcDebugHeaders() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = getSpreadsheet();
   var allSheets = ss.getSheets().map(function(s) { return s.getName(); });
   var sheet = ss.getSheetByName(CCDC_EMP_SHEET);
   if (!sheet) {
@@ -798,7 +833,7 @@ function handleTts(text) {
 // CCDC: Danh sách nhân viên (dùng cho đồng bộ LocalStorage)
 // ============================================================
 function getEmployeeSheetMap() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var ss = getSpreadsheet();
   var sheet = ss.getSheetByName(EMP_SHEET_NAME);
   if (!sheet) return { error: 'Không tìm thấy sheet "' + EMP_SHEET_NAME + '"' };
   var data = sheet.getDataRange().getValues();
