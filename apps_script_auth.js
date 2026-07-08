@@ -916,6 +916,76 @@ function handleAIChat(userMessage) {
     return createJsonResponse({ status: 'success', reply: 'Báo cáo Sếp, hệ thống AI chưa được kích hoạt. Sếp vào Project Settings → Script Properties → thêm GEMINI_API_KEY nhé!' });
   }
 
+  // =====================================================================
+  // BƯỚC 1: TRA CỨU NHÂN VIÊN THÔNG MINH (Real-time từ Google Sheet)
+  // =====================================================================
+  var employeeContext = '';
+  var msg = userMessage.toLowerCase();
+
+  // Từ khóa kích hoạt tra cứu nhân viên
+  var lookupKeywords = ['tra mã', 'tra cứu', 'tìm nhân viên', 'mã nv', 'msnv', 'nhân viên mã',
+    'quản lý của', 'ca của', 'ai quản lý', 'thuộc team', 'thuộc nhóm', 'ai là trưởng'];
+  var hasMsnv = /\b3\d{6}\b/.test(userMessage); // Mã NV GHN: 7 số, bắt đầu bằng 3
+  var hasLookupIntent = hasMsnv || lookupKeywords.some(function(k) { return msg.indexOf(k) >= 0; });
+
+  if (hasLookupIntent) {
+    try {
+      var map = getEmployeeSheetMap();
+      if (!map.error) {
+        var data = map.data;
+        var idx = map.idx;
+        var found = [];
+
+        // Lấy tất cả mã NV xuất hiện trong câu hỏi
+        var msnvList = userMessage.match(/\b3\d{6}\b/g) || [];
+
+        for (var i = map.dataStart; i < data.length; i++) {
+          var empMsnv = (data[i][idx.msnv] || '').toString().trim();
+          var empHoten = (data[i][idx.hoten] || '').toString().trim();
+          if (!empMsnv || empMsnv === 'ID') continue;
+
+          var matched = false;
+          // Ưu tiên: match theo mã NV
+          if (msnvList.length > 0) {
+            for (var m = 0; m < msnvList.length; m++) {
+              if (empMsnv === msnvList[m]) { matched = true; break; }
+            }
+          }
+
+          if (matched) {
+            var rawQ = (data[i][idx.quanly] || '').toString().trim();
+            var quanlyName = rawQ.indexOf('-') > 0 ? rawQ.substring(rawQ.indexOf('-') + 1).trim() : rawQ;
+            found.push({
+              msnv: empMsnv,
+              hoten: empHoten,
+              trangthai: (data[i][idx.ca] || '').toString().trim(),
+              quanly: quanlyName
+            });
+            if (found.length >= 10) break;
+          }
+        }
+
+        if (found.length > 0) {
+          employeeContext = '\n\n=== DỮ LIỆU NHÂN VIÊN REAL-TIME TỪ HỆ THỐNG ===\n';
+          for (var f = 0; f < found.length; f++) {
+            employeeContext += '• MSNV: ' + found[f].msnv +
+              ' | Họ tên: ' + found[f].hoten +
+              ' | Trạng thái: ' + found[f].trangthai +
+              ' | Quản lý trực tiếp: ' + (found[f].quanly || 'Chưa có thông tin') + '\n';
+          }
+          employeeContext += '=== KẾT THÚC DỮ LIỆU NHÂN VIÊN ===';
+        } else if (hasMsnv) {
+          employeeContext = '\n\n=== TRA CỨU NHÂN VIÊN ===\nKhông tìm thấy nhân viên nào khớp với mã ' + (userMessage.match(/\b3\d{6}\b/g) || []).join(', ') + ' trong hệ thống.\n===';
+        }
+      }
+    } catch(e) {
+      employeeContext = '\n\n[Lưu ý: Không thể truy xuất dữ liệu nhân viên lúc này]';
+    }
+  }
+
+  // =====================================================================
+  // BƯỚC 2: DỮ LIỆU KHO + SYSTEM PROMPT
+  // =====================================================================
   var khoData = 'BÁO CÁO DATA TỔNG HỢP DỰ ÁN KHO TRUNG CHUYỂN GHN - HƯNG YÊN (GIAI ĐOẠN 1)\n' +
     'Tên dự án: Trung tâm Phân loại, Đóng gói GHN-Hưng Yên (Giai đoạn 1)\n' +
     'Địa điểm: Lô B11, B12, B13, B24, B25, B26 - KCN số 03, Xã Xuân Trúc, Tỉnh Hưng Yên.\n\n' +
@@ -948,8 +1018,13 @@ function handleAIChat(userMessage) {
   var systemPrompt = 'Bạn là Kỹ sư trưởng đầy kinh nghiệm chuyên quản lý hạ tầng và vận hành logistics của Giao Hàng Nhanh (GHN).\n' +
     'Nhiệm vụ: tư vấn, giải đáp mọi vấn đề kỹ thuật, vận hành kho bãi, máy móc, và quản lý nhân sự.\n' +
     'Khi hỏi về KTC Hưng Yên, tham khảo dữ liệu sau:\n--- DỮ LIỆU KHO HƯNG YÊN ---\n' + khoData + '\n---\n' +
-    'Quy tắc giao tiếp: xưng "Tôi", gọi người dùng là "Sếp". Trả lời súc tích, gãy gọn, dùng Markdown.';
+    'Khi có DỮ LIỆU NHÂN VIÊN REAL-TIME ở dưới, hãy dùng chính xác dữ liệu đó để trả lời, không tự bịa thêm.\n' +
+    'Quy tắc giao tiếp: xưng "Tôi", gọi người dùng là "Sếp". Trả lời súc tích, gãy gọn, dùng Markdown.' +
+    employeeContext;
 
+  // =====================================================================
+  // BƯỚC 3: GỌI GEMINI API
+  // =====================================================================
   var payload = {
     'contents': [{ 'role': 'user', 'parts': [{ 'text': systemPrompt + '\n\nSếp hỏi: ' + userMessage }] }],
     'generationConfig': { 'temperature': 0.3 }
