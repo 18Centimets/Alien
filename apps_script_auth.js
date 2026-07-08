@@ -491,7 +491,7 @@ var CCDC_EMP_SHEET   = 'DS nhân sự';
 var CCDC_HEADER_ROW  = 1;   // 0-indexed: dòng 2 trong Sheet = header thật
 var CCDC_COL_MSNV    = 'ID';
 var CCDC_COL_HOTEN   = 'Họ và tên';
-var CCDC_COL_CA      = 'Ca làm việc đăng ký';
+var CCDC_COL_CA      = 'Trạng thái';          // Cột C — Đang làm việc / Đã nghỉ
 var CCDC_COL_QUANLY  = 'Sup/lead Tháng 5'; // Cột E — quản lý trực tiếp
 
 
@@ -513,7 +513,7 @@ function ccdcGetEmpMap() {
   // Fallback hardcode theo vị trí thực tế đã xác nhận
   if (idx.msnv   < 0) idx.msnv   = 0;  // ID
   if (idx.hoten  < 0) idx.hoten  = 1;  // Họ và tên
-  if (idx.ca     < 0) idx.ca     = 3;  // Ca làm việc đăng ký
+  if (idx.ca     < 0) idx.ca     = 2;  // Trạng thái (Đang làm việc/Đã nghỉ)
   if (idx.quanly < 0) idx.quanly = 4;  // Sup/lead Tháng 5 (cột E)
   // Data bắt đầu từ dòng sau header (dòng 3 trong Sheet = index 2)
   return { data: data, idx: idx, headers: headers, dataStart: CCDC_HEADER_ROW + 1 };
@@ -751,7 +751,14 @@ function ccdcGetAllLogs() {
 function ccdcGetAllNhanLogs() {
   var ss = getSpreadsheet();
   var sheet = ss.getSheetByName('CCDC_Nhan');
-  if (!sheet) return createJsonResponse({ status: 'error', message: 'Không tìm thấy sheet CCDC_Nhan' });
+  // Tự tạo sheet nếu chưa tồn tại (giống cách CCDC_Giao hoạt động)
+  if (!sheet) {
+    sheet = ss.insertSheet('CCDC_Nhan');
+    sheet.appendRow(['Thời Gian Thu Hồi','Mã NV','Họ Tên','Ca Làm Việc','Quản Lý','Mã Thiết Bị','Tên Thiết Bị','Tình Trạng','Ghi Chú','Người Thao Tác']);
+    sheet.getRange(1,1,1,10).setFontWeight('bold').setBackground('#2ecc71').setFontColor('white');
+    sheet.setFrozenRows(1);
+    return createJsonResponse({ status: 'success', log: [] }); // Sheet mới, chưa có dữ liệu
+  }
   var data = sheet.getDataRange().getValues();
   var log = [];
   // Cấu trúc CCDC_Nhan: [Thời Gian Thu Hồi, Mã NV, Họ Tên, Ca Làm Việc, Quản Lý, Mã Thiết Bị, Tên Thiết Bị, Tình Trạng, Ghi Chú, Người Thao Tác]
