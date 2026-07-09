@@ -804,48 +804,46 @@ function ccdcGetTodayLog() {
   var ss = getSpreadsheet();
   var sheet = ccdcGetOrCreateGiaoSheet(ss);
   var data = sheet.getDataRange().getValues();
-  
-  // So sánh bằng Date object — không phụ thuộc locale/format string
-  var now = new Date();
-  var todayYear  = now.getFullYear();
-  var todayMonth = now.getMonth();
-  var todayDate  = now.getDate();
-  
+
+  // Dùng ISO yyyy-MM-dd — không bao giờ bị nhầm locale dd/MM vs MM/dd
+  var today = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'yyyy-MM-dd');
   var log = [];
+
   for (var i = data.length - 1; i >= 1; i--) {
     var cellVal = data[i][0];
     if (!cellVal) continue;
-    
-    // Parse ngày: nếu là Date object thì dùng trực tiếp, nếu là string thì parse
-    var cellDate;
+
+    // Google Sheets luôn trả Date object khi ô chứa ngày
+    var cellDateStr = '';
     if (cellVal instanceof Date) {
-      cellDate = cellVal;
+      cellDateStr = Utilities.formatDate(cellVal, 'Asia/Ho_Chi_Minh', 'yyyy-MM-dd');
     } else {
-      // Thử parse string dd/MM/yyyy hoặc MM/dd/yyyy
-      cellDate = new Date(cellVal.toString());
-      if (isNaN(cellDate.getTime())) continue;
+      // Fallback: string thô — thử parse
+      var parsed = new Date(cellVal.toString());
+      if (!isNaN(parsed.getTime())) {
+        cellDateStr = Utilities.formatDate(parsed, 'Asia/Ho_Chi_Minh', 'yyyy-MM-dd');
+      }
     }
-    
-    if (cellDate.getFullYear() === todayYear && 
-        cellDate.getMonth() === todayMonth && 
-        cellDate.getDate() === todayDate) {
+
+    if (cellDateStr === today) {
       log.push({
-        timestamp:       formatCellDate(cellVal),
-        msnv:            data[i][1].toString(),
-        hoten:           data[i][2].toString(),
-        ca:              data[i][3].toString(),
-        ma_thiet_bi:     data[i][5].toString(),
-        ten_thiet_bi:    data[i][6].toString(),
-        da_thu_hoi:      data[i][7].toString() === 'true',
-        thu_hoi_luc:     formatCellDate(data[i][8]),
-        tinh_trang:      data[i][9].toString(),
-        nguoi_thao_tac:  data[i][11] ? data[i][11].toString() : ''
+        timestamp:      formatCellDate(cellVal),
+        msnv:           data[i][1].toString(),
+        hoten:          data[i][2].toString(),
+        ca:             data[i][3].toString(),
+        ma_thiet_bi:    data[i][5].toString(),
+        ten_thiet_bi:   data[i][6].toString(),
+        da_thu_hoi:     data[i][7].toString() === 'true',
+        thu_hoi_luc:    formatCellDate(data[i][8]),
+        tinh_trang:     data[i][9].toString(),
+        nguoi_thao_tac: data[i][11] ? data[i][11].toString() : ''
       });
     }
     if (log.length >= 50) break;
   }
   return createJsonResponse({ status: 'success', log: log });
 }
+
 
 
 function ccdcGetAllLogs() {
