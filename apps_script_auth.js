@@ -792,6 +792,13 @@ function ccdcSubmitNhan(params) {
 }
 
 
+// Helper parse Date từ sheet
+function formatCellDate(val) {
+  if (!val) return '';
+  if (val instanceof Date) return Utilities.formatDate(val, 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy HH:mm:ss');
+  return val.toString();
+}
+
 // API: Log giao dịch hôm nay
 function ccdcGetTodayLog() {
   var ss = getSpreadsheet();
@@ -800,16 +807,17 @@ function ccdcGetTodayLog() {
   var today = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy');
   var log = [];
   for (var i = data.length - 1; i >= 1; i--) {
-    if ((data[i][0]||'').toString().substring(0,10) === today) {
+    var tsStr = formatCellDate(data[i][0]);
+    if (tsStr.substring(0, 10) === today) {
       log.push({
-        timestamp:       data[i][0].toString(),
+        timestamp:       tsStr,
         msnv:            data[i][1].toString(),
         hoten:           data[i][2].toString(),
         ca:              data[i][3].toString(),
         ma_thiet_bi:     data[i][5].toString(),
         ten_thiet_bi:    data[i][6].toString(),
         da_thu_hoi:      data[i][7].toString() === 'true',
-        thu_hoi_luc:     data[i][8].toString(),
+        thu_hoi_luc:     formatCellDate(data[i][8]),
         tinh_trang:      data[i][9].toString(),
         nguoi_thao_tac:  data[i][11] ? data[i][11].toString() : ''
       });
@@ -818,7 +826,6 @@ function ccdcGetTodayLog() {
   }
   return createJsonResponse({ status: 'success', log: log });
 }
-
 
 function ccdcGetAllLogs() {
   var ss = getSpreadsheet();
@@ -829,8 +836,8 @@ function ccdcGetAllLogs() {
     var row = data[i];
     if (row[1]) {
       log.push({
-        row_index:      i,                                              // dùng để mute_alert
-        timestamp:      row[0] ? row[0].toString() : '',
+        row_index:      i,
+        timestamp:      formatCellDate(row[0]),
         msnv:           row[1] ? row[1].toString() : '',
         hoten:          row[2] ? row[2].toString() : '',
         ca:             row[3] ? row[3].toString() : '',
@@ -838,7 +845,7 @@ function ccdcGetAllLogs() {
         ma_thiet_bi:    row[5] ? row[5].toString() : '',
         ten_thiet_bi:   row[6] ? row[6].toString() : '',
         da_thu_hoi:     row[7].toString() === 'true',
-        thu_hoi_luc:    row[8] ? row[8].toString() : '',
+        thu_hoi_luc:    formatCellDate(row[8]),
         tinh_trang:     row[9] ? row[9].toString() : '',
         ghi_chu:        row[10] ? row[10].toString() : '',
         nguoi_thao_tac: row[11] ? row[11].toString() : '',
@@ -848,6 +855,7 @@ function ccdcGetAllLogs() {
   }
   return createJsonResponse({ status: 'success', log: log });
 }
+
 
 
 // API: Lấy toàn bộ lịch sử thu hồi thiết bị (CCDC_Nhan)
