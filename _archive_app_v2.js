@@ -16,9 +16,9 @@ function escapeHtml(str) {
         .replace(/'/g, '&#039;');
 }
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyZUWjTuJ41Q1162sgV49ON8i6Kinz5Y6BxR2nRrzEvGVzEWaFMoUCussregzXdjY_/exec'; // Auth + CCDC + AI — trỏ vào Sheet chính
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyZUWjTuJ41Q1162sgV49ON8i6Kinz5Y6BxR2nRrzEvGVzEWaFMoUCussregzXdjY_/exec'; // Auth API
 const REPORT_API_URL  = 'https://script.google.com/macros/s/AKfycbzQB5zWptOlgE0Wt5pfhopMVN2GEZ18ConPuvT8HuRHXqUaJ1_nPV-MmmZk7Clxp-jo/exec'; // Data Báo Cáo
-const CCDC_API_URL    = APPS_SCRIPT_URL; // Dùng chung Apps Script URL
+const CCDC_API_URL    = APPS_SCRIPT_URL; // Dùng chung Apps Script URL — chỉ cần deploy lại 1 lần
 
 
 // Chart.js Global Defaults for Dark Theme
@@ -162,6 +162,8 @@ function initDashboard() {
     renderProvinceChart();
     renderHeatmapTable();
     renderOverviewSummaries();
+    renderLayoutMap();
+    initMapSearch(); // New function
     if (ghnMaterialsData) {
         if (ghnMaterialsData.allocations && ghnMaterialsData.allocations.length > 0) {
             renderMaterialsTable();
@@ -1481,7 +1483,79 @@ function renderTrendAnalysis(currentData) {
     }
 }
 
+// Map Search Logic
+function initMapSearch() {
+    const poList = document.getElementById('poList');
+    const provList = document.getElementById('provList');
+    const mapSearchPO = document.getElementById('mapSearchPO');
+    const mapSearchProv = document.getElementById('mapSearchProv');
+    const overlay = document.getElementById('mapDetailsOverlay');
+    const closeBtn = document.getElementById('closeMapOverlay');
 
+    if (!poList || !ghnData) return;
+
+    // Populate datalists
+    const pos = ghnData.postOffices;
+    pos.forEach(po => {
+        const opt = document.createElement('option');
+        opt.value = po.name;
+        poList.appendChild(opt);
+    });
+
+    const provinces = [...new Set(pos.map(po => po.province))].sort();
+    provinces.forEach(prov => {
+        const opt = document.createElement('option');
+        opt.value = prov;
+        provList.appendChild(opt);
+    });
+
+    // PO Search Event
+    mapSearchPO.addEventListener('change', (e) => {
+        const found = pos.find(p => p.name === e.target.value);
+        if (found) {
+            showMapOverlay(found);
+        }
+    });
+
+    // Province Search Event
+    mapSearchProv.addEventListener('change', (e) => {
+        const provPOs = pos.filter(p => p.province === e.target.value);
+        if (provPOs.length > 0) {
+            showProvinceOverlay(e.target.value, provPOs);
+        }
+    });
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => overlay.classList.add('hidden'));
+    }
+}
+
+function showMapOverlay(po) {
+    const overlay = document.getElementById('mapDetailsOverlay');
+    if (!overlay) return;
+    
+    document.getElementById('overlayName').textContent = po.name;
+    document.getElementById('overlayOrders').textContent = formatNumber(po.volMet);
+    document.getElementById('overlayDistrict').textContent = po.district;
+    document.getElementById('overlayProvince').textContent = po.province;
+    document.getElementById('overlayAM').textContent = po.am;
+    
+    overlay.classList.remove('hidden');
+}
+
+function showProvinceOverlay(province, provPOs) {
+    const overlay = document.getElementById('mapDetailsOverlay');
+    if (!overlay) return;
+
+    const totalOrders = provPOs.reduce((sum, p) => sum + p.volMet, 0);
+    document.getElementById('overlayName').textContent = `Khu vực: ${province}`;
+    document.getElementById('overlayOrders').textContent = formatNumber(totalOrders);
+    document.getElementById('overlayDistrict').textContent = `${provPOs.length} Bưu cục`;
+    document.getElementById('overlayProvince').textContent = province;
+    document.getElementById('overlayAM').textContent = "Danh sách đa dạng";
+    
+    overlay.classList.remove('hidden');
+}
 
 // --- AUTHENTICATION LOGIC ---
 let tempMsnv = ''; // Lưu tạm MSNV để dùng ở bước OTP
@@ -1554,17 +1628,8 @@ function initAuth() {
     if (btnLogout) {
         btnLogout.addEventListener('click', () => {
             if(confirm('Bạn có chắc chắn muốn đăng xuất không?')) {
-                // Gọi server để invalidate token trước
-                const token = localStorage.getItem('ghn_session_token') || '';
-                if (token) {
-                    fetch(`${APPS_SCRIPT_URL}?action=logout&token=${encodeURIComponent(token)}`).catch(() => {});
-                }
                 localStorage.removeItem('ghn_auth_token');
                 localStorage.removeItem('ghn_user_role');
-                localStorage.removeItem('ghn_user_msnv');
-                localStorage.removeItem('ghn_user_fullname');
-                localStorage.removeItem('ghn_user_perms');
-                localStorage.removeItem('ghn_session_token');
                 window.location.reload();
             }
         });
@@ -1572,15 +1637,15 @@ function initAuth() {
 
     // Check if already logged in
     if (localStorage.getItem('ghn_auth_token') === 'verified') {
-        const localMsnv  = localStorage.getItem('ghn_user_msnv') || '';
-        const localRole   = localStorage.getItem('ghn_user_role') || '';
-        const localToken  = localStorage.getItem('ghn_session_token') || '';
+        const localMsnv = localStorage.getItem('ghn_user_msnv') || '';
+        const localRole = localStorage.getItem('ghn_user_role') || '';
         
-        // Xác thực phiên đăng nhập bằng session token thực sự
-        fetch(`${APPS_SCRIPT_URL}?action=verify_session&token=${encodeURIComponent(localToken)}`)
+        // Xác thực phiên đăng nhập thực tế từ server để chống giả mạo localStorage
+        fetch(`${APPS_SCRIPT_URL}?action=verify_session&msnv=${encodeURIComponent(localMsnv)}&role=${encodeURIComponent(localRole)}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
+                    // Cập nhật lại role và permissions chuẩn từ Sheets
                     localStorage.setItem('ghn_user_role', data.role);
                     localStorage.setItem('ghn_user_perms', data.permissions);
                     authOverlay.style.display = 'none';
@@ -1588,11 +1653,10 @@ function initAuth() {
                     applyRoleRestrictions();
                     loadData();
                 } else {
-                    // Token không hợp lệ hoặc hết hạn → buộc đăng nhập lại
+                    // Phiên giả mạo hoặc tài khoản đã bị khóa -> xóa cache và tải lại trang
                     localStorage.removeItem('ghn_auth_token');
                     localStorage.removeItem('ghn_user_role');
                     localStorage.removeItem('ghn_user_perms');
-                    localStorage.removeItem('ghn_session_token');
                     window.location.reload();
                 }
             })
@@ -1671,14 +1735,14 @@ function initAuth() {
                 tempMsnv = data.msnv;
                 requestOTP(tempMsnv);
             } else if (data.status === 'bypass_otp') {
-                // BOSS001 — lưu session token ngay sau khi đăng nhập
-                localStorage.setItem('ghn_auth_token',    'verified');
-                localStorage.setItem('ghn_user_role',     data.role);
-                localStorage.setItem('ghn_user_msnv',     data.msnv || '');
+                localStorage.setItem('ghn_auth_token', 'verified');
+                localStorage.setItem('ghn_user_role', data.role);
+                localStorage.setItem('ghn_user_msnv', data.msnv || '');
                 localStorage.setItem('ghn_user_fullname', data.fullname || '');
-                localStorage.setItem('ghn_session_token', data.session_token || '');
                 let permsArray = data.permissions || ['overview'];
-                if (typeof permsArray === 'string') permsArray = permsArray.split(',').map(p => p.trim()).filter(p => p);
+                if (typeof permsArray === 'string') {
+                    permsArray = permsArray.split(',').map(p => p.trim()).filter(p => p);
+                }
                 localStorage.setItem('ghn_user_perms', JSON.stringify(permsArray));
                 authOverlay.style.display = 'none';
                 mainApp.style.display = 'flex';
@@ -1709,14 +1773,15 @@ function initAuth() {
             const data = await response.json();
             
             if (data.status === 'success') {
-                // Lưu session token từ server sau khi OTP hợp lệ
-                localStorage.setItem('ghn_auth_token',    'verified');
-                localStorage.setItem('ghn_user_role',     data.role);
-                localStorage.setItem('ghn_user_msnv',     tempMsnv || '');
+                localStorage.setItem('ghn_auth_token', 'verified');
+                localStorage.setItem('ghn_user_role', data.role);
+                localStorage.setItem('ghn_user_msnv', tempMsnv || '');
                 localStorage.setItem('ghn_user_fullname', data.fullname || '');
-                localStorage.setItem('ghn_session_token', data.session_token || '');
+                // Permissions có thể là string hoặc array, chuẩn hóa về array
                 let permsArray = data.permissions || ['overview'];
-                if (typeof permsArray === 'string') permsArray = permsArray.split(',').map(p => p.trim()).filter(p => p);
+                if (typeof permsArray === 'string') {
+                    permsArray = permsArray.split(',').map(p => p.trim()).filter(p => p);
+                }
                 localStorage.setItem('ghn_user_perms', JSON.stringify(permsArray));
                 authOverlay.style.display = 'none';
                 mainApp.style.display = 'flex';
@@ -2082,8 +2147,8 @@ function initChatbot() {
         scrollToBottom();
 
         try {
-            // Call Apps Script Backend (Integrated V2)
-            const response = await fetch(`${APPS_SCRIPT_URL}?action=chat&message=${encodeURIComponent(text)}`);
+            // Call Apps Script Backend
+            const response = await fetch(`${REPORT_API_URL}?action=chat&message=${encodeURIComponent(text)}`);
             const data = await response.json();
             
             removeElement(typingId);
@@ -2374,7 +2439,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = `SỰ CỐ KHẨN CẤP: Tôi vừa phát hiện sự cố tại khu vực: ${location}. Mức độ: ${priorityText}. Mô tả hiện tượng: ${desc}. Là Kỹ Sư Trưởng, hãy đánh giá mức độ rủi ro và đưa ra 3 bước sơ cứu/xử lý tạm thời ngay lập tức trước khi đội bảo trì đến. Trình bày dưới dạng gạch đầu dòng ngắn gọn.`;
             
             try {
-                const response = await fetch(`${APPS_SCRIPT_URL}?action=chat&message=${encodeURIComponent(message)}`, {
+                const response = await fetch(`${REPORT_API_URL}?action=chat&message=${encodeURIComponent(message)}`, {
                     method: 'GET'
                 });
                 
@@ -2427,6 +2492,7 @@ const allMenus = [
     { id: 'forklifts', name: 'Nhật Ký Xe Nâng' },
     { id: 'infra-health', name: 'Sức Khỏe Kho' },
     { id: 'purchases', name: 'Tình Trạng Đặt Mua' },
+    { id: 'transport-map', name: 'Bản Đồ Vận Tải' },
     { id: 'ccdc-device', name: 'CCDC Thiết Bị' },
     { id: 'ccdc-report', name: 'Quản Lý Thiết Bị' }
 ];
@@ -2468,10 +2534,9 @@ async function initUserManagement() {
             const chatid = document.getElementById('um-chatid').value;
             const role = document.getElementById('um-role').value;
 
-            const sessionToken = localStorage.getItem('ghn_session_token') || '';
             const url = currentUserEditing 
-                ? `${APPS_SCRIPT_URL}?action=update_user&token=${encodeURIComponent(sessionToken)}&msnv=${msnv}&password=${password}&fullname=${encodeURIComponent(fullname)}&role=${role}&chatid=${chatid}`
-                : `${APPS_SCRIPT_URL}?action=create_user&token=${encodeURIComponent(sessionToken)}&msnv=${msnv}&password=${password}&fullname=${encodeURIComponent(fullname)}&role=${role}&chatid=${chatid}`;
+                ? `${APPS_SCRIPT_URL}?action=update_user&msnv=${msnv}&password=${password}&fullname=${encodeURIComponent(fullname)}&role=${role}&chatid=${chatid}`
+                : `${APPS_SCRIPT_URL}?action=create_user&msnv=${msnv}&password=${password}&fullname=${encodeURIComponent(fullname)}&role=${role}&chatid=${chatid}`;
 
             try {
                 const response = await fetch(url);
@@ -2512,8 +2577,7 @@ async function initUserManagement() {
             const permsStr = newPerms.join(',');
 
             try {
-                const sessionToken = localStorage.getItem('ghn_session_token') || '';
-                const url = `${APPS_SCRIPT_URL}?action=update_user&token=${encodeURIComponent(sessionToken)}&msnv=${currentUserEditing}&permissions=${encodeURIComponent(permsStr)}`;
+                const url = `${APPS_SCRIPT_URL}?action=update_user&msnv=${currentUserEditing}&permissions=${encodeURIComponent(permsStr)}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 if (data.status === 'success') {
@@ -2538,8 +2602,7 @@ async function fetchUsersFromBackend() {
     if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Đang tải danh sách từ Google Server...</td></tr>';
     
     try {
-        const sessionToken = localStorage.getItem('ghn_session_token') || '';
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=get_users&token=${encodeURIComponent(sessionToken)}`);
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=get_users`);
         const data = await response.json();
         if (data.status === 'success') {
             onlineUsers = data.data;
@@ -2652,8 +2715,7 @@ window.toggleLockUser = async function(msnv, currentStatus, newStatusToggle) {
     if (msnv === 'ADMIN001') { alert('Sếp không thể tự khóa tài khoản Super Admin của mình!'); return; }
     const newStatus = newStatusToggle;
     try {
-        const sessionToken = localStorage.getItem('ghn_session_token') || '';
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=update_user&token=${encodeURIComponent(sessionToken)}&msnv=${msnv}&status=${newStatus}`);
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=update_user&msnv=${msnv}&status=${newStatus}`);
         const data = await response.json();
         if(data.status === 'success') {
             await fetchUsersFromBackend();
@@ -2667,8 +2729,7 @@ window.deleteUser = async function(msnv) {
     if (msnv === 'ADMIN001') { alert('Không thể xóa Super Admin!'); return; }
     if (confirm('Sếp có chắc chắn muốn XÓA VĨNH VIỄN tài khoản ' + msnv + ' không? Thao tác này sẽ xóa dữ liệu trên Google Sheet.')) {
         try {
-            const sessionToken = localStorage.getItem('ghn_session_token') || '';
-            const response = await fetch(`${APPS_SCRIPT_URL}?action=delete_user&token=${encodeURIComponent(sessionToken)}&msnv=${msnv}`);
+            const response = await fetch(`${APPS_SCRIPT_URL}?action=delete_user&msnv=${msnv}`);
             const data = await response.json();
             if(data.status === 'success') {
                 await fetchUsersFromBackend();
@@ -2718,58 +2779,15 @@ let ccdc_cacheLoaded = false;
 async function ccdcPreloadEmployees() {
     if (ccdc_cacheLoaded) return;
     try {
-        const cachedStr = localStorage.getItem('ccdc_employees');
-        const syncTimeStr = localStorage.getItem('ccdc_employees_time');
-        
-        if (cachedStr) {
-            ccdc_employeesCache = JSON.parse(cachedStr);
-            ccdc_cacheLoaded = true;
-            console.log(`[CCDC] Đã load ${ccdc_employeesCache.length} nhân viên từ LocalStorage.`);
-            const statusEl = document.getElementById('ccdc-sync-status');
-            if (statusEl && syncTimeStr) {
-                statusEl.textContent = `Cập nhật: ${syncTimeStr}`;
-            }
-            return;
-        }
-        await ccdcSyncEmployees();
-    } catch(e) {
-        console.warn("[CCDC] Lỗi khi tải trước danh sách nhân viên:", e);
-    }
-}
-
-async function ccdcSyncEmployees() {
-    const btn = document.getElementById('ccdc-sync-btn');
-    const statusEl = document.getElementById('ccdc-sync-status');
-    if (btn) btn.innerHTML = `<i data-lucide="loader-2" class="spin" style="width:14px; height:14px;"></i> Đang tải...`;
-    if (statusEl) statusEl.textContent = "Đang tải dữ liệu...";
-    if (typeof lucide !== 'undefined') lucide.createIcons();
-
-    try {
-        console.log("[CCDC] Bắt đầu đồng bộ danh sách nhân viên từ Apps Script...");
+        console.log("[CCDC] Bắt đầu tải trước danh sách nhân viên...");
         const res = await ccdcApiCall({ action: 'get_employees' });
         if (res && res.status === 'success' && Array.isArray(res.employees)) {
             ccdc_employeesCache = res.employees;
             ccdc_cacheLoaded = true;
-            
-            localStorage.setItem('ccdc_employees', JSON.stringify(res.employees));
-            
-            const now = new Date();
-            const timeStr = `${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-            localStorage.setItem('ccdc_employees_time', timeStr);
-
-            console.log(`[CCDC] Đã đồng bộ ${ccdc_employeesCache.length} nhân viên.`);
-            if (statusEl) statusEl.textContent = `Cập nhật: ${timeStr}`;
-            ccdcToast(`Đã đồng bộ ${ccdc_employeesCache.length} nhân sự`, 'success');
-        } else {
-            throw new Error(res.message || "Lỗi không xác định");
+            console.log(`[CCDC] Đã tải trước ${ccdc_employeesCache.length} nhân viên vào bộ nhớ đệm.`);
         }
     } catch(e) {
-        console.warn("[CCDC] Lỗi đồng bộ:", e);
-        if (statusEl) statusEl.textContent = "Lỗi đồng bộ!";
-        ccdcToast(`Lỗi đồng bộ: ${e.message}`, 'error');
-    } finally {
-        if (btn) btn.innerHTML = `<i data-lucide="refresh-cw" style="width:14px; height:14px;"></i> Đồng bộ nhân sự`;
-        if (typeof lucide !== 'undefined') lucide.createIcons();
+        console.warn("[CCDC] Lỗi khi tải trước danh sách nhân viên:", e);
     }
 }
 
@@ -3179,11 +3197,17 @@ function ccdcShowResultGiao(emp) {
     if (form) form.innerHTML = `
         <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:16px;">
             <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">📋 Thông Tin Thiết Bị Giao</div>
-            <div style="margin-bottom:12px;">
-                <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Mã thiết bị (Quét QR thiết bị vào đây) <span style="color:#e74c3c">*</span></label>
-                <input id="ccdc-f-ma" type="text" placeholder="VD: ASSET001" autocomplete="off"
-                    onkeydown="if(event.key==='Enter'){ event.preventDefault(); ccdcSubmit(); }"
-                    style="width:100%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+                <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Mã thiết bị <span style="color:#e74c3c">*</span></label>
+                    <input id="ccdc-f-ma" type="text" placeholder="VD: TB-001" autocomplete="off"
+                        style="width:100%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;">
+                </div>
+                <div>
+                    <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Tên thiết bị <span style="color:#e74c3c">*</span></label>
+                    <input id="ccdc-f-ten" type="text" placeholder="VD: Máy scan barcode" autocomplete="off"
+                        style="width:100%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;">
+                </div>
             </div>
             <div>
                 <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Ghi chú</label>
@@ -3249,11 +3273,8 @@ function ccdcShowResultNhan(borrowedList) {
         <div style="border-top:1px solid rgba(255,255,255,0.08);padding-top:14px;">
             <div>
                 <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Tình trạng thiết bị khi nhận lại <span style="color:#e74c3c">*</span></label>
-                <select id="ccdc-f-tinh" style="width:100%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px;appearance:none;">
-                    <option value="Bình thường" style="color:#000;">Bình thường</option>
-                    <option value="Lỗi/Hư hỏng" style="color:#000;">Lỗi/Hư hỏng</option>
-                    <option value="Báo Mất" style="color:#000;">Báo Mất</option>
-                </select>
+                <input id="ccdc-f-tinh" type="text" placeholder="VD: Tốt / Hỏng màn hình / Cần sạc pin..."
+                    style="width:100%;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 13px;color:var(--text-primary);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px;">
             </div>
             <div>
                 <label style="font-size:12px;font-weight:600;color:var(--text-muted);display:block;margin-bottom:6px;">Ghi chú</label>
@@ -3290,21 +3311,22 @@ async function ccdcSubmit() {
     if (ccdc_mode === 'giao') {
         if (!ccdc_empData) { ccdcToast('⚠️ Không có thông tin nhân viên để giao', 'error'); return; }
         const ma  = document.getElementById('ccdc-f-ma')?.value.trim();
+        const ten = document.getElementById('ccdc-f-ten')?.value.trim();
         const ghi = document.getElementById('ccdc-f-ghi')?.value.trim() || '';
         if (!ma)  { ccdcToast('⚠️ Vui lòng nhập Mã Thiết Bị', 'error'); return; }
+        if (!ten) { ccdcToast('⚠️ Vui lòng nhập Tên Thiết Bị', 'error'); return; }
         btn.disabled = true; btn.innerHTML = '⏳ Đang lưu...';
         try {
             const res = await ccdcApiCall({
-                action:'submit_giao', 
-                msnv:ccdc_empData.msnv, 
-                thiet_bi_id: ma, 
-                ghi_chu: ghi,
+                action:'submit_giao', msnv:ccdc_empData.msnv, hoten:ccdc_empData.hoten,
+                ca:ccdc_empData.ca, quanly:ccdc_empData.quanly,
+                ma_thiet_bi:ma, ten_thiet_bi:ten, ghi_chu:ghi,
                 nguoi_thao_tac: nguoi_thao_tac
             });
             if (res.status === 'success') {
                 const empName = ccdc_empData.hoten || 'nhân viên';
                 ccdcCloseResult();
-                ccdcToast(`✅ Đã giao thiết bị "${ma}" cho ${empName}`, 'success');
+                ccdcToast(`✅ Đã giao "${ten}" cho ${empName}`, 'success');
                 ccdcLoadLog();
             } else { ccdcToast('❌ ' + (res.message || 'Lỗi lưu'), 'error'); }
         } catch(e) { ccdcToast('❌ Lỗi kết nối', 'error'); }
@@ -3312,18 +3334,16 @@ async function ccdcSubmit() {
 
     } else {
         if (!ccdc_selectedBorrow) { ccdcToast('⚠️ Vui lòng chọn thiết bị cần thu hồi', 'error'); return; }
-        const tinh = document.getElementById('ccdc-f-tinh')?.value;
+        const tinh = document.getElementById('ccdc-f-tinh')?.value.trim();
         const ghi2 = document.getElementById('ccdc-f-ghi2')?.value.trim() || '';
-        if (!tinh) { ccdcToast('⚠️ Vui lòng chọn Tình trạng thiết bị', 'error'); return; }
+        if (!tinh) { ccdcToast('⚠️ Vui lòng nhập Tình trạng thiết bị', 'error'); return; }
         btn.disabled = true; btn.innerHTML = '⏳ Đang lưu...';
         try {
             const res = await ccdcApiCall({
-                action:'submit_nhan', 
-                msnv:ccdc_selectedBorrow.msnv,
-                thiet_bi_id: ccdc_selectedBorrow.ma_thiet_bi,
-                tinh_trang: tinh, 
-                ghi_chu: ghi2,
-                row_index: ccdc_selectedBorrow.row_index,
+                action:'submit_nhan', msnv:ccdc_selectedBorrow.msnv,
+                ma_thiet_bi:ccdc_selectedBorrow.ma_thiet_bi,
+                tinh_trang:tinh, ghi_chu:ghi2,
+                row_index:ccdc_selectedBorrow.row_index,
                 nguoi_thao_tac: nguoi_thao_tac
             });
             if (res.status === 'success') {
@@ -3342,58 +3362,33 @@ async function ccdcSubmit() {
 async function ccdcLoadLog() {
     const tbody = document.getElementById('ccdc-log-tbody');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px;">Đang tải...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px;">Đang tải...</td></tr>';
     try {
-        const res = await ccdcApiCall({ action: 'ccdc_get_all_logs' });
+        const res = await ccdcApiCall({ action: 'get_today_log' });
         if (res.status === 'success' && res.log && res.log.length > 0) {
-            // Lọc giao dịch hôm nay ở client — tránh lỗi locale ngày tháng backend
-            const now = new Date();
-            const todayStr = String(now.getDate()).padStart(2,'0') + '/' 
-                           + String(now.getMonth()+1).padStart(2,'0') + '/' 
-                           + now.getFullYear();
-            // Format timestamp từ API có thể là "07/09/2026" (MM/dd) hoặc "09/07/2026" (dd/MM)
-            // Lấy ngày theo cách parse linh hoạt: kiểm tra cả 2 format
-            const todayLogs = res.log.filter(r => {
-                if (!r.timestamp) return false;
-                const ts = r.timestamp.substring(0, 10); // "XX/XX/2026"
-                // So khớp trực tiếp
-                if (ts === todayStr) return true;
-                // So khớp MM/dd/yyyy vs dd/MM/yyyy (swap 2 phần đầu)
-                const parts = ts.split('/');
-                if (parts.length === 3) {
-                    const swapped = parts[1] + '/' + parts[0] + '/' + parts[2];
-                    if (swapped === todayStr) return true;
-                }
-                return false;
-            });
-
-            if (todayLogs.length > 0) {
-                tbody.innerHTML = todayLogs.map(r => `
-                    <tr>
-                        <td style="white-space:nowrap;font-size:12px;color:var(--text-muted);">${r.timestamp.substring(0,16)}</td>
-                        <td><strong>${r.msnv}</strong></td>
-                        <td>${r.hoten}</td>
-                        <td><code style="background:rgba(255,255,255,0.07);padding:2px 8px;border-radius:6px;font-size:12px;">${r.ma_thiet_bi}</code></td>
-                        <td>${r.ten_thiet_bi}</td>
-                        <td class="text-center">
-                            ${r.da_thu_hoi
-                                ? '<span class="status-badge safe">✅ Đã nhận</span>'
-                                : '<span class="status-badge warning">🔵 Đang mượn</span>'
-                            }
-                        </td>
-                        <td style="font-size:12px;color:var(--text-muted);">${r.nguoi_thao_tac || '<span style="opacity:0.4">—</span>'}</td>
-                    </tr>`).join('');
-            } else {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px;">Chưa có giao dịch nào hôm nay</td></tr>';
-            }
+            tbody.innerHTML = res.log.map(r => `
+                <tr>
+                    <td style="white-space:nowrap;font-size:12px;color:var(--text-muted);">${r.timestamp.substring(0,16)}</td>
+                    <td><strong>${r.msnv}</strong></td>
+                    <td>${r.hoten}</td>
+                    <td><code style="background:rgba(255,255,255,0.07);padding:2px 8px;border-radius:6px;font-size:12px;">${r.ma_thiet_bi}</code></td>
+                    <td>${r.ten_thiet_bi}</td>
+                    <td class="text-center">
+                        ${r.da_thu_hoi
+                            ? '<span class="status-badge safe">✅ Đã nhận</span>'
+                            : '<span class="status-badge warning">🔵 Đang mượn</span>'
+                        }
+                    </td>
+                    <td style="font-size:12px;color:var(--text-muted);">${r.nguoi_thao_tac || '<span style="opacity:0.4">—</span>'}</td>
+                </tr>`).join('');
         } else {
             tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px;">Chưa có giao dịch nào hôm nay</td></tr>';
         }
+
     } catch(e) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#e74c3c;padding:24px;">⚠️ Không tải được dữ liệu</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#e74c3c;padding:24px;">⚠️ Không tải được dữ liệu</td></tr>';
     }
 }
-
 
 // === HELPERS ===
 function ccdcCloseResult() {
@@ -3443,20 +3438,8 @@ async function ccdcApiCall(params) {
         : (typeof APPS_SCRIPT_URL !== 'undefined' ? APPS_SCRIPT_URL : '');
     if (!baseUrl) throw new Error('Chưa cấu hình CCDC_API_URL');
 
-    let qsParams = { ...params };
-    if (params.action === 'submit_giao') {
-        qsParams.ma_thiet_bi = params.thiet_bi_id;
-        qsParams.ten_thiet_bi = 'Thiết bị ' + params.thiet_bi_id;
-        if (typeof ccdc_empData !== 'undefined' && ccdc_empData) {
-            qsParams.hoten = ccdc_empData.hoten;
-            qsParams.ca = ccdc_empData.ca;
-            qsParams.quanly = ccdc_empData.quanly;
-        }
-    } else if (params.action === 'submit_nhan') {
-        qsParams.ma_thiet_bi = params.thiet_bi_id;
-    }
-
-    const qs = Object.entries(qsParams)
+    // Lọc bỏ undefined/null, ép về string
+    const qs = Object.entries(params)
         .filter(([k, v]) => v !== undefined && v !== null)
         .map(([k, v]) => k + '=' + encodeURIComponent(String(v)))
         .join('&');
@@ -3497,38 +3480,22 @@ let ccdcReportData = [];
 async function ccdcReportLoad() {
     const tbody = document.getElementById('ccdc-report-tbody');
     if (tbody) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">🔄 Đang tải lịch sử cấp phát từ Google Server...</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">🔄 Đang tải lịch sử cấp phát từ Google Server...</td></tr>';
     }
 
     try {
-        // Fetch song song cả 2 sheets: CCDC_Giao và CCDC_Nhan
-        const [resGiao, resNhan] = await Promise.all([
-            ccdcApiCall({ action: 'ccdc_get_all_logs' }),
-            ccdcApiCall({ action: 'ccdc_get_all_logs_nhan' })
-        ]);
-
-        const giaoLog = (resGiao && resGiao.status === 'success' && Array.isArray(resGiao.log))
-            ? resGiao.log.map(item => ({ ...item, _type: 'giao' }))
-            : [];
-
-        const nhanLog = (resNhan && resNhan.status === 'success' && Array.isArray(resNhan.log))
-            ? resNhan.log.map(item => ({ ...item, _type: 'nhan' }))
-            : [];
-
-        // Merge và sắp xếp mới nhất lên trên
-        const merged = [...giaoLog, ...nhanLog].sort((a, b) => {
-            const ta = a.timestamp || '', tb = b.timestamp || '';
-            return tb.localeCompare(ta);
-        });
-
-        ccdcReportData = merged;
-        ccdcReportUpdateKPIs(ccdcReportData);
-        ccdcReportRender(ccdcReportData);
-
+        const res = await ccdcApiCall({ action: 'ccdc_get_all_logs' });
+        if (res && res.status === 'success' && Array.isArray(res.log)) {
+            ccdcReportData = res.log;
+            ccdcReportUpdateKPIs(ccdcReportData);
+            ccdcReportRender(ccdcReportData);
+        } else {
+            throw new Error('Dữ liệu không đúng định dạng');
+        }
     } catch (err) {
         console.error('[CCDC Report]', err);
         if (tbody) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px 20px; color: var(--status-red);">⚠️ Lỗi không thể tải dữ liệu: ' + escapeHtml(err.message || err) + '</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px 20px; color: var(--status-red);">⚠️ Lỗi không thể tải dữ liệu: ' + escapeHtml(err.message || err) + '</td></tr>';
         }
     }
 }
@@ -3555,48 +3522,22 @@ function ccdcReportRender(list) {
     if (!tbody) return;
 
     if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">Chưa có dữ liệu nào khớp với bộ lọc</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px 20px; color: var(--text-muted);">Chưa có dữ liệu nào khớp với bộ lọc</td></tr>';
         return;
     }
 
     tbody.innerHTML = list.map(item => {
-        // Badge loại: Giao hoặc Thu hồi
-        const typeBadge = item._type === 'nhan'
-            ? '<span class="status-badge safe" style="font-size:11px;padding:2px 8px;">📥 Thu hồi</span>'
-            : '<span class="status-badge warning" style="font-size:11px;padding:2px 8px;">📤 Giao</span>';
-
         let statusBadge = '';
-        if (item._type === 'nhan') {
-            // Nhận thiết bị: hiển thị tình trạng khi thu hồi
-            const tinhTrang = item.tinh_trang ? escapeHtml(item.tinh_trang) : 'N/A';
-            statusBadge = `<span class="status-badge safe" style="display:inline-block;">✅ Đã nhận</span><div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Tình trạng: <strong>${tinhTrang}</strong></div>`;
-        } else if (item.da_thu_hoi) {
+        if (item.da_thu_hoi) {
             statusBadge = `
                 <span class="status-badge safe" style="display:inline-block; margin-bottom:4px;">Đã thu hồi</span>
                 <div style="font-size:11px; color:var(--text-muted); line-height:1.3;">
-                    Trả lúc: ${escapeHtml((item.thu_hoi_luc || '').substring(0, 16))}<br>
-                    Tình trạng: <strong>${escapeHtml(item.tinh_trang || '')}</strong>
+                    Trả lúc: ${escapeHtml(item.thu_hoi_luc.substring(0, 16))}<br>
+                    Tình trạng: <strong>${escapeHtml(item.tinh_trang)}</strong>
                 </div>
             `;
         } else {
-        // Kiểm tra thiết bị có trong danh sách cảnh báo không (PDA / Xe nâng)
-        const isAlertDevice = /PDA|Xe\s*nâng/i.test(item.ten_thiet_bi || '');
-        let muteBtnHtml = '';
-        if (item._type === 'giao' && isAlertDevice) {
-            if (item.tat_canh_bao) {
-                muteBtnHtml = `<div style="margin-top:6px;"><span style="font-size:11px;color:var(--text-muted);">🔕 Nhắc nhở đã tắt</span></div>`;
-            } else {
-                muteBtnHtml = `<div style="margin-top:6px;">
-                    <button onclick="ccdcMuteAlert(${item.row_index})" 
-                        style="font-size:11px;padding:3px 10px;border-radius:6px;border:1px solid rgba(255,120,0,0.5);background:rgba(255,120,0,0.1);color:var(--ghn-orange);cursor:pointer;transition:all 0.2s;"
-                        onmouseover="this.style.background='rgba(255,120,0,0.25)'"
-                        onmouseout="this.style.background='rgba(255,120,0,0.1)'">
-                        🔕 Tắt nhắc
-                    </button>
-                </div>`;
-            }
-        }
-        statusBadge = `<span class="status-badge warning">Đang mượn</span>${muteBtnHtml}`;
+            statusBadge = '<span class="status-badge warning">Đang mượn</span>';
         }
 
         const note = item.ghi_chu ? escapeHtml(item.ghi_chu) : '<span style="font-style:italic;color:var(--text-muted);font-size:12px;">Không có</span>';
@@ -3604,27 +3545,26 @@ function ccdcReportRender(list) {
 
         return `
             <tr style="border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)';" onmouseout="this.style.background='transparent';">
-                <td style="padding: 12px 16px; font-size: 13px;">${typeBadge}</td>
-                <td style="padding: 12px 16px; font-size: 13px;">
-                    ${escapeHtml((item.timestamp || '').substring(0, 16))}
+                <td style="padding: 14px 20px; font-size: 14px;">
+                    ${escapeHtml(item.timestamp.substring(0, 16))}
                 </td>
-                <td style="padding: 12px 16px; font-size: 13px;">
-                    <strong style="color:var(--text-primary);">${escapeHtml(item.hoten || '')}</strong>
-                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Mã số: ${escapeHtml(item.msnv || '')}</div>
+                <td style="padding: 14px 20px; font-size: 14px;">
+                    <strong style="color:var(--text-primary);">${escapeHtml(item.hoten)}</strong>
+                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">Mã số: ${escapeHtml(item.msnv)}</div>
                 </td>
-                <td style="padding: 12px 16px; font-size: 13px;">
+                <td style="padding: 14px 20px; font-size: 14px;">
                     <div>Ca: ${escapeHtml(item.ca || 'N/A')}</div>
-                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">QL: ${escapeHtml(item.quanly || 'N/A')}</div>
+                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">QL: ${escapeHtml(item.quanly || 'N/A')}</div>
                 </td>
-                <td style="padding: 12px 16px; font-size: 13px;">
-                    <strong style="color:var(--ghn-orange);">${escapeHtml(item.ma_thiet_bi || '')}</strong>
-                    <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">${escapeHtml(item.ten_thiet_bi || '')}</div>
+                <td style="padding: 14px 20px; font-size: 14px;">
+                    <strong style="color:var(--ghn-orange);">${escapeHtml(item.ma_thiet_bi)}</strong>
+                    <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">${escapeHtml(item.ten_thiet_bi)}</div>
                 </td>
-                <td style="padding: 12px 16px; font-size: 13px;">
+                <td style="padding: 14px 20px; font-size: 14px;">
                     ${statusBadge}
                     ${operatorInfo}
                 </td>
-                <td style="padding: 12px 16px; font-size: 13px; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${note}">
+                <td style="padding: 14px 20px; font-size: 14px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${note}">
                     ${note}
                 </td>
             </tr>
@@ -3661,22 +3601,6 @@ window.ccdcReportFilter = function() {
 window.ccdcReportRefresh = function() {
     ccdcReportLoad();
     ccdcToast('🔄 Đang làm mới dữ liệu báo cáo...', 'success');
-};
-
-// Tắt cảnh báo nhắc nhở thủ công cho 1 thiết bị
-window.ccdcMuteAlert = async function(rowIndex) {
-    if (!confirm('🔕 Tắt nhắc nhở cho thiết bị này?\nBot Telegram sẽ không gửi nhắc nữa cho đến khi thu hồi.')) return;
-    try {
-        const res = await ccdcApiCall({ action: 'mute_alert', row_index: rowIndex });
-        if (res && res.status === 'success') {
-            ccdcToast('🔕 Đã tắt cảnh báo nhắc nhở!', 'success');
-            ccdcReportLoad(); // Refresh bảng để cập nhật trạng thái
-        } else {
-            ccdcToast('⚠️ ' + ((res && res.message) || 'Lỗi không xác định!'), 'error');
-        }
-    } catch(err) {
-        ccdcToast('⚠️ Lỗi kết nối: ' + err.message, 'error');
-    }
 };
 
 window.ccdcReportExportCSV = function() {

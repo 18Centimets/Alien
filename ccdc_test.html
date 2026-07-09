@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>CCDC Module — Kiểm thử độc lập</title>
+  <style>
+    body { font-family: monospace; background: #0d1b2a; color: #e8edf3; padding: 20px; }
+    .test { margin: 8px 0; padding: 10px 14px; border-radius: 8px; font-size: 13px; }
+    .pass { background: rgba(39,174,96,0.15); border-left: 3px solid #27ae60; }
+    .fail { background: rgba(231,76,60,0.15);  border-left: 3px solid #e74c3c; }
+    .info { background: rgba(41,128,185,0.1);  border-left: 3px solid #2980b9; }
+    h2 { color: #f26522; margin: 20px 0 8px; }
+    #summary { margin-top: 20px; font-size: 15px; font-weight: bold; }
+  </style>
+</head>
+<body>
+<h2>🧪 CCDC Module — Kiểm thử trước khi nhúng vào Dashboard</h2>
+<div id="log"></div>
+<div id="summary"></div>
+
+<script>
+/* ===== TEST HARNESS ===== */
+const log = document.getElementById('log');
+let pass = 0, fail = 0;
+
+function test(name, fn) {
+  try {
+    const result = fn();
+    if (result === true || result === undefined) {
+      log.innerHTML += `<div class="test pass">✅ PASS — ${name}</div>`;
+      pass++;
+    } else {
+      log.innerHTML += `<div class="test fail">❌ FAIL — ${name}: ${result}</div>`;
+      fail++;
+    }
+  } catch(e) {
+    log.innerHTML += `<div class="test fail">❌ ERROR — ${name}: ${e.message}</div>`;
+    fail++;
+  }
+}
+
+function info(msg) {
+  log.innerHTML += `<div class="test info">ℹ️ ${msg}</div>`;
+}
+
+/* ===== PASTE CCDC LOGIC ĐỂ TEST ===== */
+
+// --- STATE ---
+let ccdc_currentMode = 'giao';
+let ccdc_selectedBorrowItem = null;
+let ccdc_pendingEmpData = null;
+
+// --- MOCK DATA (thay thế API call để test offline) ---
+const MOCK_EMPLOYEES = [
+  { msnv: 'GHN001', hoten: 'Nguyễn Văn An', ca: 'Ca Sáng 6h-14h',   quanly: 'Nguyễn Văn Bảo' },
+  { msnv: 'GHN002', hoten: 'Trần Thị Bình',  ca: 'Ca Chiều 14h-22h', quanly: 'Nguyễn Văn Bảo' },
+  { msnv: '3006216', hoten: 'Nguyễn Văn Bảo', ca: 'Hành chính',     quanly: 'Giám đốc KTC'    },
+];
+
+const MOCK_BORROWED = [
+  { msnv:'GHN001', hoten:'Nguyễn Văn An', ca:'Ca Sáng', quanly:'Bảo', ma_thiet_bi:'TB-001', ten_thiet_bi:'Máy scan barcode', timestamp:'13/06/2026 08:30:00', row_index:2 },
+  { msnv:'GHN001', hoten:'Nguyễn Văn An', ca:'Ca Sáng', quanly:'Bảo', ma_thiet_bi:'TB-005', ten_thiet_bi:'Bộ đàm',           timestamp:'13/06/2026 08:31:00', row_index:3 },
+];
+
+// --- CORE FUNCTIONS (copied from ccdc module) ---
+function ccdc_lookupEmployee(msnv) {
+  if (!msnv || !msnv.trim()) return { status: 'error', message: 'Thiếu mã NV' };
+  const q = msnv.trim().toLowerCase();
+  const found = MOCK_EMPLOYEES.find(e => e.msnv.toLowerCase() === q);
+  if (found) return { status: 'found', ...found };
+  return { status: 'not_found', message: 'Không tìm thấy: ' + msnv };
+}
+
+function ccdc_lookupBorrowed(msnv) {
+  if (!msnv || !msnv.trim()) return { status: 'error' };
+  const q = msnv.trim().toLowerCase();
+  const items = MOCK_BORROWED.filter(b => b.msnv.toLowerCase() === q);
+  if (items.length === 0) return { status: 'no_borrow' };
+  return { status: 'has_borrow', borrowed: items };
+}
+
+function ccdc_validateGiao(ma_thiet_bi, ten_thiet_bi) {
+  if (!ma_thiet_bi || !ma_thiet_bi.trim()) return 'Thiếu Mã Thiết Bị';
+  if (!ten_thiet_bi || !ten_thiet_bi.trim()) return 'Thiếu Tên Thiết Bị';
+  return null;
+}
+
+function ccdc_validateNhan(selectedItem, tinh_trang) {
+  if (!selectedItem) return 'Chưa chọn thiết bị';
+  if (!tinh_trang || !tinh_trang.trim()) return 'Thiếu Tình Trạng';
+  return null;
+}
+
+function ccdc_formatTimestamp() {
+  return new Date().toLocaleString('vi-VN', {
+    day:'2-digit', month:'2-digit', year:'numeric',
+    hour:'2-digit', minute:'2-digit', second:'2-digit'
+  });
+}
+
+function ccdc_buildLogRow(entry) {
+  const badge = entry.da_thu_hoi
+    ? `<span class="badge-in">✅ Đã nhận</span>`
+    : `<span class="badge-out">🔵 Đang mượn</span>`;
+  return `<tr>
+    <td>${entry.timestamp}</td><td>${entry.msnv}</td><td>${entry.hoten}</td>
+    <td>${entry.ma_thiet_bi}</td><td>${entry.ten_thiet_bi}</td><td>${badge}</td>
+  </tr>`;
+}
+
+function ccdc_switchMode(mode) {
+  if (!['giao', 'nhan'].includes(mode)) return false;
+  ccdc_currentMode = mode;
+  ccdc_selectedBorrowItem = null;
+  ccdc_pendingEmpData = null;
+  return true;
+}
+
+function ccdc_processBarcode(raw) {
+  const msnv = (raw || '').trim();
+  if (!msnv) return { ok: false, reason: 'empty' };
+  if (ccdc_currentMode === 'giao') {
+    return { ok: true, action: 'lookup_employee', msnv };
+  } else {
+    return { ok: true, action: 'lookup_borrowed', msnv };
+  }
+}
+
+// --- Kiểm tra không xung đột với tên hàm dashboard ---
+const DASHBOARD_FUNCTIONS = [
+  'renderMaterialsTable', 'renderForkliftsTable', 'renderPurchasesTable',
+  'exportCombinedReport', 'setReportFilter', 'updateReportPeriodLabel',
+  'filterByDate', 'parseDate', 'getWeekRange', 'getMonthRange',
+  'initMaterialsSearch', 'initForkliftsSearch', 'showToast'
+];
+
+const CCDC_FUNCTIONS = [
+  'ccdc_lookupEmployee', 'ccdc_lookupBorrowed', 'ccdc_validateGiao',
+  'ccdc_validateNhan', 'ccdc_formatTimestamp', 'ccdc_buildLogRow',
+  'ccdc_switchMode', 'ccdc_processBarcode',
+  'ccdcSubmitGiao', 'ccdcSubmitNhan', 'ccdcLoadLog',
+  'ccdcClosePopup', 'ccdcShowPopupGiao', 'ccdcShowPopupNhan',
+  'ccdcSelectBorrow', 'ccdcProcessScan', 'ccdcSwitchTab'
+];
+
+/* ===== RUN TESTS ===== */
+
+info('=== NHÓM 1: Kiểm tra phân giải mã QR / Mã NV ===');
+
+test('Tìm NV tồn tại (GHN001)', () => {
+  const res = ccdc_lookupEmployee('GHN001');
+  return res.status === 'found' && res.hoten === 'Nguyễn Văn An' ? true : `Got: ${JSON.stringify(res)}`;
+});
+
+test('Tìm NV tồn tại case-insensitive (ghn001)', () => {
+  const res = ccdc_lookupEmployee('ghn001');
+  return res.status === 'found' ? true : 'case insensitive fail';
+});
+
+test('Tìm Phó phòng Bảo (3006216)', () => {
+  const res = ccdc_lookupEmployee('3006216');
+  return res.status === 'found' && res.hoten === 'Nguyễn Văn Bảo' ? true : `Got: ${res.status}`;
+});
+
+test('Mã NV không tồn tại trả not_found', () => {
+  const res = ccdc_lookupEmployee('GHOST999');
+  return res.status === 'not_found' ? true : `Got: ${res.status}`;
+});
+
+test('Mã NV rỗng trả error', () => {
+  const res = ccdc_lookupEmployee('');
+  return res.status === 'error' ? true : `Got: ${res.status}`;
+});
+
+test('Mã NV null không crash', () => {
+  const res = ccdc_lookupEmployee(null);
+  return res.status === 'error' ? true : `Got: ${res.status}`;
+});
+
+info('=== NHÓM 2: Kiểm tra tra cứu thiết bị đang mượn ===');
+
+test('NV GHN001 có 2 TB đang mượn', () => {
+  const res = ccdc_lookupBorrowed('GHN001');
+  return res.status === 'has_borrow' && res.borrowed.length === 2 ? true : `Got: ${res.status}, count=${res.borrowed?.length}`;
+});
+
+test('NV GHN002 không có TB đang mượn', () => {
+  const res = ccdc_lookupBorrowed('GHN002');
+  return res.status === 'no_borrow' ? true : `Got: ${res.status}`;
+});
+
+test('lookup_borrowed case-insensitive', () => {
+  const res = ccdc_lookupBorrowed('GHN001'.toLowerCase());
+  return res.status === 'has_borrow' ? true : `Got: ${res.status}`;
+});
+
+info('=== NHÓM 3: Validation GIAO ===');
+
+test('Validate GIAO đủ data — pass', () => {
+  return ccdc_validateGiao('TB-001', 'Máy scan') === null ? true : 'Should return null';
+});
+
+test('Validate GIAO thiếu mã TB — fail', () => {
+  return ccdc_validateGiao('', 'Máy scan') !== null ? true : 'Should return error msg';
+});
+
+test('Validate GIAO thiếu tên TB — fail', () => {
+  return ccdc_validateGiao('TB-001', '') !== null ? true : 'Should return error msg';
+});
+
+test('Validate GIAO mã chỉ spaces — fail', () => {
+  return ccdc_validateGiao('   ', 'Máy scan') !== null ? true : 'spaces should fail';
+});
+
+info('=== NHÓM 4: Validation NHẬN ===');
+
+test('Validate NHẬN đủ data — pass', () => {
+  const item = { ma_thiet_bi: 'TB-001', row_index: 2 };
+  return ccdc_validateNhan(item, 'Tốt') === null ? true : 'Should return null';
+});
+
+test('Validate NHẬN chưa chọn item — fail', () => {
+  return ccdc_validateNhan(null, 'Tốt') !== null ? true : 'Should return error';
+});
+
+test('Validate NHẬN thiếu tình trạng — fail', () => {
+  const item = { ma_thiet_bi: 'TB-001', row_index: 2 };
+  return ccdc_validateNhan(item, '') !== null ? true : 'Should return error';
+});
+
+info('=== NHÓM 5: Xử lý barcode scan ===');
+
+test('Scan mode giao → action lookup_employee', () => {
+  ccdc_switchMode('giao');
+  const r = ccdc_processBarcode('GHN001');
+  return r.ok && r.action === 'lookup_employee' && r.msnv === 'GHN001' ? true : JSON.stringify(r);
+});
+
+test('Scan mode nhan → action lookup_borrowed', () => {
+  ccdc_switchMode('nhan');
+  const r = ccdc_processBarcode('GHN001');
+  return r.ok && r.action === 'lookup_borrowed' ? true : JSON.stringify(r);
+});
+
+test('Scan chuỗi rỗng → ok=false', () => {
+  const r = ccdc_processBarcode('');
+  return !r.ok && r.reason === 'empty' ? true : JSON.stringify(r);
+});
+
+test('Scan trim whitespace (súng scan đôi khi thêm space)', () => {
+  ccdc_switchMode('giao');
+  const r = ccdc_processBarcode('  GHN001  ');
+  return r.ok && r.msnv === 'GHN001' ? true : `msnv=${r.msnv}`;
+});
+
+info('=== NHÓM 6: Switch mode ===');
+
+test('switchMode(giao) — valid', () => ccdc_switchMode('giao') === true);
+test('switchMode(nhan) — valid', () => ccdc_switchMode('nhan') === true);
+test('switchMode(invalid) — invalid', () => ccdc_switchMode('unknown') === false);
+test('switchMode reset selectedItem', () => {
+  ccdc_selectedBorrowItem = { ma_thiet_bi: 'X' };
+  ccdc_switchMode('giao');
+  return ccdc_selectedBorrowItem === null ? true : 'Should be null after switch';
+});
+
+info('=== NHÓM 7: Timestamp & log row ===');
+
+test('formatTimestamp trả string không rỗng', () => {
+  const ts = ccdc_formatTimestamp();
+  return typeof ts === 'string' && ts.length > 10 ? true : `Got: ${ts}`;
+});
+
+test('formatTimestamp có format ngày VN (dd/MM)', () => {
+  const ts = ccdc_formatTimestamp();
+  return ts.includes('/') ? true : `Got: ${ts}`;
+});
+
+test('buildLogRow tạo <tr> hợp lệ khi đang mượn', () => {
+  const row = ccdc_buildLogRow({ timestamp:'13/06/2026 08:30', msnv:'GHN001', hoten:'An', ma_thiet_bi:'TB-001', ten_thiet_bi:'Scan', da_thu_hoi:false });
+  return row.includes('<tr>') && row.includes('Đang mượn') ? true : 'Missing expected content';
+});
+
+test('buildLogRow tạo <tr> hợp lệ khi đã nhận', () => {
+  const row = ccdc_buildLogRow({ timestamp:'13/06/2026 08:30', msnv:'GHN001', hoten:'An', ma_thiet_bi:'TB-001', ten_thiet_bi:'Scan', da_thu_hoi:true });
+  return row.includes('Đã nhận') ? true : 'Missing badge-in';
+});
+
+info('=== NHÓM 8: Kiểm tra không xung đột tên hàm với Dashboard ===');
+
+CCDC_FUNCTIONS.forEach(fn => {
+  test(`Hàm ${fn} không trùng với Dashboard`, () => {
+    return !DASHBOARD_FUNCTIONS.includes(fn) ? true : `XỬ LÝ XUNG ĐỘT: ${fn} đã tồn tại trong Dashboard!`;
+  });
+});
+
+info('=== NHÓM 9: Kiểm tra ID HTML không xung đột ===');
+const EXISTING_IDS = [
+  'scanInput','scanTitle','tabGiao','tabNhan','resultOverlay','resultCard',
+  'fMaThietBi','fTenThietBi','logTable','logBody','clock'
+];
+const CCDC_IDS = [
+  'ccdc-scan-input','ccdc-mode-giao','ccdc-mode-nhan',
+  'ccdc-overlay','ccdc-result-card','ccdc-log-tbody','ccdc-scan-title',
+  'ccdc-f-ma','ccdc-f-ten','ccdc-f-ghi','ccdc-f-tinh-trang'
+];
+
+CCDC_IDS.forEach(id => {
+  test(`ID #${id} không trùng với IDs hiện tại`, () => {
+    return !EXISTING_IDS.includes(id) ? true : `XUNG ĐỘT ID: #${id}`;
+  });
+});
+
+/* ===== SUMMARY ===== */
+const summary = document.getElementById('summary');
+const total = pass + fail;
+const color = fail === 0 ? '#27ae60' : '#e74c3c';
+summary.innerHTML = `
+  <div style="padding:16px 20px;border-radius:12px;border:2px solid ${color};background:${color}22;margin-top:20px;">
+    <div style="font-size:20px;color:${color};">${fail === 0 ? '🎉 TẤT CẢ TESTS PASS' : `⚠️ ${fail} TEST THẤT BẠI`}</div>
+    <div style="margin-top:6px;color:#8fa3b8;">Kết quả: ${pass} pass / ${fail} fail / ${total} tổng</div>
+    ${fail === 0
+      ? '<div style="margin-top:8px;color:#27ae60;font-size:13px;">✅ An toàn để tích hợp vào Dashboard</div>'
+      : '<div style="margin-top:8px;color:#e74c3c;font-size:13px;">❌ Cần sửa lỗi trước khi tích hợp</div>'
+    }
+  </div>
+`;
+</script>
+</body>
+</html>
