@@ -151,9 +151,10 @@ function doGet(e) {
   if (action === 'submit_giao')      return ccdcSubmitGiao(e.parameter);
   if (action === 'submit_nhan')      return ccdcSubmitNhan(e.parameter);
   if (action === 'get_today_log')    return ccdcGetTodayLog();
-  if (action === 'ccdc_get_all_logs') return ccdcGetAllLogs();
+  if (action === 'ccdc_get_all_logs')      return ccdcGetAllLogs();
   if (action === 'ccdc_get_all_logs_nhan') return ccdcGetAllNhanLogs();
-  if (action === 'debug_headers')    return ccdcDebugHeaders();
+  if (action === 'mute_alert')             return handleMuteAlert(parseInt(e.parameter.row_index || '0'));
+  if (action === 'debug_headers')          return ccdcDebugHeaders();
   if (action === 'tts')              return handleTts(e.parameter.text);
 
   return createJsonResponse({ status: "error", message: "Invalid action" });
@@ -708,7 +709,7 @@ function ccdcSubmitGiao(params) {
     var ss = getSpreadsheet();
     var sheet = ccdcGetOrCreateGiaoSheet(ss);
     var ts = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy HH:mm:ss');
-    sheet.appendRow([ts, msnv, hoten, ca, quanly, ma, ten, 'false', '', '', ghi, nguoi_thao_tac]);
+    sheet.appendRow([ts, msnv, hoten, ca, quanly, ma, ten, 'false', '', '', ghi, nguoi_thao_tac, '', '']);
     return createJsonResponse({ status: 'success', message: 'Giao thiết bị thành công!' });
   } catch(e) {
     return createJsonResponse({ status: 'error', message: 'Hệ thống bận, vui lòng thử lại sau.' });
@@ -828,29 +829,29 @@ function ccdcGetTodayLog() {
 }
 
 
-// API: Lấy toàn bộ lịch sử giao nhận CCDC thiết bị
 function ccdcGetAllLogs() {
   var ss = getSpreadsheet();
   var sheet = ccdcGetOrCreateGiaoSheet(ss);
   var data = sheet.getDataRange().getValues();
   var log = [];
-  // Quét từ dòng mới nhất lên dòng đầu tiên (bỏ qua dòng tiêu đề index 0)
   for (var i = data.length - 1; i >= 1; i--) {
     var row = data[i];
-    if (row[1]) { // Kiểm tra nếu có Mã NV (không phải hàng trống)
+    if (row[1]) {
       log.push({
-        timestamp:       row[0] ? row[0].toString() : '',
-        msnv:            row[1] ? row[1].toString() : '',
-        hoten:           row[2] ? row[2].toString() : '',
-        ca:              row[3] ? row[3].toString() : '',
-        quanly:          row[4] ? row[4].toString() : '',
-        ma_thiet_bi:     row[5] ? row[5].toString() : '',
-        ten_thiet_bi:    row[6] ? row[6].toString() : '',
-        da_thu_hoi:      row[7].toString() === 'true',
-        thu_hoi_luc:     row[8] ? row[8].toString() : '',
-        tinh_trang:      row[9] ? row[9].toString() : '',
-        ghi_chu:         row[10] ? row[10].toString() : '',
-        nguoi_thao_tac:  row[11] ? row[11].toString() : ''
+        row_index:      i,                                              // dùng để mute_alert
+        timestamp:      row[0] ? row[0].toString() : '',
+        msnv:           row[1] ? row[1].toString() : '',
+        hoten:          row[2] ? row[2].toString() : '',
+        ca:             row[3] ? row[3].toString() : '',
+        quanly:         row[4] ? row[4].toString() : '',
+        ma_thiet_bi:    row[5] ? row[5].toString() : '',
+        ten_thiet_bi:   row[6] ? row[6].toString() : '',
+        da_thu_hoi:     row[7].toString() === 'true',
+        thu_hoi_luc:    row[8] ? row[8].toString() : '',
+        tinh_trang:     row[9] ? row[9].toString() : '',
+        ghi_chu:        row[10] ? row[10].toString() : '',
+        nguoi_thao_tac: row[11] ? row[11].toString() : '',
+        tat_canh_bao:   row[13] ? row[13].toString().toLowerCase() === 'true' : false
       });
     }
   }
@@ -898,8 +899,14 @@ function ccdcGetOrCreateGiaoSheet(ss) {
   var sheet = ss.getSheetByName('CCDC_Giao');
   if (!sheet) {
     sheet = ss.insertSheet('CCDC_Giao');
-    sheet.appendRow(['Thời Gian Giao','Mã NV','Họ Tên','Ca Làm Việc','Quản Lý','Mã Thiết Bị','Tên Thiết Bị','Đã Thu Hồi','Thời Gian Thu Hồi','Tình Trạng','Ghi Chú','Người Thao Tác']);
-    sheet.getRange(1,1,1,12).setFontWeight('bold').setBackground('#f26522').setFontColor('white');
+    sheet.appendRow([
+      'Thời Gian Giao','Mã NV','Họ Tên','Ca Làm Việc','Quản Lý',
+      'Mã Thiết Bị','Tên Thiết Bị','Đã Thu Hồi','Thời Gian Thu Hồi',
+      'Tình Trạng','Ghi Chú','Người Thao Tác',
+      'Thời Gian Nhắc',  // col 12 (M) — timestamp (ms) của lần nhắc gần nhất
+      'Tắt Cảnh Báo'     // col 13 (N) — true/false tắt thủ công
+    ]);
+    sheet.getRange(1,1,1,14).setFontWeight('bold').setBackground('#f26522').setFontColor('white');
     sheet.setFrozenRows(1);
     sheet.setColumnWidth(1,160); sheet.setColumnWidth(7,200); sheet.setColumnWidth(9,160); sheet.setColumnWidth(12,180);
   }
@@ -1165,3 +1172,143 @@ function handleAIChat(userMessage) {
     return createJsonResponse({ status: 'success', reply: 'Lỗi hệ thống AI: ' + error.toString() });
   }
 }
+
+// ============================================================
+// CCDC ALERT: NHẮC NHỞ THU HỒI THIẾT BỊ QUA TELEGRAM
+// Trigger: Cài Time-driven trigger mỗi 1 giờ cho hàm này
+// ============================================================
+
+/**
+ * Parse chuỗi timestamp dạng "dd/MM/yyyy HH:mm:ss" thành Date object
+ */
+function parseGiaoTimestamp(ts) {
+  try {
+    var parts = ts.trim().split(' ');
+    var d = parts[0].split('/');
+    var t = (parts[1] || '0:0:0').split(':');
+    return new Date(
+      parseInt(d[2]), parseInt(d[1]) - 1, parseInt(d[0]),
+      parseInt(t[0]), parseInt(t[1]), parseInt(t[2] || '0')
+    );
+  } catch(e) { return null; }
+}
+
+/**
+ * Tìm Telegram Chat ID của user theo Họ Tên trong Sheet "Tài khoản"
+ * Sheet "Tài khoản": col C (index 2) = Họ Tên, col G (index 6) = Telegram Chat ID
+ */
+function getChatIdByName(authData, name) {
+  var trimmedName = (name || '').trim();
+  for (var i = 1; i < authData.length; i++) {
+    if (authData[i][2].toString().trim() === trimmedName) {
+      var chatId = authData[i][6] ? authData[i][6].toString().trim() : '';
+      return chatId;
+    }
+  }
+  return '';
+}
+
+/**
+ * Kiểm tra và gửi nhắc nhở thu hồi thiết bị PDA/Xe nâng qua Telegram.
+ * Chỉ nhắc khi: đã quá 12 giờ từ lúc giao, chưa thu hồi, chưa tắt cảnh báo.
+ * Nhắc lại mỗi 4 giờ nếu vẫn chưa thu hồi.
+ *
+ * *** ĐỂ KÍCH HOẠT: vào Apps Script → Triggers → Add Trigger ***
+ *   Function: checkOverdueDevices
+ *   Event source: Time-driven
+ *   Type: Hour timer → Every 1 hour
+ */
+function checkOverdueDevices() {
+  var ALERT_DEVICES   = /PDA|Xe\s*n\u00e2ng/i;   // Chỉ nhắc PDA và Xe nâng
+  var FIRST_ALERT_H   = 12;    // Nhắc lần đầu sau 12 giờ
+  var REPEAT_ALERT_H  = 4;     // Nhắc lại mỗi 4 giờ tiếp theo
+
+  var ss        = getSpreadsheet();
+  var giaoSheet = ccdcGetOrCreateGiaoSheet(ss);
+  var giaoData  = giaoSheet.getDataRange().getValues();
+  var authSheet = getAuthSheet();
+  var authData  = authSheet.getDataRange().getValues();
+
+  var now = new Date();
+  var sent = 0;
+
+  for (var i = 1; i < giaoData.length; i++) {
+    var row = giaoData[i];
+    if (!row[1]) continue;                                        // Hàng trống
+
+    // === Điều kiện loại trừ ===
+    if (row[7].toString() === 'true') continue;                   // Đã thu hồi
+    if ((row[13] || '').toString().toLowerCase() === 'true') continue; // Tắt cảnh báo thủ công
+
+    // Chỉ áp dụng PDA và Xe nâng
+    var tenThietBi = row[6].toString();
+    if (!ALERT_DEVICES.test(tenThietBi)) continue;
+
+    // === Tính giờ đã trôi ===
+    var giaoTime = parseGiaoTimestamp(row[0].toString());
+    if (!giaoTime) continue;
+    var hoursElapsed = (now.getTime() - giaoTime.getTime()) / 3600000;
+    if (hoursElapsed < FIRST_ALERT_H) continue;                   // Chưa đến 12 giờ
+
+    // === Kiểm tra lần nhắc cuối ===
+    var lastNhacRaw = row[12] ? row[12].toString().trim() : '';
+    if (lastNhacRaw) {
+      var lastNhacMs = parseInt(lastNhacRaw);
+      if (!isNaN(lastNhacMs)) {
+        var hoursSinceLast = (now.getTime() - lastNhacMs) / 3600000;
+        if (hoursSinceLast < REPEAT_ALERT_H) continue;            // Chưa đến 4 giờ
+      }
+    }
+
+    // === Tìm Chat ID người bắn giao ===
+    var nguoiThaoTac = row[11] ? row[11].toString() : '';
+    var chatId = getChatIdByName(authData, nguoiThaoTac);
+    if (!chatId) continue;                                         // Không có Telegram
+
+    // === Tính giờ + phút đã trôi ===
+    var totalMin = Math.floor((now.getTime() - giaoTime.getTime()) / 60000);
+    var h = Math.floor(totalMin / 60);
+    var m = totalMin % 60;
+
+    // === Nội dung tin nhắn ===
+    var msg = '\u26a0\ufe0f *NH\u1eaec NH\u1ede THU H\u1ed2I THI\u1ebeT B\u1eca*\n\n'
+      + '\ud83d\udce6 Thi\u1ebft b\u1ecb: *' + row[5] + '* \u2014 ' + tenThietBi + '\n'
+      + '\ud83d\udc64 Nh\u00e2n vi\u00ean: ' + row[2] + ' (' + row[1] + ')\n'
+      + '\ud83d\udc54 Qu\u1ea3n l\u00fd TT: *' + (row[4] || 'Ch\u01b0a c\u00f3') + '*\n'
+      + '\ud83d\udd57 Giao l\u00fac: ' + row[0].toString().substring(0, 16) + '\n'
+      + '\u23f1 \u0110\u00e3 qu\u00e1: *' + h + ' gi\u1edd ' + m + ' ph\u00fat*\n\n'
+      + 'Vui l\u00f2ng ki\u1ec3m tra v\u00e0 thu h\u1ed3i thi\u1ebft b\u1ecb.\n'
+      + '\ud83d\udd15 T\u1eaft nh\u1eafc: V\u00e0o CCDC Report trong app.';
+
+    sendTelegramMessage(chatId, msg);
+
+    // === Ghi lại thời gian nhắc gần nhất (col M = index 12) ===
+    giaoSheet.getRange(i + 1, 13).setValue(now.getTime().toString());
+    sent++;
+  }
+
+  Logger.log('[CCDC Alert] \u0110\u00e3 g\u1eedi ' + sent + ' nh\u1eafc nh\u1edf l\u00fac ' + now.toString());
+}
+
+/**
+ * Tắt cảnh báo thủ công cho 1 bản ghi trong CCDC_Giao.
+ * rowIndex = data array index (i), sheet row = rowIndex + 1.
+ */
+function handleMuteAlert(rowIndex) {
+  if (!rowIndex || rowIndex < 1) {
+    return createJsonResponse({ status: 'error', message: 'Row index không hợp lệ!' });
+  }
+  var ss    = getSpreadsheet();
+  var sheet = ccdcGetOrCreateGiaoSheet(ss);
+  var data  = sheet.getDataRange().getValues();
+  if (rowIndex >= data.length) {
+    return createJsonResponse({ status: 'error', message: 'Không tìm thấy bản ghi!' });
+  }
+  // Kiểm tra đã thu hồi chưa (không cần tắt nếu đã thu hồi)
+  if (data[rowIndex][7].toString() === 'true') {
+    return createJsonResponse({ status: 'error', message: 'Thiết bị đã được thu hồi, không cần tắt cảnh báo.' });
+  }
+  sheet.getRange(rowIndex + 1, 14).setValue('true'); // col N = Tắt Cảnh Báo
+  return createJsonResponse({ status: 'success', message: 'Đã tắt cảnh báo nhắc nhở cho thiết bị này!' });
+}
+

@@ -3550,7 +3550,24 @@ function ccdcReportRender(list) {
                 </div>
             `;
         } else {
-            statusBadge = '<span class="status-badge warning">Đang mượn</span>';
+        // Kiểm tra thiết bị có trong danh sách cảnh báo không (PDA / Xe nâng)
+        const isAlertDevice = /PDA|Xe\s*nâng/i.test(item.ten_thiet_bi || '');
+        let muteBtnHtml = '';
+        if (item._type === 'giao' && isAlertDevice) {
+            if (item.tat_canh_bao) {
+                muteBtnHtml = `<div style="margin-top:6px;"><span style="font-size:11px;color:var(--text-muted);">🔕 Nhắc nhở đã tắt</span></div>`;
+            } else {
+                muteBtnHtml = `<div style="margin-top:6px;">
+                    <button onclick="ccdcMuteAlert(${item.row_index})" 
+                        style="font-size:11px;padding:3px 10px;border-radius:6px;border:1px solid rgba(255,120,0,0.5);background:rgba(255,120,0,0.1);color:var(--ghn-orange);cursor:pointer;transition:all 0.2s;"
+                        onmouseover="this.style.background='rgba(255,120,0,0.25)'"
+                        onmouseout="this.style.background='rgba(255,120,0,0.1)'">
+                        🔕 Tắt nhắc
+                    </button>
+                </div>`;
+            }
+        }
+        statusBadge = `<span class="status-badge warning">Đang mượn</span>${muteBtnHtml}`;
         }
 
         const note = item.ghi_chu ? escapeHtml(item.ghi_chu) : '<span style="font-style:italic;color:var(--text-muted);font-size:12px;">Không có</span>';
@@ -3615,6 +3632,22 @@ window.ccdcReportFilter = function() {
 window.ccdcReportRefresh = function() {
     ccdcReportLoad();
     ccdcToast('🔄 Đang làm mới dữ liệu báo cáo...', 'success');
+};
+
+// Tắt cảnh báo nhắc nhở thủ công cho 1 thiết bị
+window.ccdcMuteAlert = async function(rowIndex) {
+    if (!confirm('🔕 Tắt nhắc nhở cho thiết bị này?\nBot Telegram sẽ không gửi nhắc nữa cho đến khi thu hồi.')) return;
+    try {
+        const res = await ccdcApiCall({ action: 'mute_alert', row_index: rowIndex });
+        if (res && res.status === 'success') {
+            ccdcToast('🔕 Đã tắt cảnh báo nhắc nhở!', 'success');
+            ccdcReportLoad(); // Refresh bảng để cập nhật trạng thái
+        } else {
+            ccdcToast('⚠️ ' + ((res && res.message) || 'Lỗi không xác định!'), 'error');
+        }
+    } catch(err) {
+        ccdcToast('⚠️ Lỗi kết nối: ' + err.message, 'error');
+    }
 };
 
 window.ccdcReportExportCSV = function() {
