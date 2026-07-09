@@ -3342,33 +3342,58 @@ async function ccdcSubmit() {
 async function ccdcLoadLog() {
     const tbody = document.getElementById('ccdc-log-tbody');
     if (!tbody) return;
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px;">Đang tải...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px;">Đang tải...</td></tr>';
     try {
-        const res = await ccdcApiCall({ action: 'get_today_log' });
+        const res = await ccdcApiCall({ action: 'ccdc_get_all_logs' });
         if (res.status === 'success' && res.log && res.log.length > 0) {
-            tbody.innerHTML = res.log.map(r => `
-                <tr>
-                    <td style="white-space:nowrap;font-size:12px;color:var(--text-muted);">${r.timestamp.substring(0,16)}</td>
-                    <td><strong>${r.msnv}</strong></td>
-                    <td>${r.hoten}</td>
-                    <td><code style="background:rgba(255,255,255,0.07);padding:2px 8px;border-radius:6px;font-size:12px;">${r.ma_thiet_bi}</code></td>
-                    <td>${r.ten_thiet_bi}</td>
-                    <td class="text-center">
-                        ${r.da_thu_hoi
-                            ? '<span class="status-badge safe">✅ Đã nhận</span>'
-                            : '<span class="status-badge warning">🔵 Đang mượn</span>'
-                        }
-                    </td>
-                    <td style="font-size:12px;color:var(--text-muted);">${r.nguoi_thao_tac || '<span style="opacity:0.4">—</span>'}</td>
-                </tr>`).join('');
+            // Lọc giao dịch hôm nay ở client — tránh lỗi locale ngày tháng backend
+            const now = new Date();
+            const todayStr = String(now.getDate()).padStart(2,'0') + '/' 
+                           + String(now.getMonth()+1).padStart(2,'0') + '/' 
+                           + now.getFullYear();
+            // Format timestamp từ API có thể là "07/09/2026" (MM/dd) hoặc "09/07/2026" (dd/MM)
+            // Lấy ngày theo cách parse linh hoạt: kiểm tra cả 2 format
+            const todayLogs = res.log.filter(r => {
+                if (!r.timestamp) return false;
+                const ts = r.timestamp.substring(0, 10); // "XX/XX/2026"
+                // So khớp trực tiếp
+                if (ts === todayStr) return true;
+                // So khớp MM/dd/yyyy vs dd/MM/yyyy (swap 2 phần đầu)
+                const parts = ts.split('/');
+                if (parts.length === 3) {
+                    const swapped = parts[1] + '/' + parts[0] + '/' + parts[2];
+                    if (swapped === todayStr) return true;
+                }
+                return false;
+            });
+
+            if (todayLogs.length > 0) {
+                tbody.innerHTML = todayLogs.map(r => `
+                    <tr>
+                        <td style="white-space:nowrap;font-size:12px;color:var(--text-muted);">${r.timestamp.substring(0,16)}</td>
+                        <td><strong>${r.msnv}</strong></td>
+                        <td>${r.hoten}</td>
+                        <td><code style="background:rgba(255,255,255,0.07);padding:2px 8px;border-radius:6px;font-size:12px;">${r.ma_thiet_bi}</code></td>
+                        <td>${r.ten_thiet_bi}</td>
+                        <td class="text-center">
+                            ${r.da_thu_hoi
+                                ? '<span class="status-badge safe">✅ Đã nhận</span>'
+                                : '<span class="status-badge warning">🔵 Đang mượn</span>'
+                            }
+                        </td>
+                        <td style="font-size:12px;color:var(--text-muted);">${r.nguoi_thao_tac || '<span style="opacity:0.4">—</span>'}</td>
+                    </tr>`).join('');
+            } else {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px;">Chưa có giao dịch nào hôm nay</td></tr>';
+            }
         } else {
             tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:30px;">Chưa có giao dịch nào hôm nay</td></tr>';
         }
-
     } catch(e) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:#e74c3c;padding:24px;">⚠️ Không tải được dữ liệu</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#e74c3c;padding:24px;">⚠️ Không tải được dữ liệu</td></tr>';
     }
 }
+
 
 // === HELPERS ===
 function ccdcCloseResult() {
