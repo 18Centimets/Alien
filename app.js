@@ -2468,9 +2468,10 @@ async function initUserManagement() {
             const chatid = document.getElementById('um-chatid').value;
             const role = document.getElementById('um-role').value;
 
+            const sessionToken = localStorage.getItem('ghn_session_token') || '';
             const url = currentUserEditing 
-                ? `${APPS_SCRIPT_URL}?action=update_user&msnv=${msnv}&password=${password}&fullname=${encodeURIComponent(fullname)}&role=${role}&chatid=${chatid}`
-                : `${APPS_SCRIPT_URL}?action=create_user&msnv=${msnv}&password=${password}&fullname=${encodeURIComponent(fullname)}&role=${role}&chatid=${chatid}`;
+                ? `${APPS_SCRIPT_URL}?action=update_user&token=${encodeURIComponent(sessionToken)}&msnv=${msnv}&password=${password}&fullname=${encodeURIComponent(fullname)}&role=${role}&chatid=${chatid}`
+                : `${APPS_SCRIPT_URL}?action=create_user&token=${encodeURIComponent(sessionToken)}&msnv=${msnv}&password=${password}&fullname=${encodeURIComponent(fullname)}&role=${role}&chatid=${chatid}`;
 
             try {
                 const response = await fetch(url);
@@ -2511,7 +2512,8 @@ async function initUserManagement() {
             const permsStr = newPerms.join(',');
 
             try {
-                const url = `${APPS_SCRIPT_URL}?action=update_user&msnv=${currentUserEditing}&permissions=${encodeURIComponent(permsStr)}`;
+                const sessionToken = localStorage.getItem('ghn_session_token') || '';
+                const url = `${APPS_SCRIPT_URL}?action=update_user&token=${encodeURIComponent(sessionToken)}&msnv=${currentUserEditing}&permissions=${encodeURIComponent(permsStr)}`;
                 const response = await fetch(url);
                 const data = await response.json();
                 if (data.status === 'success') {
@@ -2650,7 +2652,8 @@ window.toggleLockUser = async function(msnv, currentStatus, newStatusToggle) {
     if (msnv === 'ADMIN001') { alert('Sếp không thể tự khóa tài khoản Super Admin của mình!'); return; }
     const newStatus = newStatusToggle;
     try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=update_user&msnv=${msnv}&status=${newStatus}`);
+        const sessionToken = localStorage.getItem('ghn_session_token') || '';
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=update_user&token=${encodeURIComponent(sessionToken)}&msnv=${msnv}&status=${newStatus}`);
         const data = await response.json();
         if(data.status === 'success') {
             await fetchUsersFromBackend();
@@ -2664,7 +2667,8 @@ window.deleteUser = async function(msnv) {
     if (msnv === 'ADMIN001') { alert('Không thể xóa Super Admin!'); return; }
     if (confirm('Sếp có chắc chắn muốn XÓA VĨNH VIỄN tài khoản ' + msnv + ' không? Thao tác này sẽ xóa dữ liệu trên Google Sheet.')) {
         try {
-            const response = await fetch(`${APPS_SCRIPT_URL}?action=delete_user&msnv=${msnv}`);
+            const sessionToken = localStorage.getItem('ghn_session_token') || '';
+            const response = await fetch(`${APPS_SCRIPT_URL}?action=delete_user&token=${encodeURIComponent(sessionToken)}&msnv=${msnv}`);
             const data = await response.json();
             if(data.status === 'success') {
                 await fetchUsersFromBackend();
