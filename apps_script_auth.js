@@ -155,7 +155,8 @@ function doGet(e) {
   if (action === 'ccdc_get_all_logs_nhan') return ccdcGetAllNhanLogs();
   if (action === 'mute_alert')             return handleMuteAlert(parseInt(e.parameter.row_index || '0'));
   if (action === 'debug_headers')          return ccdcDebugHeaders();
-  if (action === 'tts')              return handleTts(e.parameter.text);
+  if (action === 'tts')                    return handleTts(e.parameter.text);
+  if (action === 'setup_system')           return handleSetupSystem(e.parameter.secret);
 
   return createJsonResponse({ status: "error", message: "Invalid action" });
 }
@@ -1301,4 +1302,115 @@ function handleMuteAlert(rowIndex) {
   sheet.getRange(rowIndex + 1, 14).setValue('true'); // col N = Tắt Cảnh Báo
   return createJsonResponse({ status: 'success', message: 'Đã tắt cảnh báo nhắc nhở cho thiết bị này!' });
 }
+
+
+// ============================================================
+// ONE-TIME SETUP — Tự động hoá sau khi Deploy
+// Gọi: ?action=setup_system&secret=INIT_GHN_2026
+// Chỉ chạy 1 lần, sau đó khoá lại tự động.
+// ============================================================
+
+function handleSetupSystem(secret) {
+  var SETUP_SECRET = 'INIT_GHN_2026';
+  if (secret !== SETUP_SECRET) {
+    return createJsonResponse({ status: 'error', message: 'Sai secret key!' });
+  }
+  // Khoá sau lần đầu chạy
+  var done = scriptProperties.getProperty('setup_done');
+  if (done === 'true') {
+    return createJsonResponse({ status: 'info', message: 'Hệ thống đã được setup trước đó. Bỏ qua.' });
+  }
+  try {
+    var log = setupSystem();
+    scriptProperties.setProperty('setup_done', 'true');
+    return createJsonResponse({ status: 'success', message: 'Setup hoàn tất!', log: log });
+  } catch(e) {
+    return createJsonResponse({ status: 'error', message: 'Lỗi setup: ' + e.toString() });
+  }
+}
+
+/**
+ * Tự động hoá toàn bộ setup sau deploy:
+ * 1. Đặt boss_password mới
+ * 2. Cài Time Trigger cho checkOverdueDevices (1h/lần)
+ * 3. Thêm cột M & N vào CCDC_Giao (nếu chưa có)
+ * 4. Xóa toàn bộ dữ liệu cũ trong CCDC_Giao và CCDC_Nhan
+ */
+function setupSystem() {
+  var log = [];
+
+  // === 1. Đặt boss_password ===
+  scriptProperties.setProperty('boss_password', 'QNhi@6789!');
+  log.push('✅ boss_password đã cập nhật');
+
+  // === 2. Cài Time Trigger ===
+  // Xoá trigger cũ trùng tên trước để tránh duplicate
+  var triggers = ScriptApp.getProjectTriggers();
+  for (var t = 0; t < triggers.length; t++) {
+    if (triggers[t].getHandlerFunction() === 'checkOverdueDevices') {
+      ScriptApp.deleteTrigger(triggers[t]);
+      log.push('🗑️ Đã xoá trigger cũ checkOverdueDevices');
+    }
+  }
+  ScriptApp.newTrigger('checkOverdueDevices')
+    .timeBased()
+    .everyHours(1)
+    .create();
+  log.push('✅ Time Trigger checkOverdueDevices (1h) đã cài');
+
+  // === 3. Thêm cột M & N vào CCDC_Giao nếu chưa có ===
+  var ss = getSpreadsheet();
+  var giaoSheet = ss.getSheetByName('CCDC_Giao');
+  if (giaoSheet) {
+    var headers = giaoSheet.getRange(1, 1, 1, giaoSheet.getLastColumn()).getValues()[0];
+    var hasNhac = headers.indexOf('Thời Gian Nhắc') >= 0;
+    var hasTat  = headers.indexOf('Tắt Cảnh Báo')  >= 0;
+    if (!hasNhac) {
+      giaoSheet.getRange(1, 13).setValue('Thời Gian Nhắc');
+      giaoSheet.getRange(1, 13).setFontWeight('bold').setBackground('#f26522').setFontColor('white');
+      log.push('✅ Đã thêm cột M (Thời Gian Nhắc) vào CCDC_Giao');
+    } else {
+      log.push('ℹ️ Cột M (Thời Gian Nhắc) đã tồn tại');
+    }
+    if (!hasTat) {
+      giaoSheet.getRange(1, 14).setValue('Tắt Cảnh Báo');
+      giaoSheet.getRange(1, 14).setFontWeight('bold').setBackground('#f26522').setFontColor('white');
+      log.push('✅ Đã thêm cột N (Tắt Cảnh Báo) vào CCDC_Giao');
+    } else {
+      log.push('ℹ️ Cột N (Tắt Cảnh Báo) đã tồn tại');
+    }
+
+    // === 4. Xoá dữ liệu cũ CCDC_Giao (giữ header row 1) ===
+    var lastRow = giaoSheet.getLastRow();
+    if (lastRow > 1) {
+      giaoSheet.deleteRows(2, lastRow - 1);
+      log.push('✅ Đã xoá ' + (lastRow - 1) + ' dòng dữ liệu cũ trong CCDC_Giao');
+    } else {
+      log.push('ℹ️ CCDC_Giao không có dữ liệu cũ cần xoá');
+    }
+  } else {
+    // Sheet chưa tồn tại → tạo mới (ccdcGetOrCreateGiaoSheet sẽ tự thêm đủ cột)
+    ccdcGetOrCreateGiaoSheet(ss);
+    log.push('✅ Tạo mới sheet CCDC_Giao (đủ 14 cột)');
+  }
+
+  // === 5. Xoá dữ liệu cũ CCDC_Nhan (giữ header) ===
+  var nhanSheet = ss.getSheetByName('CCDC_Nhan');
+  if (nhanSheet) {
+    var lastNhan = nhanSheet.getLastRow();
+    if (lastNhan > 1) {
+      nhanSheet.deleteRows(2, lastNhan - 1);
+      log.push('✅ Đã xoá ' + (lastNhan - 1) + ' dòng dữ liệu cũ trong CCDC_Nhan');
+    } else {
+      log.push('ℹ️ CCDC_Nhan không có dữ liệu cũ');
+    }
+  } else {
+    ccdcGetOrCreateNhanSheet(ss);
+    log.push('✅ Tạo mới sheet CCDC_Nhan');
+  }
+
+  log.push('🚀 Setup hoàn tất lúc ' + new Date().toString());
+  return log;
+}
+
 
