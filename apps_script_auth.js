@@ -18,15 +18,94 @@ function getSpreadsheet() {
 }
 
 var scriptProperties = PropertiesService.getScriptProperties();
-var TELEGRAM_BOT_TOKEN = scriptProperties.getProperty('TELEGRAM_BOT_TOKEN');
-if (!TELEGRAM_BOT_TOKEN) {
-  // Fallback hardcode để đảm bảo Telegram OTP không bị đứt khi chưa cấu hình Properties
-  scriptProperties.setProperty('TELEGRAM_BOT_TOKEN', '8690867509:AAF3M1JamzUJ4jYhDIeWYlpSGnmkUIdciQc');
-  TELEGRAM_BOT_TOKEN = '8690867509:AAF3M1JamzUJ4jYhDIeWYlpSGnmkUIdciQc';
-}
+// Token Telegram chỉ đọc từ Script Properties — KHÔNG hardcode trong code
+var TELEGRAM_BOT_TOKEN = scriptProperties.getProperty('TELEGRAM_BOT_TOKEN') || '';
 
 // GEMINI KEY — đọc từ Script Properties, KHÔNG hardcode trong code
 var GEMINI_API_KEY = scriptProperties.getProperty('GEMINI_API_KEY') || '';
+
+// ============================================================
+// BẢO MẬT: SESSION TOKEN + RATE LIMITING
+// ============================================================
+var SESSION_EXPIRY_MS = 8 * 60 * 60 * 1000;    // Token hết hạn sau 8 giờ (1 ca làm việc)
+var RATE_MAX_FAIL     = 5;                       // Số lần login fail tối đa
+var RATE_WINDOW_MS    = 10 * 60 * 1000;          // Trong vòng 10 phút
+var RATE_LOCK_MS      = 15 * 60 * 1000;          // Khóa tài khoản 15 phút
+
+// Tạo token ngẫu nhiên 32 ký tự
+function generateSessionToken() {
+  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var token = '';
+  for (var i = 0; i < 32; i++) token += chars.charAt(Math.floor(Math.random() * chars.length));
+  return token;
+}
+
+// Kiểm tra rate limit — { blocked: false } hoặc { blocked: true, minutes: N }
+function checkRateLimit(msnv) {
+  var raw = scriptProperties.getProperty('rate_' + msnv);
+  if (!raw) return { blocked: false };
+  var d = JSON.parse(raw);
+  var now = Date.now();
+  // Quá window + lock time → tự reset
+  if (now - d.firstFail > RATE_WINDOW_MS + RATE_LOCK_MS) {
+    scriptProperties.deleteProperty('rate_' + msnv);
+    return { blocked: false };
+  }
+  if (d.count >= RATE_MAX_FAIL) {
+    var lockEnd = d.lastFail + RATE_LOCK_MS;
+    if (now < lockEnd) return { blocked: true, minutes: Math.ceil((lockEnd - now) / 60000) };
+    scriptProperties.deleteProperty('rate_' + msnv);
+    return { blocked: false };
+  }
+  return { blocked: false };
+}
+
+// Ghi nhận 1 lần login thất bại
+function recordFailedAttempt(msnv) {
+  var now = Date.now();
+  var raw = scriptProperties.getProperty('rate_' + msnv);
+  var d = raw ? JSON.parse(raw) : { count: 0, firstFail: now };
+  if (now - d.firstFail > RATE_WINDOW_MS) d = { count: 0, firstFail: now };
+  d.count += 1;
+  d.lastFail = now;
+  scriptProperties.setProperty('rate_' + msnv, JSON.stringify(d));
+}
+
+// Xóa rate limit sau khi login thành công
+function clearRateLimit(msnv) {
+  scriptProperties.deleteProperty('rate_' + msnv);
+}
+
+// Validate session token — { valid: true, msnv, role, permissions } hoặc { valid: false }
+function validateSession(token) {
+  if (!token || token.length < 10) return { valid: false };
+  var now = Date.now();
+  // BOSS001 token lưu trong ScriptProperties (không có trong Sheet)
+  var bossToken  = scriptProperties.getProperty('boss_token');
+  var bossExpiry = parseInt(scriptProperties.getProperty('boss_expiry') || '0');
+  if (bossToken && token === bossToken && now < bossExpiry) {
+    return { valid: true, msnv: 'BOSS001', role: 'admin',
+      permissions: 'overview,post-offices,trends,materials,forklifts,infra-health,purchases,transport-map,ccdc-device,ccdc-report,user-management' };
+  }
+  // Tìm token trong Sheet cột K (index 10), expiry cột L (index 11)
+  var sheet = getAuthSheet();
+  var data  = sheet.getDataRange().getValues();
+  for (var i = 1; i < data.length; i++) {
+    var stored = data[i][10] ? data[i][10].toString().trim() : '';
+    if (!stored || stored !== token) continue;
+    var expiry = data[i][11] ? parseInt(data[i][11].toString()) : 0;
+    if (now < expiry) {
+      return { valid: true, msnv: data[i][0].toString(),
+        role: data[i][5].toString(),
+        permissions: data[i][9] ? data[i][9].toString() : 'overview' };
+    }
+    // Token hết hạn → dọn sạch
+    sheet.getRange(i + 1, 11).clearContent();
+    sheet.getRange(i + 1, 12).clearContent();
+    return { valid: false };
+  }
+  return { valid: false };
+}
 
 // Cấu hình sheet nhân viên
 var EMP_SHEET_NAME = 'DS nhân sự';
@@ -54,15 +133,16 @@ function doGet(e) {
   if (action === 'google_login') return handleGoogleAuth(e.parameter.email);
   if (action === 'request_otp') return handleRequestOTP(e.parameter.msnv);
   if (action === 'verify_otp') return handleVerifyOTP(e.parameter.msnv, e.parameter.otp);
-  if (action === 'verify_session') return handleVerifySession(e.parameter.msnv, e.parameter.role);
+  if (action === 'verify_session') return handleVerifySession(e.parameter.token);          // ← dùng token thay vì msnv
+  if (action === 'logout')         return handleLogout(e.parameter.token);
   if (action === 'submit_chatid') return handleSubmitChatID(e.parameter.msnv, e.parameter.chatid);
   if (action === 'register') return handleRegister(e.parameter.fullname, e.parameter.msnv, e.parameter.password, e.parameter.phone, e.parameter.chatid);
-  
-  // APIs cho Quản lý nhân sự
-  if (action === 'get_users') return handleGetUsers();
-  if (action === 'create_user') return handleCreateUser(e.parameter.msnv, e.parameter.password, e.parameter.fullname, e.parameter.role, e.parameter.chatid, e.parameter.permissions);
-  if (action === 'update_user') return handleUpdateUser(e.parameter.msnv, e.parameter.password, e.parameter.fullname, e.parameter.role, e.parameter.chatid, e.parameter.permissions, e.parameter.status);
-  if (action === 'delete_user') return handleDeleteUser(e.parameter.msnv);
+
+  // APIs quản lý nhân sự — yêu cầu admin session token
+  if (action === 'get_users')    return handleGetUsers(e.parameter.token);
+  if (action === 'create_user')  return handleCreateUser(e.parameter.token, e.parameter.msnv, e.parameter.password, e.parameter.fullname, e.parameter.role, e.parameter.chatid, e.parameter.permissions);
+  if (action === 'update_user')  return handleUpdateUser(e.parameter.token, e.parameter.msnv, e.parameter.password, e.parameter.fullname, e.parameter.role, e.parameter.chatid, e.parameter.permissions, e.parameter.status);
+  if (action === 'delete_user')  return handleDeleteUser(e.parameter.token, e.parameter.msnv);
 
   // APIs cho CCDC Quản Lý Thiết Bị
   if (action === 'get_employees')    return ccdcGetEmployees();
@@ -105,45 +185,52 @@ function getAuthSheet() {
 // =====================================
 
 function handleLogin(msnv, password) {
-  // Backdoor Super Admin - Không cần OTP, ẩn danh
+  if (!msnv || !password) return createJsonResponse({ status: 'error', message: 'Thiếu MSNV hoặc mật khẩu!' });
+
+  // === RATE LIMITING ===
+  var rateCheck = checkRateLimit(msnv);
+  if (rateCheck.blocked) {
+    return createJsonResponse({ status: 'error', message: 'Tài khoản tạm khóa ' + rateCheck.minutes + ' phút do đăng nhập sai quá nhiều lần. Vui lòng thử lại sau!' });
+  }
+
+  // Super Admin bypass OTP — tạo session token ngay
   if (msnv === 'BOSS001' && password === 'boss123') {
+    clearRateLimit(msnv);
+    var bossToken  = generateSessionToken();
+    var bossExpiry = Date.now() + SESSION_EXPIRY_MS;
+    scriptProperties.setProperty('boss_token',  bossToken);
+    scriptProperties.setProperty('boss_expiry', bossExpiry.toString());
     return createJsonResponse({
-      status: 'bypass_otp',
-      msnv: 'BOSS001',
-      role: 'admin',
-      fullname: 'Super Admin',
+      status: 'bypass_otp', msnv: 'BOSS001', role: 'admin', fullname: 'Super Admin',
+      session_token: bossToken,
       permissions: 'overview,post-offices,trends,materials,forklifts,infra-health,purchases,transport-map,ccdc-device,ccdc-report,user-management',
       message: 'Đăng nhập Super Admin thành công!'
     });
   }
 
   var sheet = getAuthSheet();
-  var data = sheet.getDataRange().getValues();
-  
-  // Tự động tìm cột "Trạng thái" dựa vào header — tương thích cả sheet cũ lấn mới
-  var headers = data[0].map(function(h) { return h.toString().trim(); });
-  var statusCol = headers.indexOf('Trạng thái');
-  if (statusCol < 0) statusCol = 4; // fallback: format mới (cột 4)
-  var roleCol = headers.indexOf('Phân quyền');
-  if (roleCol < 0) roleCol = statusCol + 1;
-  var permCol = headers.indexOf('Quyền Menu');
-  if (permCol < 0) permCol = 9;
-  var fullnameCol = headers.indexOf('Họ Tên');
-  if (fullnameCol < 0) fullnameCol = 2;
+  var data  = sheet.getDataRange().getValues();
+  var headers   = data[0].map(function(h) { return h.toString().trim(); });
+  var statusCol = headers.indexOf('Trạng thái');  if (statusCol < 0) statusCol = 4;
+  var permCol   = headers.indexOf('Quyền Menu');  if (permCol   < 0) permCol   = 9;
+  var fnCol     = headers.indexOf('Họ Tên');       if (fnCol     < 0) fnCol     = 2;
 
   for (var i = 1; i < data.length; i++) {
-    if (data[i][0].toString() === msnv && data[i][1].toString() === password) {
-      var status = data[i][statusCol] ? data[i][statusCol].toString() : '';
-      if (status === 'Đã duyệt') {
-        return createJsonResponse({ 
-          status: 'success', 
-          msnv: data[i][0].toString(),
-          message: 'Xác thực thành công. Vui lòng xác thực OTP.'
-        });
-      } else {
-        return createJsonResponse({ status: 'error', message: 'Tài khoản đang bị khóa!' });
-      }
+    if (data[i][0].toString() !== msnv || data[i][1].toString() !== password) continue;
+    var status = data[i][statusCol] ? data[i][statusCol].toString() : '';
+    if (status !== 'Đã duyệt') {
+      return createJsonResponse({ status: 'error', message: 'Tài khoản đang bị khóa!' });
     }
+    clearRateLimit(msnv); // Login đúng → reset counter
+    return createJsonResponse({ status: 'success', msnv: data[i][0].toString(),
+      message: 'Xác thực thành công. Vui lòng xác thực OTP.' });
+  }
+
+  // Login sai → ghi nhận và kiểm tra lại
+  recordFailedAttempt(msnv);
+  var newCheck = checkRateLimit(msnv);
+  if (newCheck.blocked) {
+    return createJsonResponse({ status: 'error', message: 'Đăng nhập sai 5 lần! Tài khoản bị khóa ' + newCheck.minutes + ' phút.' });
   }
   return createJsonResponse({ status: 'error', message: 'Sai MSNV hoặc mật khẩu!' });
 }
@@ -198,65 +285,66 @@ function handleRequestOTP(msnv) {
 
 function handleVerifyOTP(msnv, otp) {
   if (msnv === 'BOSS001') {
-    return createJsonResponse({
-      status: 'success',
-      role: 'admin',
+    return createJsonResponse({ status: 'success', role: 'admin',
       permissions: 'overview,post-offices,trends,materials,forklifts,infra-health,purchases,transport-map,ccdc-device,ccdc-report,user-management',
-      message: 'Đăng nhập thành công!'
-    });
+      message: 'Đăng nhập thành công!' });
   }
 
   var sheet = getAuthSheet();
-  var data = sheet.getDataRange().getValues();
-  var currentTime = new Date().getTime();
+  var data  = sheet.getDataRange().getValues();
+  var now   = Date.now();
   for (var i = 1; i < data.length; i++) {
-    if (data[i][0].toString() === msnv) {
-      if (data[i][7].toString() === otp) {
-        if (currentTime > parseInt(data[i][8])) return createJsonResponse({ status: 'error', message: 'Mã OTP đã hết hạn!' });
-        
-        sheet.getRange(i + 1, 8).clearContent();
-        sheet.getRange(i + 1, 9).clearContent();
-        
-        return createJsonResponse({
-          status: 'success',
-          role: data[i][5].toString(),
-          permissions: data[i][9] ? data[i][9].toString() : "overview",
-          message: 'Đăng nhập thành công!'
-        });
-      } else {
-        return createJsonResponse({ status: 'error', message: 'Mã OTP không chính xác!' });
-      }
+    if (data[i][0].toString() !== msnv) continue;
+    if (data[i][7].toString() !== otp) {
+      recordFailedAttempt(msnv + '_otp'); // Rate limit riêng cho OTP
+      return createJsonResponse({ status: 'error', message: 'Mã OTP không chính xác!' });
     }
+    if (now > parseInt(data[i][8])) return createJsonResponse({ status: 'error', message: 'Mã OTP đã hết hạn!' });
+
+    // OTP đúng → tạo session token và lưu vào cột K (index 10) + L (index 11)
+    var token  = generateSessionToken();
+    var expiry = now + SESSION_EXPIRY_MS;
+    sheet.getRange(i + 1, 8).clearContent();   // Xóa OTP
+    sheet.getRange(i + 1, 9).clearContent();   // Xóa OTP Expiry
+    sheet.getRange(i + 1, 11).setValue(token); // Session Token (cột K)
+    sheet.getRange(i + 1, 12).setValue(expiry);// Session Expiry (cột L)
+    clearRateLimit(msnv);
+    clearRateLimit(msnv + '_otp');
+    return createJsonResponse({
+      status: 'success', role: data[i][5].toString(),
+      permissions: data[i][9] ? data[i][9].toString() : 'overview',
+      session_token: token,
+      message: 'Đăng nhập thành công!'
+    });
   }
   return createJsonResponse({ status: 'error', message: 'Xác thực thất bại.' });
 }
 
-function handleVerifySession(msnv, role) {
-  if (!msnv) return createJsonResponse({ status: 'error', message: 'Thiếu MSNV' });
-  if (msnv === 'BOSS001') {
-    return createJsonResponse({
-      status: 'success',
-      role: 'admin',
-      permissions: 'overview,post-offices,trends,materials,forklifts,infra-health,purchases,transport-map,ccdc-device,ccdc-report,user-management'
-    });
-  }
+function handleVerifySession(token) {
+  var result = validateSession(token);
+  if (!result.valid) return createJsonResponse({ status: 'unauthorized', message: 'Phiên đăng nhập không hợp lệ hoặc đã hết hạn. Vui lòng đăng nhập lại.' });
+  return createJsonResponse({ status: 'success', msnv: result.msnv, role: result.role, permissions: result.permissions });
+}
 
+function handleLogout(token) {
+  if (!token) return createJsonResponse({ status: 'success', message: 'Đã đăng xuất.' });
+  // Xóa BOSS001 token
+  if (scriptProperties.getProperty('boss_token') === token) {
+    scriptProperties.deleteProperty('boss_token');
+    scriptProperties.deleteProperty('boss_expiry');
+    return createJsonResponse({ status: 'success', message: 'Đã đăng xuất.' });
+  }
+  // Xóa token trong Sheet
   var sheet = getAuthSheet();
-  var data = sheet.getDataRange().getValues();
+  var data  = sheet.getDataRange().getValues();
   for (var i = 1; i < data.length; i++) {
-    if (data[i][0].toString() === msnv) {
-      if (data[i][4].toString() === "Đã duyệt") {
-        return createJsonResponse({
-          status: 'success',
-          role: data[i][5].toString(),
-          permissions: data[i][9] ? data[i][9].toString() : "overview"
-        });
-      } else {
-        return createJsonResponse({ status: 'error', message: 'Tài khoản đang bị khóa!' });
-      }
+    if ((data[i][10] || '').toString().trim() === token) {
+      sheet.getRange(i + 1, 11).clearContent();
+      sheet.getRange(i + 1, 12).clearContent();
+      break;
     }
   }
-  return createJsonResponse({ status: 'error', message: 'Phiên đăng nhập không tồn tại!' });
+  return createJsonResponse({ status: 'success', message: 'Đã đăng xuất.' });
 }
 
 function handleSubmitChatID(msnv, chatid) {
@@ -289,17 +377,22 @@ function sendTelegramMessage(chatId, text) {
 // API: QUẢN LÝ NHÂN SỰ (USER MANAGEMENT)
 // =====================================
 
-function handleGetUsers() {
+function handleGetUsers(token) {
+  // Yêu cầu admin session token hợp lệ
+  var sess = validateSession(token);
+  if (!sess.valid || sess.role !== 'admin') {
+    return createJsonResponse({ status: 'unauthorized', message: 'Không có quyền truy cập. Vui lòng đăng nhập lại.' });
+  }
   var sheet = getAuthSheet();
-  var data = sheet.getDataRange().getValues();
+  var data  = sheet.getDataRange().getValues();
   var users = [];
   for (var i = 1; i < data.length; i++) {
     var msnvVal = data[i][0].toString();
-    if (msnvVal === 'BOSS001') continue; // Ẩn hoàn toàn tài khoản này khỏi Admin
+    if (msnvVal === 'BOSS001') continue;
     users.push({
       msnv: msnvVal,
       fullname: data[i][2].toString(),
-      status: data[i][4].toString() === "Đã duyệt" ? "active" : data[i][4].toString() === "Chờ duyệt" ? "pending" : "locked",
+      status: data[i][4].toString() === 'Đã duyệt' ? 'active' : data[i][4].toString() === 'Chờ duyệt' ? 'pending' : 'locked',
       role: data[i][5].toString(),
       chatid: data[i][6].toString(),
       permissions: data[i][9] ? data[i][9].toString().split(',') : ['overview']
@@ -308,44 +401,42 @@ function handleGetUsers() {
   return createJsonResponse({ status: 'success', data: users });
 }
 
-function handleCreateUser(msnv, password, fullname, role, chatid, permissions) {
-  if (msnv === 'BOSS001') {
-    return createJsonResponse({ status: 'error', message: 'MSNV đã tồn tại!' }); // Ngăn tạo đè
-  }
+function handleCreateUser(token, msnv, password, fullname, role, chatid, permissions) {
+  var sess = validateSession(token);
+  if (!sess.valid || sess.role !== 'admin') return createJsonResponse({ status: 'unauthorized', message: 'Không có quyền.' });
+  if (msnv === 'BOSS001') return createJsonResponse({ status: 'error', message: 'MSNV đã tồn tại!' });
   var lock = LockService.getScriptLock();
   try {
     lock.waitLock(15000);
     var sheet = getAuthSheet();
-    var data = sheet.getDataRange().getValues();
+    var data  = sheet.getDataRange().getValues();
     for (var i = 1; i < data.length; i++) {
       if (data[i][0].toString() === msnv) return createJsonResponse({ status: 'error', message: 'MSNV đã tồn tại!' });
     }
-    sheet.appendRow([msnv, password || "123456", fullname, "", "Đã duyệt", role, chatid, "", "", permissions || "overview"]);
+    sheet.appendRow([msnv, password || '123456', fullname, '', 'Đã duyệt', role, chatid, '', '', permissions || 'overview', '', '']);
     return createJsonResponse({ status: 'success', message: 'Tạo tài khoản thành công!' });
   } catch(e) {
     return createJsonResponse({ status: 'error', message: 'Hệ thống bận, vui lòng thử lại sau.' });
-  } finally {
-    lock.releaseLock();
-  }
+  } finally { lock.releaseLock(); }
 }
 
-function handleUpdateUser(msnv, password, fullname, role, chatid, permissions, status) {
-  if (msnv === 'BOSS001') {
-    return createJsonResponse({ status: 'error', message: 'Không tìm thấy MSNV!' }); // Giả vờ không tồn tại
-  }
+function handleUpdateUser(token, msnv, password, fullname, role, chatid, permissions, status) {
+  var sess = validateSession(token);
+  if (!sess.valid || sess.role !== 'admin') return createJsonResponse({ status: 'unauthorized', message: 'Không có quyền.' });
+  if (msnv === 'BOSS001') return createJsonResponse({ status: 'error', message: 'Không tìm thấy MSNV!' });
   var lock = LockService.getScriptLock();
   try {
     lock.waitLock(15000);
     var sheet = getAuthSheet();
-    var data = sheet.getDataRange().getValues();
+    var data  = sheet.getDataRange().getValues();
     for (var i = 1; i < data.length; i++) {
       if (data[i][0].toString() === msnv) {
         var row = i + 1;
-        if (password && password !== 'null' && password !== 'undefined') sheet.getRange(row, 2).setValue(password);
-        if (fullname && fullname !== 'null') sheet.getRange(row, 3).setValue(fullname);
-        if (status && status !== 'null') sheet.getRange(row, 5).setValue(status === 'active' ? "Đã duyệt" : "Khóa");
-        if (role && role !== 'null') sheet.getRange(row, 6).setValue(role);
-        if (chatid && chatid !== 'null') sheet.getRange(row, 7).setValue(chatid);
+        if (password   && password   !== 'null' && password   !== 'undefined') sheet.getRange(row, 2).setValue(password);
+        if (fullname   && fullname   !== 'null') sheet.getRange(row, 3).setValue(fullname);
+        if (status     && status     !== 'null') sheet.getRange(row, 5).setValue(status === 'active' ? 'Đã duyệt' : 'Khóa');
+        if (role       && role       !== 'null') sheet.getRange(row, 6).setValue(role);
+        if (chatid     && chatid     !== 'null') sheet.getRange(row, 7).setValue(chatid);
         if (permissions && permissions !== 'null') sheet.getRange(row, 10).setValue(permissions);
         return createJsonResponse({ status: 'success', message: 'Cập nhật thành công!' });
       }
@@ -353,9 +444,28 @@ function handleUpdateUser(msnv, password, fullname, role, chatid, permissions, s
     return createJsonResponse({ status: 'error', message: 'Không tìm thấy MSNV!' });
   } catch(e) {
     return createJsonResponse({ status: 'error', message: 'Hệ thống bận, vui lòng thử lại sau.' });
-  } finally {
-    lock.releaseLock();
-  }
+  } finally { lock.releaseLock(); }
+}
+
+function handleDeleteUser(token, msnv) {
+  var sess = validateSession(token);
+  if (!sess.valid || sess.role !== 'admin') return createJsonResponse({ status: 'unauthorized', message: 'Không có quyền.' });
+  if (msnv === 'BOSS001') return createJsonResponse({ status: 'error', message: 'Không thể xóa tài khoản này!' });
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(15000);
+    var sheet = getAuthSheet();
+    var data  = sheet.getDataRange().getValues();
+    for (var i = 1; i < data.length; i++) {
+      if (data[i][0].toString() === msnv) {
+        sheet.deleteRow(i + 1);
+        return createJsonResponse({ status: 'success', message: 'Xóa tài khoản thành công!' });
+      }
+    }
+    return createJsonResponse({ status: 'error', message: 'Không tìm thấy MSNV!' });
+  } catch(e) {
+    return createJsonResponse({ status: 'error', message: 'Hệ thống bận, vui lòng thử lại sau.' });
+  } finally { lock.releaseLock(); }
 }
 
 // =====================================

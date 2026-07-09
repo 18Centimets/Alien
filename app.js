@@ -1554,8 +1554,17 @@ function initAuth() {
     if (btnLogout) {
         btnLogout.addEventListener('click', () => {
             if(confirm('Bạn có chắc chắn muốn đăng xuất không?')) {
+                // Gọi server để invalidate token trước
+                const token = localStorage.getItem('ghn_session_token') || '';
+                if (token) {
+                    fetch(`${APPS_SCRIPT_URL}?action=logout&token=${encodeURIComponent(token)}`).catch(() => {});
+                }
                 localStorage.removeItem('ghn_auth_token');
                 localStorage.removeItem('ghn_user_role');
+                localStorage.removeItem('ghn_user_msnv');
+                localStorage.removeItem('ghn_user_fullname');
+                localStorage.removeItem('ghn_user_perms');
+                localStorage.removeItem('ghn_session_token');
                 window.location.reload();
             }
         });
@@ -1563,15 +1572,15 @@ function initAuth() {
 
     // Check if already logged in
     if (localStorage.getItem('ghn_auth_token') === 'verified') {
-        const localMsnv = localStorage.getItem('ghn_user_msnv') || '';
-        const localRole = localStorage.getItem('ghn_user_role') || '';
+        const localMsnv  = localStorage.getItem('ghn_user_msnv') || '';
+        const localRole   = localStorage.getItem('ghn_user_role') || '';
+        const localToken  = localStorage.getItem('ghn_session_token') || '';
         
-        // Xác thực phiên đăng nhập thực tế từ server để chống giả mạo localStorage
-        fetch(`${APPS_SCRIPT_URL}?action=verify_session&msnv=${encodeURIComponent(localMsnv)}&role=${encodeURIComponent(localRole)}`)
+        // Xác thực phiên đăng nhập bằng session token thực sự
+        fetch(`${APPS_SCRIPT_URL}?action=verify_session&token=${encodeURIComponent(localToken)}`)
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // Cập nhật lại role và permissions chuẩn từ Sheets
                     localStorage.setItem('ghn_user_role', data.role);
                     localStorage.setItem('ghn_user_perms', data.permissions);
                     authOverlay.style.display = 'none';
@@ -1579,10 +1588,11 @@ function initAuth() {
                     applyRoleRestrictions();
                     loadData();
                 } else {
-                    // Phiên giả mạo hoặc tài khoản đã bị khóa -> xóa cache và tải lại trang
+                    // Token không hợp lệ hoặc hết hạn → buộc đăng nhập lại
                     localStorage.removeItem('ghn_auth_token');
                     localStorage.removeItem('ghn_user_role');
                     localStorage.removeItem('ghn_user_perms');
+                    localStorage.removeItem('ghn_session_token');
                     window.location.reload();
                 }
             })
@@ -1661,14 +1671,14 @@ function initAuth() {
                 tempMsnv = data.msnv;
                 requestOTP(tempMsnv);
             } else if (data.status === 'bypass_otp') {
-                localStorage.setItem('ghn_auth_token', 'verified');
-                localStorage.setItem('ghn_user_role', data.role);
-                localStorage.setItem('ghn_user_msnv', data.msnv || '');
+                // BOSS001 — lưu session token ngay sau khi đăng nhập
+                localStorage.setItem('ghn_auth_token',    'verified');
+                localStorage.setItem('ghn_user_role',     data.role);
+                localStorage.setItem('ghn_user_msnv',     data.msnv || '');
                 localStorage.setItem('ghn_user_fullname', data.fullname || '');
+                localStorage.setItem('ghn_session_token', data.session_token || '');
                 let permsArray = data.permissions || ['overview'];
-                if (typeof permsArray === 'string') {
-                    permsArray = permsArray.split(',').map(p => p.trim()).filter(p => p);
-                }
+                if (typeof permsArray === 'string') permsArray = permsArray.split(',').map(p => p.trim()).filter(p => p);
                 localStorage.setItem('ghn_user_perms', JSON.stringify(permsArray));
                 authOverlay.style.display = 'none';
                 mainApp.style.display = 'flex';
@@ -1699,15 +1709,14 @@ function initAuth() {
             const data = await response.json();
             
             if (data.status === 'success') {
-                localStorage.setItem('ghn_auth_token', 'verified');
-                localStorage.setItem('ghn_user_role', data.role);
-                localStorage.setItem('ghn_user_msnv', tempMsnv || '');
+                // Lưu session token từ server sau khi OTP hợp lệ
+                localStorage.setItem('ghn_auth_token',    'verified');
+                localStorage.setItem('ghn_user_role',     data.role);
+                localStorage.setItem('ghn_user_msnv',     tempMsnv || '');
                 localStorage.setItem('ghn_user_fullname', data.fullname || '');
-                // Permissions có thể là string hoặc array, chuẩn hóa về array
+                localStorage.setItem('ghn_session_token', data.session_token || '');
                 let permsArray = data.permissions || ['overview'];
-                if (typeof permsArray === 'string') {
-                    permsArray = permsArray.split(',').map(p => p.trim()).filter(p => p);
-                }
+                if (typeof permsArray === 'string') permsArray = permsArray.split(',').map(p => p.trim()).filter(p => p);
                 localStorage.setItem('ghn_user_perms', JSON.stringify(permsArray));
                 authOverlay.style.display = 'none';
                 mainApp.style.display = 'flex';
@@ -2527,7 +2536,8 @@ async function fetchUsersFromBackend() {
     if (tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">Đang tải danh sách từ Google Server...</td></tr>';
     
     try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=get_users`);
+        const sessionToken = localStorage.getItem('ghn_session_token') || '';
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=get_users&token=${encodeURIComponent(sessionToken)}`);
         const data = await response.json();
         if (data.status === 'success') {
             onlineUsers = data.data;
