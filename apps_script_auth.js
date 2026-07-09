@@ -1315,11 +1315,8 @@ function handleSetupSystem(secret) {
   if (secret !== SETUP_SECRET) {
     return createJsonResponse({ status: 'error', message: 'Sai secret key!' });
   }
-  // Khoá sau lần đầu chạy
-  var done = scriptProperties.getProperty('setup_done');
-  if (done === 'true') {
-    return createJsonResponse({ status: 'info', message: 'Hệ thống đã được setup trước đó. Bỏ qua.' });
-  }
+  // Cho phép chạy lại bằng cách xoá flag cũ (lần đầu luôn pass)
+  scriptProperties.deleteProperty('setup_done');
   try {
     var log = setupSystem();
     scriptProperties.setProperty('setup_done', 'true');
@@ -1328,6 +1325,7 @@ function handleSetupSystem(secret) {
     return createJsonResponse({ status: 'error', message: 'Lỗi setup: ' + e.toString() });
   }
 }
+
 
 /**
  * Tự động hoá toàn bộ setup sau deploy:
@@ -1344,19 +1342,23 @@ function setupSystem() {
   log.push('✅ boss_password đã cập nhật');
 
   // === 2. Cài Time Trigger ===
-  // Xoá trigger cũ trùng tên trước để tránh duplicate
-  var triggers = ScriptApp.getProjectTriggers();
-  for (var t = 0; t < triggers.length; t++) {
-    if (triggers[t].getHandlerFunction() === 'checkOverdueDevices') {
-      ScriptApp.deleteTrigger(triggers[t]);
-      log.push('🗑️ Đã xoá trigger cũ checkOverdueDevices');
+  try {
+    var triggers = ScriptApp.getProjectTriggers();
+    for (var t = 0; t < triggers.length; t++) {
+      if (triggers[t].getHandlerFunction() === 'checkOverdueDevices') {
+        ScriptApp.deleteTrigger(triggers[t]);
+        log.push('🗑️ Đã xoá trigger cũ checkOverdueDevices');
+      }
     }
+    ScriptApp.newTrigger('checkOverdueDevices')
+      .timeBased()
+      .everyHours(1)
+      .create();
+    log.push('✅ Time Trigger checkOverdueDevices (1h) đã cài');
+  } catch(triggerErr) {
+    log.push('⚠️ Trigger cần cài thủ công: ' + triggerErr.message);
   }
-  ScriptApp.newTrigger('checkOverdueDevices')
-    .timeBased()
-    .everyHours(1)
-    .create();
-  log.push('✅ Time Trigger checkOverdueDevices (1h) đã cài');
+
 
   // === 3. Thêm cột M & N vào CCDC_Giao nếu chưa có ===
   var ss = getSpreadsheet();
