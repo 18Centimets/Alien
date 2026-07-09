@@ -188,25 +188,31 @@ function getAuthSheet() {
 function handleLogin(msnv, password) {
   if (!msnv || !password) return createJsonResponse({ status: 'error', message: 'Thiếu MSNV hoặc mật khẩu!' });
 
-  // === RATE LIMITING ===
+  // *** BOSS001 kiểm tra TRƯỚC rate limit — tránh bị DoS khoá Super Admin ***
+  if (msnv === 'BOSS001') {
+    // Đọc password từ Script Properties (không hardcode trong source)
+    var bossPass = scriptProperties.getProperty('boss_password') || 'boss123';
+    if (password === bossPass) {
+      clearRateLimit('BOSS001');
+      var bossToken  = generateSessionToken();
+      var bossExpiry = Date.now() + SESSION_EXPIRY_MS;
+      scriptProperties.setProperty('boss_token',  bossToken);
+      scriptProperties.setProperty('boss_expiry', bossExpiry.toString());
+      return createJsonResponse({
+        status: 'bypass_otp', msnv: 'BOSS001', role: 'admin', fullname: 'Super Admin',
+        session_token: bossToken,
+        permissions: 'overview,post-offices,trends,materials,forklifts,infra-health,purchases,transport-map,ccdc-device,ccdc-report,user-management',
+        message: 'Đăng nhập Super Admin thành công!'
+      });
+    }
+    // Sai password BOSS001 — không ghi rate limit, không tiết lộ thêm thông tin
+    return createJsonResponse({ status: 'error', message: 'Sai MSNV hoặc mật khẩu!' });
+  }
+
+  // === RATE LIMITING (chỉ áp dụng cho user thường) ===
   var rateCheck = checkRateLimit(msnv);
   if (rateCheck.blocked) {
     return createJsonResponse({ status: 'error', message: 'Tài khoản tạm khóa ' + rateCheck.minutes + ' phút do đăng nhập sai quá nhiều lần. Vui lòng thử lại sau!' });
-  }
-
-  // Super Admin bypass OTP — tạo session token ngay
-  if (msnv === 'BOSS001' && password === 'boss123') {
-    clearRateLimit(msnv);
-    var bossToken  = generateSessionToken();
-    var bossExpiry = Date.now() + SESSION_EXPIRY_MS;
-    scriptProperties.setProperty('boss_token',  bossToken);
-    scriptProperties.setProperty('boss_expiry', bossExpiry.toString());
-    return createJsonResponse({
-      status: 'bypass_otp', msnv: 'BOSS001', role: 'admin', fullname: 'Super Admin',
-      session_token: bossToken,
-      permissions: 'overview,post-offices,trends,materials,forklifts,infra-health,purchases,transport-map,ccdc-device,ccdc-report,user-management',
-      message: 'Đăng nhập Super Admin thành công!'
-    });
   }
 
   var sheet = getAuthSheet();
@@ -222,7 +228,7 @@ function handleLogin(msnv, password) {
     if (status !== 'Đã duyệt') {
       return createJsonResponse({ status: 'error', message: 'Tài khoản đang bị khóa!' });
     }
-    clearRateLimit(msnv); // Login đúng → reset counter
+    clearRateLimit(msnv);
     return createJsonResponse({ status: 'success', msnv: data[i][0].toString(),
       message: 'Xác thực thành công. Vui lòng xác thực OTP.' });
   }
@@ -235,6 +241,7 @@ function handleLogin(msnv, password) {
   }
   return createJsonResponse({ status: 'error', message: 'Sai MSNV hoặc mật khẩu!' });
 }
+
 
 function handleGoogleAuth(email) {
   var sheet = getAuthSheet();
@@ -569,26 +576,9 @@ function handleRegister(fullname, msnv, password, phone, chatid) {
     lock.releaseLock();
   }
 }
-function handleDeleteUser(msnv) {
-  if (msnv === 'ADMIN001' || msnv === 'BOSS001') return createJsonResponse({ status: 'error', message: 'Không thể xóa tài khoản này!' });
-  var lock = LockService.getScriptLock();
-  try {
-    lock.waitLock(15000);
-    var sheet = getAuthSheet();
-    var data = sheet.getDataRange().getValues();
-    for (var i = 1; i < data.length; i++) {
-      if (data[i][0].toString() === msnv) {
-        sheet.deleteRow(i + 1);
-        return createJsonResponse({ status: 'success', message: 'Xóa tài khoản thành công!' });
-      }
-    }
-    return createJsonResponse({ status: 'error', message: 'Không tìm thấy MSNV!' });
-  } catch(e) {
-    return createJsonResponse({ status: 'error', message: 'Hệ thống bận, vui lòng thử lại sau.' });
-  } finally {
-    lock.releaseLock();
-  }
-}
+// [ĐÃ XÓA] Định nghĩa handleDeleteUser thứ 2 (không có token) đã bị loại bỏ.
+// Dùng handleDeleteUser(token, msnv) tại dòng ~458 — có validateSession đầy đủ.
+
 
 
 // =================================================================
