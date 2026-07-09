@@ -804,13 +804,33 @@ function ccdcGetTodayLog() {
   var ss = getSpreadsheet();
   var sheet = ccdcGetOrCreateGiaoSheet(ss);
   var data = sheet.getDataRange().getValues();
-  var today = Utilities.formatDate(new Date(), 'Asia/Ho_Chi_Minh', 'dd/MM/yyyy');
+  
+  // So sánh bằng Date object — không phụ thuộc locale/format string
+  var now = new Date();
+  var todayYear  = now.getFullYear();
+  var todayMonth = now.getMonth();
+  var todayDate  = now.getDate();
+  
   var log = [];
   for (var i = data.length - 1; i >= 1; i--) {
-    var tsStr = formatCellDate(data[i][0]);
-    if (tsStr.substring(0, 10) === today) {
+    var cellVal = data[i][0];
+    if (!cellVal) continue;
+    
+    // Parse ngày: nếu là Date object thì dùng trực tiếp, nếu là string thì parse
+    var cellDate;
+    if (cellVal instanceof Date) {
+      cellDate = cellVal;
+    } else {
+      // Thử parse string dd/MM/yyyy hoặc MM/dd/yyyy
+      cellDate = new Date(cellVal.toString());
+      if (isNaN(cellDate.getTime())) continue;
+    }
+    
+    if (cellDate.getFullYear() === todayYear && 
+        cellDate.getMonth() === todayMonth && 
+        cellDate.getDate() === todayDate) {
       log.push({
-        timestamp:       tsStr,
+        timestamp:       formatCellDate(cellVal),
         msnv:            data[i][1].toString(),
         hoten:           data[i][2].toString(),
         ca:              data[i][3].toString(),
@@ -826,6 +846,7 @@ function ccdcGetTodayLog() {
   }
   return createJsonResponse({ status: 'success', log: log });
 }
+
 
 function ccdcGetAllLogs() {
   var ss = getSpreadsheet();
