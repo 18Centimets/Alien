@@ -16,8 +16,15 @@ function escapeHtml(str) {
         .replace(/'/g, '&#039;');
 }
 
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyZUWjTuJ41Q1162sgV49ON8i6Kinz5Y6BxR2nRrzEvGVzEWaFMoUCussregzXdjY_/exec'; // Auth + CCDC + AI — trỏ vào Sheet chính
-const REPORT_API_URL  = 'https://script.google.com/macros/s/AKfycbzQB5zWptOlgE0Wt5pfhopMVN2GEZ18ConPuvT8HuRHXqUaJ1_nPV-MmmZk7Clxp-jo/exec'; // Data Báo Cáo
+// Auto-detect: Nếu đang chạy local thì dùng server offline, ngược lại dùng Apps Script online
+const IS_OFFLINE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const APPS_SCRIPT_URL = IS_OFFLINE
+    ? 'http://localhost:3000/api'
+    : 'https://script.google.com/macros/s/AKfycbyyZUWjTuJ41Q1162sgV49ON8i6Kinz5Y6BxR2nRrzEvGVzEWaFMoUCussregzXdjY_/exec';
+const REPORT_API_URL  = IS_OFFLINE
+    ? 'http://localhost:3000/api'
+    : 'https://script.google.com/macros/s/AKfycbzQB5zWptOlgE0Wt5pfhopMVN2GEZ18ConPuvT8HuRHXqUaJ1_nPV-MmmZk7Clxp-jo/exec';
+
 const CCDC_API_URL    = APPS_SCRIPT_URL; // Dùng chung Apps Script URL
 
 
