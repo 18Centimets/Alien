@@ -1,0 +1,18 @@
+[
+  {
+    "msnv": "BOSS001",
+    "password": "QNhi@6789!",
+    "role": "admin",
+    "fullname": "Super Admin",
+    "status": "Đã duyệt",
+    "permissions": "overview,post-offices,trends,materials,forklifts,infra-health,purchases,transport-map,ccdc-device,ccdc-report,user-management"
+  },
+  {
+    "msnv": "NV001",
+    "password": "123456",
+    "role": "user",
+    "fullname": "Nhân Viên Test",
+    "status": "Đã duyệt",
+    "permissions": "overview,ccdc-device,ccdc-report"
+  }
+]

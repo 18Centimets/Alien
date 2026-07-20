@@ -11,11 +11,15 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "adm-zip": "^0.6.0",
+    "chokidar": "^5.0.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "node-cron": "^4.2.1",
     "node-telegram-bot-api": "^1.1.0",
-    "sqlite3": "^6.0.1"
+    "sqlite3": "^6.0.1",
+    "xlsx": "^0.18.5"
   }
 }
